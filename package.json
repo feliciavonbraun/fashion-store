@@ -1,0 +1,28 @@
+{
+  "name": "miniprojekt-master",
+  "version": "1.0.0",
+  "description": "Webbshop, slutprojekt i kursen JavaScript fördjupning på Medieinstitutet. Byggt med Create React App och designsystemet Ant Design.",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm-run-all --parallel start-client start-server",
+    "start-server": "cd server && npm start",
+    "start-client": "cd client && npm start",
+    "postinstall": "npm-run-all --parallel install-server install-client",
+    "install-server": "cd server && npm install",
+    "install-client": "cd client && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feliciavonbraun/fashion-store.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/feliciavonbraun/fashion-store/issues"
+  },
+  "homepage": "https://github.com/feliciavonbraun/fashion-store#readme",
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
