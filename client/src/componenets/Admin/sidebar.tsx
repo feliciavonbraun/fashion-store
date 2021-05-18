@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import GetAdminList from "./AdminList";
-import Orders from "./orders";
+import UserList from "./UserList";
 
 const { Content, Sider } = Layout;
 
@@ -30,11 +30,11 @@ class Sidebar extends Component {
                             </Menu.Item>
                             <Menu.Item key="2" >
                                 <span>Orders</span>
-                                <Link to='/orders' />
+                                <Link to='' />
                             </Menu.Item>
                             <Menu.Item key="3" >
                                 <span>Users</span>
-
+                                <Link to='user-list' />
                             </Menu.Item>
                         </Menu>
                     </Sider>
@@ -43,7 +43,7 @@ class Sidebar extends Component {
                         <Content className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
 
                             <Route path="/admin-list" component={GetAdminList} />
-                            <Route path="/orders" component={Orders} />
+                            <Route path="/user-list" component={UserList} />
 
                         </Content>
                     </Layout>
