@@ -15,7 +15,9 @@ Kör appen i utvecklingsläge.\
 [GitHub-repot](https://github.com/msmalinosterberg/miniprojekt)\
 [Ant Design](https://ant.design/docs/react/introduce)\
 [Se sidan här](https://fashionstore-webshop.netlify.app/)
-## Skapat av
+## Backend Skapat av
+
+## Frontend Skapat av
 [Malin Österberg](https://github.com/msmalinosterberg)\
 [Amanda Samuelsson](https://github.com/amandasamuelsson)\
 [Moa Stenqvist](https://github.com/stonetwix)
