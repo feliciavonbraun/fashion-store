@@ -14,12 +14,17 @@ app.use(cookieSession({
     secure: false,
     httpOnly: true
 }));
+/* ALL ROUTES */
+app.use(productRouter);
 
+/* ERROR HANDLING */
+app.use((req, res) => {
+    res.status(404).json('Wrong')
+})
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).json(err.message);
 });
-app.use(productRouter);
 
 /* CONNECT TO DATABASE */
 (async function run() {
