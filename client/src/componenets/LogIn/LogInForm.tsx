@@ -12,7 +12,7 @@ interface Props {
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
-        history.push('/admin-list')
+        history.push('/sidebar')
     };
 
     const onFinishFailed = (errorInfo: any) => {
