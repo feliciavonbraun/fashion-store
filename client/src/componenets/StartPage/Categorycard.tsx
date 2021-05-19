@@ -1,4 +1,4 @@
-import { Button, Row } from "antd";
+import {  Menu, Row } from "antd";
 import React, { Component, CSSProperties } from "react";
 
 
@@ -8,10 +8,12 @@ class CategoryMenu extends Component {
         return(
             <div>
                 <Row style={categoryMenuContainer}>
-                    <Button type="text">Skirts</Button>
-                    <Button type="text">Tops</Button>
-                    <Button type="text">Dresses</Button>
-                    <Button type="text">Trousers</Button>
+                    <Menu mode="horizontal" style={MenuStyle}>
+                      <Menu.Item >Skirts</Menu.Item>
+                        <Menu.Item >Tops</Menu.Item>
+                        <Menu.Item >Dresses</Menu.Item>
+                        <Menu.Item >Trousers</Menu.Item>
+                    </Menu>
                 </Row>
             </div>
         )
@@ -25,16 +27,18 @@ const categoryMenuContainer: CSSProperties = {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    margin: 'auto',
+    height: '1rem',
+    margin: '0',
    
 }
 
-const listStyle: CSSProperties = {
+const MenuStyle: CSSProperties = {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'row',
 }
 
-const linkStyle: CSSProperties = {
-    listStyleType: 'none',
-}
+// const linkStyle: CSSProperties = {
+//    fontWeight: 400,
+//    borderBottom: '0.1rem solid black'
+// }
