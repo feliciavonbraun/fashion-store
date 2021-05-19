@@ -1,5 +1,6 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import CarouselStart from './Carousel';
+import CategoryMenu from './Categorycard';
 import ProductCardGrid from './ProductCardGrid';
 
 class StartPageView extends Component {
@@ -7,6 +8,7 @@ class StartPageView extends Component {
         return(
             <div>
                 <CarouselStart />
+                <CategoryMenu/>
                 <ProductCardGrid />
             </div>
         )
