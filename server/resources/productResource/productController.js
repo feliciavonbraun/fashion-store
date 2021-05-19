@@ -7,5 +7,9 @@ router.get('/', async (req, res) => {
     res.status(200).json(docs);
 });
 
+router.post('/', async (req, res) => {
+    await Product.create(req.body)
+    res.status(201).json(req.body)
+})
 
 module.exports = router;
