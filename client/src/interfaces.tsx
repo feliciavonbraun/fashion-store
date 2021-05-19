@@ -9,5 +9,6 @@ export interface User {
 }
 
 export interface Order extends IReceipt {
+  _id: string;
   isSent: boolean;
 }
