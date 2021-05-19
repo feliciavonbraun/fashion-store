@@ -1,4 +1,5 @@
-import { List } from "antd";
+import { List, Row, Col } from "antd";
+import { CSSProperties } from "react";
 import UserListItem from "./UserListItem";
 
 export default function UserList() {
@@ -20,10 +21,28 @@ export default function UserList() {
   ];
 
   return (
-    <List
-      itemLayout="horizontal"
-      dataSource={users}
-      renderItem={(user) => <UserListItem user={user} />}
-    ></List>
+    <Row style={containerStyle}>
+      <Col style={columnStyle}>
+        <List
+          itemLayout="horizontal"
+          dataSource={users}
+          renderItem={(user) => <UserListItem user={user} />}
+        ></List>
+      </Col>
+    </Row >
+
   );
+}
+
+const containerStyle: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingBottom: '8rem',
+  textAlign: 'left',
+}
+
+const columnStyle: CSSProperties = {
+  marginTop: '8rem',
+  width: '80%'
 }
