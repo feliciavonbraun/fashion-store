@@ -1,5 +1,5 @@
-import { List } from "antd";
-import { Component } from "react";
+import { List, Col, Row } from "antd";
+import { Component, CSSProperties } from "react";
 import { Order } from "../../interfaces";
 import OrderListItem from "./OrderListItem";
 
@@ -92,11 +92,28 @@ export default class OrderList extends Component<{}, State> {
 
   render() {
     return (
-      <List
-        itemLayout="vertical"
-        dataSource={this.state.orders}
-        renderItem={(order) => <OrderListItem order={order} />}
-      ></List>
+      <Row style={containerStyle}>
+        <Col style={columnStyle}>
+          <List
+            itemLayout="vertical"
+            dataSource={this.state.orders}
+            renderItem={(order) => <OrderListItem order={order} />}
+          ></List>
+        </Col>
+      </Row>
     );
   }
+}
+
+const containerStyle: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingBottom: '8rem',
+  textAlign: 'left', 
+}
+
+const columnStyle: CSSProperties = {
+  marginTop: '8rem',
+  width: '80%'
 }
