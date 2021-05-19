@@ -16,6 +16,11 @@ Kör appen i utvecklingsläge.\
 [Ant Design](https://ant.design/docs/react/introduce)\
 [Se sidan här](https://fashionstore-webshop.netlify.app/)
 ## Backend Skapat av
+[Josefin Enerlöv](https://github.com/jenerlov)\
+[Maria Helena Norén](mariahelenanoren@gmail.com)\
+[Jennifer Tendell](https://github.com/JenniferTendell)\
+[Felicia von Braun](https://github.com/feliciavonbraun)\
+[Mikaela Andersson](https://github.com/MikaelaAnd)
 
 ## Frontend Skapat av
 [Malin Österberg](https://github.com/msmalinosterberg)\

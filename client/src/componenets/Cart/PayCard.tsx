@@ -57,15 +57,15 @@ class PayCard extends Component<Props> {
                 <Input placeholder="XXXX XXXX XXXX XXXX"/>
             </Form.Item>
             <Form.Item name={['card', 'expdate']} label="Expiry date" 
-                rules={[{ required: true }]}>
+                rules={[{ min: 5, max: 5, required: true }]}>
                 <Input placeholder="MM/YY"/>
             </Form.Item>
             <Form.Item name={['card', 'name']} label="Name on card" 
-                rules={[{ required: true }]}>
+                rules={[{min: 2, required: true }]}>
                 <Input />
             </Form.Item>
             <Form.Item name={['card', 'cvc']} label="CVC/CCV" 
-                rules={[{ required: true }]}>
+                rules={[{ min: 3, max: 3, required: true }]}>
                 <Input placeholder="e.g. 123"/>
             </Form.Item>
             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 7 }}>

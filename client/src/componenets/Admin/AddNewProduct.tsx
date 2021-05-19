@@ -53,7 +53,7 @@ class AddNewProduct extends Component<Props, State> {
     newProduct.id = Math.max(...existingProducts.map((item: Product) => item.id)) + 1;
     existingProducts.push(newProduct)
     localStorage.setItem('products', JSON.stringify(existingProducts));
-    this.props.history.push('/admin-list');
+    this.props.history.push('/product-list');
     this.setState({ buttonSaveLoading: false });
   };
 
@@ -90,6 +90,10 @@ class AddNewProduct extends Component<Props, State> {
               </Form.Item>
               
               <Form.Item name={["product", "imageUrl"]} label="ImageUrl" rules={[{ required: true }]}>
+                <Input />
+              </Form.Item>
+
+              <Form.Item name={["product", "storage qty"]} label="Storage qty" rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
 

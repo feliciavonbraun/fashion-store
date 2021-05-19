@@ -7,7 +7,7 @@ import { Product } from "../ProductItemsList";
 interface State {
     products?: Product[]; 
 }
-class GetAdminList extends Component < {}, State>{
+class ProductList extends Component < {}, State>{
 
     state: State = {
         products: []
@@ -81,4 +81,4 @@ const editStyle: CSSProperties = {
     alignItems: 'center'
 }
 
-export default GetAdminList; 
+export default ProductList; 

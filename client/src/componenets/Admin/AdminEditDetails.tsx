@@ -62,7 +62,7 @@ class AdminEditDetails extends Component<Props, State> {
     const editedProduct: Product = {...this.state.product, ...values.product};
     const updatedProducts = products.map((item: Product) => item.id === editedProduct.id ? editedProduct : item);
     localStorage.setItem('products', JSON.stringify(updatedProducts));
-    this.props.history.push('/admin-list');
+    this.props.history.push('/product-list');
     this.setState({ buttonSaveLoading: false });
   }
 
@@ -84,7 +84,7 @@ class AdminEditDetails extends Component<Props, State> {
     const productId = this.state.product?.id;
     const newProducts = products.filter((item: Product) => item.id !== productId);
     localStorage.setItem('products', JSON.stringify(newProducts));
-    this.props.history.push('/admin-list');
+    this.props.history.push('/product-list');
     this.setState({ buttonDeleteLoading: false });
   }
 
@@ -135,6 +135,10 @@ class AdminEditDetails extends Component<Props, State> {
               </Form.Item>
               
               <Form.Item name={["product", "imageUrl"]} label="ImageUrl" rules={[{ required: true }]}>
+                <Input />
+              </Form.Item>
+
+              <Form.Item name={["product", "storage qty"]} label="Storage qty" rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
 

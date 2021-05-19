@@ -56,11 +56,11 @@ class InformationForm extends Component<Props> {
                 validateMessages={validateMessages}
                 onFinish={this.onFinish}>
                 <Form.Item name={['user', 'name']} label="Name" 
-                    rules={[{ required: true }]}>
+                    rules={[{ min: 2, required: true }]}>
                     <Input />
                 </Form.Item>
                 <Form.Item name={['user', 'email']} label="Email" 
-                    rules={[{ type: 'email', required: true }]}>
+                    rules={[{ min: 5, type: 'email', required: true }]}>
                     <Input />
                 </Form.Item>
                 <Form.Item name={['user', 'phone']} label="Phone" 
@@ -68,15 +68,15 @@ class InformationForm extends Component<Props> {
                     <Input />
                 </Form.Item>
                 <Form.Item name={['user', 'street']} label="Street" 
-                    rules={[{ required: true }]}>
+                    rules={[{ min: 5, required: true }]}>
                     <Input />
                 </Form.Item>
                 <Form.Item name={['user', 'zipcode']} label="Zipcode" 
-                    rules={[{ required: true }]}>
+                    rules={[{ min: 5, max: 5, required: true }]}>
                     <Input />
                 </Form.Item>
                 <Form.Item name={['user', 'city']} label="City" 
-                    rules={[{ required: true }]}>
+                    rules={[{ min: 3, required: true }]}>
                     <Input />
                 </Form.Item>
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 5 }}>
