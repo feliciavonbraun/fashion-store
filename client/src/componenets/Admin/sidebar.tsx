@@ -16,7 +16,7 @@ class Sidebar extends Component {
                 <Layout>
                     <Sider style={siderStyle}>
                         <div className="logo" />
-                        <Menu theme="dark" mode="inline" defaultSelectedKeys={['']} selectedKeys={['']} >
+                        <Menu theme="dark" mode="inline" defaultSelectedKeys={['0']}  >
                             <Menu.Item key="1" >
                                 <span>Products</span>
                                 <Link to='product-list' />
