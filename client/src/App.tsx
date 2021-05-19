@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import AdminEditDetails from "./componenets/Admin/AdminEditDetails";
-import AdminLogIn from "./componenets/Admin/AdminLogIn";
+import LogIn from "./componenets/LogIn/LogIn";
 import Sidebar from "./componenets/Admin/sidebar"
 import CartView from "./componenets/Cart/CartView";
 import Footer2 from "./componenets/Footer";
@@ -24,7 +24,7 @@ function App() {
           <Route path="/ordersuccess" component={OrderSuccessMessage} />
           <Route exact path="/" component={StartPageView} />
           <Route path="/cart" component={CartView} />
-          <Route path="/admin" component={AdminLogIn} />
+          <Route path="/login" component={LogIn} />
           <Route path="/sidebar" component={Sidebar} />
           <Route path="/add-product" component={AddNewProduct} />
           <Route path="/edit-product/:id" component={AdminEditDetails} />
