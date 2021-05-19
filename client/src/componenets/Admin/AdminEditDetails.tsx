@@ -138,6 +138,10 @@ class AdminEditDetails extends Component<Props, State> {
                 <Input />
               </Form.Item>
 
+              <Form.Item name={["product", "storage qty"]} label="Storage qty" rules={[{ required: true }]}>
+                <Input />
+              </Form.Item>
+
               <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
