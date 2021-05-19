@@ -1,5 +1,5 @@
 import { List, Avatar } from "antd";
-import { Component } from "react";
+import { Component, CSSProperties } from "react";
 import { Order } from "../../interfaces";
 import { PaymentCard } from "../Cart/PayCard";
 import { PaymentKlarna } from "../Cart/PayKlarna";
@@ -32,16 +32,17 @@ export default class OrderListItem extends Component<Props, State> {
   }
   render() {
     return (
-      <List.Item actions={[]}>
+      <List.Item style={listItem}>
         <List.Item.Meta title={`Order ${this.state.order._id}`} />
-        <p>{this.state.order.userInfo.name}</p>
-        <p>{this.state.order.userInfo.email}</p>
-        <p>{this.state.order.userInfo.phone}</p>
-        <p>{this.state.order.userInfo.street}</p>
-        <p>{this.state.order.userInfo.city}</p>
-        <p>{this.state.order.userInfo.zipcode}</p>
+        <p style={orderInfo}>{this.state.order.userInfo.name}</p>
+        <p style={orderInfo}>{this.state.order.userInfo.email}</p>
+        <p style={orderInfo}>{this.state.order.userInfo.phone}</p>
+        <p style={orderInfo}>{this.state.order.userInfo.street}</p>
+        <p style={orderInfo}>{this.state.order.userInfo.city}</p>
+        <p style={orderInfo}>{this.state.order.userInfo.zipcode}</p>
         <List
-          itemLayout="horizontal"
+          style={itemsList}
+          itemLayout="vertical"
           dataSource={this.state.order.cart}
           renderItem={(cartItem) => (
             <List.Item>
@@ -50,42 +51,64 @@ export default class OrderListItem extends Component<Props, State> {
                 avatar={<Avatar src={cartItem.product.imageUrl} />}
                 description={cartItem.product.description}
               />
-              <div style={{ display: "flex" }}>
-                <p style={{ marginRight: "0.5rem" }}>
+              <div style={itemInfo}>
+                <p>
                   Price: <b>{cartItem.product.price * cartItem.quantity} kr</b>
                 </p>
-                <p>
+                <p style={marginLeft}>
                   Quantity: <b>{cartItem.quantity}</b>
                 </p>
               </div>
             </List.Item>
           )}
         ></List>
-        <p>
-          Delivery method: <b>{this.state.order.deliveryMethod}</b>
-        </p>
+        <p
+          style={orderInfo}
+        >{` Delivery method: ${this.state.order.deliveryMethod}`}</p>
         {this.isKlarna(this.state.order.paymentMethod) ? (
-          <p>
-            Payment method: <b>Swish</b>
-          </p>
+          <p style={orderInfo}>Payment method: Klarna</p>
         ) : this.isCard(this.state.order.paymentMethod) ? (
-          <p>
-            Payment method: <b>Card</b>
-          </p>
+          <p style={orderInfo}>Payment method: Card</p>
         ) : (
-          <p>
-            Payment method: <b>Swish</b>
-          </p>
+          <p style={orderInfo}>Payment method: Swish</p>
         )}
-        <p>
-          Total order price: <b>{this.state.order.totalPrice} kr</b>
+        <p style={orderInfo}>{`Total order price: ${
+          this.state.order.totalPrice
+        } kr, incl delivery (VAT: ${
+          this.state.order.totalPrice * 0.25
+        } kr)`}</p>
+        <p style={status}>
+          Status: <b>{this.state.order.isSent ? "Sent" : "Proccessing"}</b>
         </p>
-        <h3>
-          {this.state.order.isSent
-            ? "Order has been sent to choosen delivery company"
-            : "Order is being proccessed"}
-        </h3>
       </List.Item>
     );
   }
 }
+
+const listItem: CSSProperties = {
+  marginBottom: "2rem",
+  padding: "1rem",
+  border: "1px solid lightgrey",
+};
+
+const itemsList: CSSProperties = {
+  marginTop: "1rem",
+};
+
+const itemInfo: CSSProperties = {
+  display: "flex",
+  justifyContent: "flex-end",
+  width: "100%",
+};
+
+const marginLeft: CSSProperties = {
+  marginLeft: "0.5rem",
+};
+
+const orderInfo: CSSProperties = {
+  margin: "0 0 0.25rem 0",
+};
+
+const status: CSSProperties = {
+  marginTop: "1rem",
+};
