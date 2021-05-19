@@ -2,7 +2,7 @@ const express = require('express');
 const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 require('express-async-errors');
-const PORT = 3000;
+const PORT = 4000;
 const app = express();
 
 
@@ -19,6 +19,7 @@ app.use((err, req, res, next) => {
     res.status(500).json(err.message);
 });
 
+/* CONNECT TO DATABASE */
 (async function run() {
     try {
         await mongoose.connect('mongodb+srv://fashionstore:fashionstore@fashionstore.gsvdx.mongodb.net/test',
