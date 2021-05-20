@@ -1,4 +1,4 @@
-const Delivery = require("./shippingModel");
+const Delivery = require("./deliveryModel");
 
 exports.getAllDeliveryOptions = async (req, res) => {
 	const docs = await Delivery.find({});
