@@ -1,9 +1,12 @@
-const express = require("express");
-const productRouter = require("./resources/productResource/productRouter");
+const express = require('express');
 const deliveryRouter = require("./resources/deliveryResource/deliveryRouter");
-const cookieSession = require("cookie-session");
-const mongoose = require("mongoose");
-require("express-async-errors");
+const productRouter = require('./resources/productResource/productRouter');
+const orderRouter = require('./resources/orderResource/orderRouter');
+const userRouter = require('./resources/userResource/userRouter');
+const cookieSession = require('cookie-session');
+const mongoose = require('mongoose');
+require('express-async-errors');
+
 const PORT = 4000;
 const app = express();
 
@@ -18,6 +21,8 @@ app.use(
 );
 /* ALL ROUTES */
 app.use(productRouter);
+app.use(orderRouter);
+app.use(userRouter);
 app.use(deliveryRouter);
 
 /* ERROR HANDLING */
