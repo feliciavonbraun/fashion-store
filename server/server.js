@@ -17,11 +17,13 @@ app.use(cookieSession({
 /* ALL ROUTES */
 app.use(productRouter);
 
+
+
 /* ERROR HANDLING */
 app.use((req, res) => {
     res.status(404).json('Wrong')
 })
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     console.error(err);
     res.status(500).json(err.message);
 });
