@@ -1,8 +1,8 @@
-GET http://localhost:4000/
+GET http://localhost:4000/api/products
 
 ###
 
-POST http://localhost:4000
+POST http://localhost:4000/api/products
 Content-Type: application/json
 
 {
