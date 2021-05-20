@@ -11,7 +11,7 @@ exports.getDeliveryOption = async (req, res) => {
 	res.status(200).json(doc);
 };
 
-exports.newDelivery = async (req, res) => {
+exports.newDeliveryOption = async (req, res) => {
 	const doc = await Delivery.create(req.body);
 	res.status(201).json(doc);
 };
