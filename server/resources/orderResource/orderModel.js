@@ -1,19 +1,19 @@
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-// const orderSchema = new mongoose.Schema({
-//     firstname: {type: string},
-//     lastname: {type: string},
-//     phone: {type: number}, 
-//     street: {type: string},
-//     zipcode: {tupe: number}, 
-//     city: {type: string}, 
-//     totalprice: {number},
-//     // orderProducts: object[],
-//     isSent: {type: boolean},
-//     shippingId: objectId,
-//     customerId: objectId,  
-// });
+const OrderSchema = new mongoose.Schema({
+    // firstname: {type: String},
+    // lastname: {type: String},
+    // email
+    phone: {type: Number, required: [true, 'pls enter phone-nbr'] }, 
+    street: {type: String, required: [true, 'pls enter street']},
+    zipcode: {type: Number, required: [true, 'pls enter zipcode']}, 
+    city: {type: String, required: [true, 'pls enter city']}, 
+    totalprice: {type: Number},
+    orderProducts: {object: []},
+    isSent: {type: Boolean},
+    // shippingId: objectId,
+    // customerId: objectId,  
+});
 
-// const orderModel = mongoose.model('order', orderSchema); 
-
-// model.export = orderSchema; 
+const OrderModel = mongoose.model('order', OrderSchema); 
+module.exports = OrderModel; 

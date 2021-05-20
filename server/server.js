@@ -1,5 +1,6 @@
 const express = require('express');
 const productRouter = require('./resources/productResource/productRouter');
+const orderRouter = require('./resources/orderResource/orderRouter');
 const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 require('express-async-errors');
@@ -17,6 +18,7 @@ app.use(
 );
 /* ALL ROUTES */
 app.use(productRouter);
+app.use(orderRouter);
 
 /* ERROR HANDLING */
 app.use((req, res) => {
