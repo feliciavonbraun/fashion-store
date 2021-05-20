@@ -15,8 +15,8 @@ POST http://localhost:4000/api/order
 Content-Type: application/json
 
 {
-    "phone": 0721773030,
-    "street": "Habyyyyyyy", 
+    "phone": "0721773030",
+    "street": "HabYYYYYYYY", 
     "zipcode": 51163,
     "city": "Haby",
     "totalprice": "1000", 
