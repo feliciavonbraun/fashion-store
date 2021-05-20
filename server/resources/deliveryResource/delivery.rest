@@ -3,8 +3,6 @@ GET http://localhost:4000/api/delivery
 ###
 
 GET http://localhost:4000/api/delivery/:id
-Content-Type: application/json
-
 
 ###
 
