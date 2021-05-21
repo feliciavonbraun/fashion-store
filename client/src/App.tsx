@@ -8,12 +8,14 @@ import Navbar from './componenets/Navbar';
 import OrderSuccessMessage from './componenets/OrderSuccess/OrderSuccessMessage';
 import ProductDetails from './componenets/ProductDetails/ProductDetails';
 import StartPageView from './componenets/StartPage/StartPageView';
-import CartProvider from './contexts/CartContext';
 import ScrollToTop from './componenets/ScrollToTop';
+import CartProvider from './contexts/CartContext';
 import ProductProvider from './contexts/ProductContext';
-
+import OrderProvider from "./contexts/OrderContext";
+    
 function App() {
     return (
+            </OrderProvider>
         <ProductProvider>
             <CartProvider>
                 <Router>
@@ -34,6 +36,8 @@ function App() {
                 </Router>
             </CartProvider>
         </ProductProvider>
+            </OrderProvider>
+
     );
 }
 

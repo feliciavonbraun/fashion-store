@@ -1,13 +1,18 @@
-import { List, Col, Row } from 'antd';
-import { Component, CSSProperties } from 'react';
-import { Order } from '../../interfaces';
-import OrderListItem from './OrderListItem';
+import { List, Col, Row } from "antd";
+import { Component, ContextType, CSSProperties } from "react";
+import { Order } from "../../interfaces";
+import OrderListItem from "./OrderListItem";
+import { OrderContext } from "../../contexts/OrderContext";
 
 interface State {
     orders: Order[];
 }
 
 export default class OrderList extends Component<{}, State> {
+
+  context!: ContextType<typeof OrderContext>
+  static contextType = OrderContext;
+
     state: State = {
         orders: [
             {
@@ -96,28 +101,37 @@ export default class OrderList extends Component<{}, State> {
         ],
     };
 
-    render() {
-        return (
+  render() {
+    return (
+      <OrderContext.Consumer>
+        {({ allOrders }) => {
+          return (
+
             <Row style={containerStyle}>
-                <Col style={columnStyle}>
-                    <List
-                        itemLayout='vertical'
-                        dataSource={this.state.orders}
-                        renderItem={(order) => <OrderListItem order={order} />}
-                    ></List>
-                </Col>
+              <Col style={columnStyle}>
+                <List
+                  itemLayout="vertical"
+                  dataSource={this.state.orders}
+                  renderItem={(order) => <OrderListItem order={order} />}
+                ></List>
+              </Col>
             </Row>
-        );
-    }
+
+
+          )
+        }}
+      </OrderContext.Consumer>
+    );
+  }
 }
 
 const containerStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: '8rem',
-    textAlign: 'left',
-};
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingBottom: '8rem',
+  textAlign: 'left',
+}
 
 const columnStyle: CSSProperties = {
     marginTop: '8rem',
