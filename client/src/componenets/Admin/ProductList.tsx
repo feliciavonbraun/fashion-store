@@ -1,41 +1,35 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Avatar, Button, Col, List, Row, } from "antd";
-import { Component, CSSProperties } from "react";
-import { Link } from "react-router-dom";
-import { Product, ProductContext } from "../../contexts/ProductContext"
+import { PlusOutlined } from '@ant-design/icons';
+import { Avatar, Button, Col, List, Row } from 'antd';
+import { CSSProperties, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { ProductContext } from '../../contexts/ProductContext';
 
-interface State {
-    allProducts: Product[]
-}
+export default function ProductList() {
+    const productContext = useContext(ProductContext);
+    const { allProducts } = productContext;
 
-class ProductList extends Component {
-    static contextType = ProductContext;
+    return (
+        <Row style={containerStyle}>
+            <Col style={columnStyle}>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginTop: '2rem',
+                        marginBottom: '3rem',
+                    }}
+                >
+                    <h1 style={{ fontWeight: 'bold' }}>ADMIN</h1>
+                    <Link to={'/product-list/add-product'}>
+                        <Button type='primary' icon={<PlusOutlined />}>
+                            Add product
+                        </Button>
+                    </Link>
+                </div>
 
-    state: State = {
-        allProducts: []
-    }
-
-    componentDidMount() {
-        let getProduct = this.context;
-        this.setState({allProducts: getProduct})
-    }
-
-    render() {
-        console.log(this.state.allProducts)
-        return (
-            <Row style={containerStyle}>
-                <Col style={columnStyle}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between',
-                        alignItems:'center', marginTop: '2rem', marginBottom: '3rem' }}>
-                        <h1 style={{fontWeight: 'bold'}}>ADMIN</h1>                  
-                        <Link to ={'/add-product'}> 
-                            <Button type="primary" icon={<PlusOutlined />}>
-                                Add product
-                            </Button>
-                        </Link> 
-                    </div>    
-
-                    <List grid={{
+                <List
+                    grid={{
                         gutter: 12,
                         xs: 1,
                         sm: 1,
@@ -43,46 +37,46 @@ class ProductList extends Component {
                         lg: 1,
                         xl: 1,
                         xxl: 1,
-                        }}
-                        dataSource={this.state.allProducts}
-                        renderItem={item => (
-                            <List.Item>
-                                <Link to={'/edit-product/' + item._id}>     
-                                <List.Item.Meta                    
-                                    avatar={<Avatar size={64} src={item.image} />} 
-                                    title={<Link to={'/edit-product/' + item._id}>{item.name}</Link>}
-                                    description={[item.description.split('.')[0],  
+                    }}
+                    dataSource={allProducts}
+                    renderItem={(item) => (
+                        <List.Item>
+                            <Link to={'/product-list/edit-product/' + item._id}>
+                                <List.Item.Meta
+                                    avatar={
+                                        <Avatar size={64} src={item.imageUrl} />
+                                    }
+                                    title={item.title}
+                                    description={[
+                                        item.description.split('.')[0],
                                     ]}
-                                />  
-                                    <p style={editStyle}>edit</p>
-                                </Link>   
-                            </List.Item>
-                        )}
-                    /> 
-                </Col>
-            </Row> 
-        )
-    }
+                                />
+                                <p style={editStyle}>edit</p>
+                            </Link>
+                        </List.Item>
+                    )}
+                />
+            </Col>
+        </Row>
+    );
 }
 
-const containerStyle: CSSProperties ={
-    display: 'flex', 
+const containerStyle: CSSProperties = {
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: '8rem',
-}
+};
 
 const columnStyle: CSSProperties = {
-   marginTop: '8rem',
-   width: '80%'
-}
+    marginTop: '8rem',
+    width: '80%',
+};
 
 const editStyle: CSSProperties = {
-    color: 'red', 
-    display: 'flex', 
+    color: 'red',
+    display: 'flex',
     justifyContent: 'flex-end',
     borderBottom: '1px solid lightgrey',
-    alignItems: 'center'
-}
-
-export default ProductList; 
+    alignItems: 'center',
+};
