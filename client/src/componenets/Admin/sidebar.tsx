@@ -24,15 +24,15 @@ class Sidebar extends Component {
                         >
                             <Menu.Item key='1'>
                                 <span>Products</span>
-                                <Link to='product-list' />
+                                <Link to='/product-list' />
                             </Menu.Item>
                             <Menu.Item key='2'>
                                 <span>Orders</span>
-                                <Link to='order-list' />
+                                <Link to='/order-list' />
                             </Menu.Item>
                             <Menu.Item key='3'>
                                 <span>Users</span>
-                                <Link to='user-list' />
+                                <Link to='/user-list' />
                             </Menu.Item>
                         </Menu>
                     </Sider>
@@ -43,18 +43,19 @@ class Sidebar extends Component {
                     >
                         <Content>
                             <Route
+                                exact
                                 path='/product-list'
                                 component={ProductList}
                             />
-                            <Route path='/order-list' component={OrderList} />
                             <Route
-                                path='/add-product'
+                                path='/product-list/add-product'
                                 component={AddNewProduct}
                             />
                             <Route
-                                path='/edit-product/:id'
+                                path='/product-list/edit-product/:id'
                                 component={AdminEditDetails}
                             />
+                            <Route path='/order-list' component={OrderList} />
                             <Route path='/user-list' component={UserList} />
                         </Content>
                     </Layout>

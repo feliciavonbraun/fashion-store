@@ -37,6 +37,7 @@ export default function AddNewProduct() {
     const onFinish = async (product: NewProduct) => {
         setButtonSaveLoading(true);
         await newProduct(product);
+        success();
         history.push('/product-list');
     };
 
@@ -110,9 +111,6 @@ export default function AddNewProduct() {
                             >
                                 <Button
                                     type='primary'
-                                    onClick={() => {
-                                        success();
-                                    }}
                                     htmlType='submit'
                                     loading={buttonSaveLoading}
                                 >

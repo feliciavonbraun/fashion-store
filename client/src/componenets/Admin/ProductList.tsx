@@ -21,7 +21,7 @@ export default function ProductList() {
                     }}
                 >
                     <h1 style={{ fontWeight: 'bold' }}>ADMIN</h1>
-                    <Link to={'/add-product'}>
+                    <Link to={'/product-list/add-product'}>
                         <Button type='primary' icon={<PlusOutlined />}>
                             Add product
                         </Button>
@@ -41,16 +41,12 @@ export default function ProductList() {
                     dataSource={allProducts}
                     renderItem={(item) => (
                         <List.Item>
-                            <Link to={'/edit-product/' + item._id}>
+                            <Link to={'/product-list/edit-product/' + item._id}>
                                 <List.Item.Meta
                                     avatar={
                                         <Avatar size={64} src={item.imageUrl} />
                                     }
-                                    title={
-                                        <Link to={'/edit-product/' + item._id}>
-                                            {item.title}
-                                        </Link>
-                                    }
+                                    title={item.title}
                                     description={[
                                         item.description.split('.')[0],
                                     ]}
