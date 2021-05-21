@@ -1,19 +1,19 @@
-import { createContext,  useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { makeRequest } from '../makeRequest';
 
-
 export interface Product {
-    _id: string,
-    name: string,
-    price: number,
-    image: string,
-    qty: number,
-    category: [],
-    description: string
-};
+    _id: string;
+    title: string;
+    price: number;
+    imageUrl: string;
+    qty: number;
+    category: String[];
+    description: string;
+}
 
 interface ProductValue {
-    allProducts: Product[]
+    getProduct: (_id: string) => Promise<Product>;
+    allProducts: Product[];
 }
 
 interface Props {
@@ -21,32 +21,37 @@ interface Props {
 }
 
 export const ProductContext = createContext<ProductValue>({} as ProductValue);
-function ProductProvider({children}: Props) {
-    const [allProducts, setAllProducts] = useState<Product[]>([])
+function ProductProvider({ children }: Props) {
+    const [allProducts, setAllProducts] = useState<Product[]>([]);
 
-    
     useEffect(() => {
-        async function getProduct() {
-            
-            console.log('HEJ')
+        async function getProducts() {
             const products = await makeRequest('/api/product', 'GET');
-            console.log(products, 'HEJ')
             setAllProducts(products);
+            console.log(products);
         }
-        getProduct();
+        getProducts();
     }, [setAllProducts]);
-    console.log('hej')
-    
-    return(
-        <ProductContext.Provider value=
-            {{
-                allProducts,
 
+    const getProduct = async (_id: string) => {
+        const product: Product = await makeRequest(
+            `/api/product/${_id}`,
+            'GET'
+        );
+        console.log(product);
+        return product;
+    };
+
+    return (
+        <ProductContext.Provider
+            value={{
+                allProducts,
+                getProduct,
             }}
         >
-            { children }
+            {children}
         </ProductContext.Provider>
-    )
+    );
 }
 
 export default ProductProvider;
