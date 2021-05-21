@@ -6,8 +6,8 @@ exports.getAllProducts = async (req, res) => {
 };
 
 exports.getProduct = async (req, res) => {
-    const { _id } = req.body;
-    const doc = await Product.find({ _id: _id });
+    const _id = req.params.id;
+    const doc = await Product.findOne({ _id: _id });
     res.status(200).json(doc);
 };
 
@@ -18,7 +18,7 @@ exports.newProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
     const { _id } = req.body;
-    const doc = await Product.replaceOne({ _id: _id }, { ...req.body });
+    const doc = await Product.replaceOne({ _id: _id }, req.body);
     res.status(200).json(doc);
 };
 
