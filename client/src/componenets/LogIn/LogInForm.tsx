@@ -32,6 +32,7 @@ interface Props {
                     name="email"
                     rules={[
                         {
+                            type: 'email',
                             required: true,
                             message: 'Please input your email',
                         },
