@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
-import AdminEditDetails from './componenets/Admin/AdminEditDetails';
 import LogIn from './componenets/LogIn/LogIn';
 import Sidebar from './componenets/Admin/sidebar';
 import CartView from './componenets/Cart/CartView';
@@ -11,7 +10,6 @@ import ProductDetails from './componenets/ProductDetails/ProductDetails';
 import StartPageView from './componenets/StartPage/StartPageView';
 import CartProvider from './contexts/CartContext';
 import ScrollToTop from './componenets/ScrollToTop';
-import AddNewProduct from './componenets/Admin/AddNewProduct';
 import ProductProvider from './contexts/ProductContext';
 
 function App() {

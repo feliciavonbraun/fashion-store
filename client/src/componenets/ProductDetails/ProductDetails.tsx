@@ -1,20 +1,10 @@
 import { Row, Col, message, Button } from 'antd';
-import {
-    Component,
-    ContextType,
-    CSSProperties,
-    useContext,
-    useEffect,
-    useState,
-} from 'react';
+import { CSSProperties, useContext, useEffect, useState } from 'react';
 import { Image } from 'antd';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Product, ProductContext } from '../../contexts/ProductContext';
 import { CartContext } from '../../contexts/CartContext';
-import ErrorPage from '../ErrorPage';
-interface State {
-    product?: Product;
-}
+
 interface Props extends RouteComponentProps<{ id: string }> {}
 
 const success = () => {

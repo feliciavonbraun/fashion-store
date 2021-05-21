@@ -1,7 +1,7 @@
 import { CSSProperties, useState, useContext } from 'react';
 import { Form, Input, InputNumber, Button, Col, Row, message } from 'antd';
 import { NewProduct, ProductContext } from '../../contexts/ProductContext';
-import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const layout = {
     labelCol: {
