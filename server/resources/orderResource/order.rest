@@ -15,10 +15,13 @@ POST http://localhost:4000/api/order
 Content-Type: application/json
 
 {
-    "phone": "0721773030",
-    "street": "HabYYYYYYYY", 
-    "zipcode": 51163,
-    "city": "Haby",
+    "orderItem": [],
+    "address": {
+        "phone": "07217711111111111",
+        "street": "Hej",
+        "zipcode": "12345",
+        "city": "Skene"
+    },
     "totalprice": "1000", 
     "orderProducts": "60a544da597058b62ff8fed1", 
     "isSent": true
@@ -30,12 +33,14 @@ PUT http://localhost:4000/api/order/:id
 Content-Type: application/json
 
 {
-    "phone": 072,
-    "street": "Ha", 
-    "zipcode": 51163,
-    "city": "Ha",
+    "orderItem": [],
+    "address": {
+        "phone": "072177",
+        "street": "Hej",
+        "zipcode": "12345",
+        "city": "Skene"
+    },
     "totalprice": "1000", 
     "orderProducts": "60a544da597058b62ff8fed1", 
-    "isSent": true,
-    "_id": "60a6254dcf7876507e4c85be"
+    "isSent": true
 }
