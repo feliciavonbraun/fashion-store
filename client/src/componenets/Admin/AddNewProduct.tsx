@@ -1,4 +1,4 @@
-import { CSSProperties, useState, useContext, useEffect } from 'react';
+import { CSSProperties, useState, useContext } from 'react';
 import { Form, Input, InputNumber, Button, Col, Row, message } from 'antd';
 import { NewProduct, ProductContext } from '../../contexts/ProductContext';
 import { useHistory } from 'react-router-dom';
