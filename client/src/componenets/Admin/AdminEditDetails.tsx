@@ -6,6 +6,9 @@ import {
     Product,
     ProductContext,
 } from '../../contexts/ProductContext';
+import { Select } from 'antd';
+
+const { Option } = Select;
 
 const layout = {
     labelCol: {
@@ -42,7 +45,8 @@ function AdminEditDetails(props: Props) {
     const history = useHistory();
     const _id = props.match.params.id;
     const productContext = useContext(ProductContext);
-    const { getProduct, updateProduct, deleteProduct } = productContext;
+    const { getProduct, updateProduct, deleteProduct, allCategories } =
+        productContext;
     const [buttonSaveLoading, setButtonSaveLoading] = useState(false);
     const [buttonDeleteLoading, setButtonDeleteLoading] = useState(false);
     const [product, setProduct] = useState<Product>();
@@ -137,6 +141,29 @@ function AdminEditDetails(props: Props) {
                                 <Input.TextArea
                                     defaultValue={product.imageUrl}
                                 />
+                            </Form.Item>
+
+                            <Form.Item
+                                name={'category'}
+                                label='Categories'
+                                rules={[{ required: true }]}
+                            >
+                                <Select
+                                    defaultValue={product.category}
+                                    mode='tags'
+                                    style={{ width: '100%' }}
+                                    tokenSeparators={[',']}
+                                >
+                                    {allCategories.map((category) => (
+                                        <Option
+                                            checked={true}
+                                            value={category}
+                                            key={category}
+                                        >
+                                            {category}
+                                        </Option>
+                                    ))}
+                                </Select>
                             </Form.Item>
 
                             <Form.Item

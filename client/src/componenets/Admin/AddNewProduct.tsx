@@ -44,10 +44,6 @@ export default function AddNewProduct() {
         history.push('/product-list');
     };
 
-    const handleChange = (value: string) => {
-        console.log(value);
-    };
-
     return (
         <div>
             <Row style={ContainerStyle}>
@@ -106,7 +102,6 @@ export default function AddNewProduct() {
                             <Select
                                 mode='tags'
                                 style={{ width: '100%' }}
-                                onChange={handleChange}
                                 tokenSeparators={[',']}
                             >
                                 {allCategories.map((category) => (
