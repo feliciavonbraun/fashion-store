@@ -18,7 +18,7 @@ exports.newProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
     const { _id } = req.body;
-    const doc = await Product.replaceOne({ _id: _id }, { ...req.body });
+    const doc = await Product.replaceOne({ _id: _id }, req.body);
     res.status(200).json(doc);
 };
 

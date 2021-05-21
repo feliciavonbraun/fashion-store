@@ -1,8 +1,11 @@
 import { Form, Input, Button, Col, Row, message } from 'antd';
-import { Component, CSSProperties } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import ErrorPage from '../ErrorPage';
-import { Product } from '../../contexts/ProductContext';
+import { CSSProperties, useContext, useEffect, useState } from 'react';
+import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
+import {
+    NewProduct,
+    Product,
+    ProductContext,
+} from '../../contexts/ProductContext';
 
 const layout = {
     labelCol: {
@@ -27,13 +30,6 @@ const validateMessages = {
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
-interface State {
-    products: Product[];
-    product: Product | undefined;
-    buttonSaveLoading: boolean;
-    buttonDeleteLoading: boolean;
-}
-
 const successSave = () => {
     message.success('The product has been updated', 3);
 };
@@ -42,87 +38,56 @@ const successDelete = () => {
     message.success('The product has been deleted', 3);
 };
 
-class AdminEditDetails extends Component<Props, State> {
-    state: State = {
-        products: JSON.parse(localStorage.getItem('products') as string) || [],
-        product: undefined,
-        buttonSaveLoading: false,
-        buttonDeleteLoading: false,
-    };
+function AdminEditDetails(props: Props) {
+    const history = useHistory();
+    const _id = props.match.params.id;
+    const productContext = useContext(ProductContext);
+    const { getProduct, updateProduct, deleteProduct } = productContext;
+    const [buttonSaveLoading, setButtonSaveLoading] = useState(false);
+    const [buttonDeleteLoading, setButtonDeleteLoading] = useState(false);
+    const [product, setProduct] = useState<Product>();
 
-    onFinish = async (values: any) => {
-        this.setState({ buttonSaveLoading: true });
-        try {
-            await saveDeleteProductMockApi();
-        } catch (error) {
-            console.log(error);
-            return;
-        }
-        const products =
-            JSON.parse(localStorage.getItem('products') as string) || [];
-        const editedProduct: Product = {
-            ...this.state.product,
-            ...values.product,
+    useEffect(() => {
+        const fetch = async () => {
+            const product = await getProduct(_id);
+            setProduct(product);
+            console.log(product);
         };
-        const updatedProducts = products.map((item: Product) =>
-            item._id === editedProduct._id ? editedProduct : item
-        );
-        localStorage.setItem('products', JSON.stringify(updatedProducts));
-        this.props.history.push('/product-list');
-        this.setState({ buttonSaveLoading: false });
+        fetch();
+    }, [_id, getProduct]);
+
+    const onFinish = async (product: NewProduct) => {
+        setButtonSaveLoading(true);
+        const updatedProduct = { ...product, _id: _id };
+        await updateProduct(updatedProduct);
+        successSave();
+        history.push('/product-list');
     };
 
-    componentDidMount() {
-        const products =
-            JSON.parse(localStorage.getItem('products') as string) || [];
-        const product = products.find(
-            (p: Product) => p._id === this.props.match.params.id
-        );
-        this.setState({ product: product });
-    }
-
-    handleDelete = async () => {
-        this.setState({ buttonDeleteLoading: true });
-        try {
-            await saveDeleteProductMockApi();
-        } catch (error) {
-            console.log(error);
-            return;
-        }
-        const products =
-            JSON.parse(localStorage.getItem('products') as string) || [];
-        const productId = this.state.product?._id;
-        const newProducts = products.filter(
-            (item: Product) => item._id !== productId
-        );
-        localStorage.setItem('products', JSON.stringify(newProducts));
-        this.props.history.push('/product-list');
-        this.setState({ buttonDeleteLoading: false });
+    const handleDelete = async () => {
+        setButtonDeleteLoading(true);
+        await deleteProduct(product!);
+        successDelete();
+        history.push('/product-list');
     };
 
-    render() {
-        const { product } = this.state;
-
-        if (!product) {
-            return <ErrorPage />;
-        }
-
-        return (
-            <div>
-                <Row style={ContainerStyle}>
-                    <Col span={24} style={columnStyle}>
+    return (
+        <div>
+            <Row style={ContainerStyle}>
+                <Col span={24} style={columnStyle}>
+                    {product ? (
                         <Form
                             {...layout}
                             name='nest-messages'
-                            onFinish={this.onFinish}
+                            onFinish={onFinish}
                             validateMessages={validateMessages}
                             initialValues={{
                                 product: {
-                                    title: this.state.product?.title,
-                                    description:
-                                        this.state.product?.description,
-                                    price: this.state.product?.price,
-                                    imageUrl: this.state.product?.imageUrl,
+                                    title: product.title,
+                                    description: product.description,
+                                    price: product.price,
+                                    imageUrl: product.imageUrl,
+                                    qty: product.qty,
                                 },
                             }}
                         >
@@ -136,15 +101,16 @@ class AdminEditDetails extends Component<Props, State> {
                                 EDIT
                             </h1>
                             <Form.Item
-                                name={['product', 'title']}
+                                name={'title'}
                                 label='Title'
                                 rules={[{ required: true }]}
                             >
-                                <Input />
+                                <Input.TextArea defaultValue={product.title} />
                             </Form.Item>
 
                             <Form.Item
-                                name={['product', 'description']}
+                                initialValue={product.description}
+                                name={'description'}
                                 label='Description'
                                 rules={[{ required: true }]}
                             >
@@ -154,27 +120,32 @@ class AdminEditDetails extends Component<Props, State> {
                             </Form.Item>
 
                             <Form.Item
-                                name={['product', 'price']}
+                                initialValue={product.price}
+                                name={'price'}
                                 label='Price'
                                 rules={[{ required: true }]}
                             >
-                                <Input />
+                                <Input.TextArea defaultValue={product.price} />
                             </Form.Item>
 
                             <Form.Item
-                                name={['product', 'imageUrl']}
+                                initialValue={product.imageUrl}
+                                name={'imageUrl'}
                                 label='ImageUrl'
                                 rules={[{ required: true }]}
                             >
-                                <Input />
+                                <Input.TextArea
+                                    defaultValue={product.imageUrl}
+                                />
                             </Form.Item>
 
                             <Form.Item
-                                name={['product', 'storage qty']}
+                                initialValue={product.qty}
+                                name={'qty'}
                                 label='Storage qty'
                                 rules={[{ required: true }]}
                             >
-                                <Input />
+                                <Input.TextArea defaultValue={product.qty} />
                             </Form.Item>
 
                             <Form.Item
@@ -188,11 +159,8 @@ class AdminEditDetails extends Component<Props, State> {
                                 >
                                     <Button
                                         type='primary'
-                                        onClick={() => {
-                                            successSave();
-                                        }}
                                         htmlType='submit'
-                                        loading={this.state.buttonSaveLoading}
+                                        loading={buttonSaveLoading}
                                     >
                                         Save
                                     </Button>
@@ -200,23 +168,22 @@ class AdminEditDetails extends Component<Props, State> {
                                     <Button
                                         type='primary'
                                         danger
-                                        onClick={() => {
-                                            this.handleDelete();
-                                            successDelete();
-                                        }}
-                                        loading={this.state.buttonDeleteLoading}
+                                        onClick={handleDelete}
+                                        loading={buttonDeleteLoading}
                                     >
                                         Delete
                                     </Button>
                                 </div>
                             </Form.Item>
                         </Form>
-                    </Col>
-                </Row>
-            </div>
-        );
-    }
+                    ) : null}
+                </Col>
+            </Row>
+        </div>
+    );
 }
+
+export default withRouter(AdminEditDetails);
 
 const ContainerStyle: CSSProperties = {
     display: 'flex',
@@ -230,9 +197,3 @@ const columnStyle: CSSProperties = {
     marginTop: '10rem',
     paddingBottom: '8rem',
 };
-
-export default withRouter(AdminEditDetails);
-
-async function saveDeleteProductMockApi() {
-    return new Promise((res) => setTimeout(() => res('success'), 2000));
-}

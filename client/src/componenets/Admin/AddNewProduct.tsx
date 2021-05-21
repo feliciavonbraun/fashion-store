@@ -1,7 +1,7 @@
-import { Component, CSSProperties } from 'react';
+import { CSSProperties, useState, useContext } from 'react';
 import { Form, Input, InputNumber, Button, Col, Row, message } from 'antd';
-import { Product } from '../../contexts/ProductContext';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { NewProduct, ProductContext } from '../../contexts/ProductContext';
+import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
 
 const layout = {
     labelCol: {
@@ -24,127 +24,107 @@ const validateMessages = {
     },
 };
 
-interface Props extends RouteComponentProps<{ id: string }> {}
-interface State {
-    product: Product | undefined;
-    buttonSaveLoading: boolean;
-}
-
 const success = () => {
     message.success('The product has been published', 3);
 };
-class AddNewProduct extends Component<Props, State> {
-    state: State = {
-        product: undefined,
-        buttonSaveLoading: false,
+
+export default function AddNewProduct() {
+    const history = useHistory();
+    const productContext = useContext(ProductContext);
+    const { newProduct } = productContext;
+    const [buttonSaveLoading, setButtonSaveLoading] = useState(false);
+
+    const onFinish = async (product: NewProduct) => {
+        setButtonSaveLoading(true);
+        await newProduct(product);
+        history.push('/product-list');
     };
 
-    onFinish = async (values: any) => {
-        this.setState({ buttonSaveLoading: true });
-        try {
-            await saveNewProductMockApi();
-        } catch (error) {
-            console.log(error);
-            return;
-        }
-        const existingProducts =
-            JSON.parse(localStorage.getItem('products') as string) || [];
-        const newProduct: Product = { ...values.product };
-        /* newProduct.id =
-            Math.max(...existingProducts.map((item: Product) => item.id)) + 1; */
-        existingProducts.push(newProduct);
-        localStorage.setItem('products', JSON.stringify(existingProducts));
-        this.props.history.push('/product-list');
-        this.setState({ buttonSaveLoading: false });
-    };
-
-    render() {
-        return (
-            <div>
-                <Row style={ContainerStyle}>
-                    <Col span={24} style={columnStyle}>
-                        <Form
-                            {...layout}
-                            name='nest-messages'
-                            onFinish={this.onFinish}
-                            validateMessages={validateMessages}
+    return (
+        <div>
+            <Row style={ContainerStyle}>
+                <Col span={24} style={columnStyle}>
+                    <Form
+                        {...layout}
+                        name='nest-messages'
+                        onFinish={onFinish}
+                        validateMessages={validateMessages}
+                    >
+                        <h1
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                fontWeight: 'bold',
+                            }}
                         >
-                            <h1
+                            ADD NEW PRODUCT{' '}
+                        </h1>
+                        <Form.Item
+                            name={'title'}
+                            label='Title'
+                            rules={[{ required: true }]}
+                        >
+                            <Input />
+                        </Form.Item>
+
+                        <Form.Item
+                            name={'description'}
+                            label='Description'
+                            rules={[{ required: true }]}
+                        >
+                            <Input.TextArea />
+                        </Form.Item>
+
+                        <Form.Item
+                            name={'price'}
+                            label='Price'
+                            rules={[{ required: true }]}
+                        >
+                            <InputNumber />
+                        </Form.Item>
+
+                        <Form.Item
+                            name={'imageUrl'}
+                            label='ImageUrl'
+                            rules={[{ required: true }]}
+                        >
+                            <Input />
+                        </Form.Item>
+
+                        <Form.Item
+                            name={'qty'}
+                            label='Storage qty'
+                            rules={[{ required: true }]}
+                        >
+                            <Input />
+                        </Form.Item>
+
+                        <Form.Item
+                            wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
+                        >
+                            <div
                                 style={{
                                     display: 'flex',
-                                    justifyContent: 'center',
-                                    fontWeight: 'bold',
+                                    justifyContent: 'space-between',
                                 }}
                             >
-                                ADD NEW PRODUCT{' '}
-                            </h1>
-                            <Form.Item
-                                name={['product', 'title']}
-                                label='Title'
-                                rules={[{ required: true }]}
-                            >
-                                <Input />
-                            </Form.Item>
-
-                            <Form.Item
-                                name={['product', 'description']}
-                                label='Description'
-                                rules={[{ required: true }]}
-                            >
-                                <Input.TextArea />
-                            </Form.Item>
-
-                            <Form.Item
-                                name={['product', 'price']}
-                                label='Price'
-                                rules={[{ required: true }]}
-                            >
-                                <InputNumber />
-                            </Form.Item>
-
-                            <Form.Item
-                                name={['product', 'imageUrl']}
-                                label='ImageUrl'
-                                rules={[{ required: true }]}
-                            >
-                                <Input />
-                            </Form.Item>
-
-                            <Form.Item
-                                name={['product', 'storage qty']}
-                                label='Storage qty'
-                                rules={[{ required: true }]}
-                            >
-                                <Input />
-                            </Form.Item>
-
-                            <Form.Item
-                                wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
+                                <Button
+                                    type='primary'
+                                    onClick={() => {
+                                        success();
                                     }}
+                                    htmlType='submit'
+                                    loading={buttonSaveLoading}
                                 >
-                                    <Button
-                                        type='primary'
-                                        onClick={() => {
-                                            success();
-                                        }}
-                                        htmlType='submit'
-                                        loading={this.state.buttonSaveLoading}
-                                    >
-                                        Save
-                                    </Button>
-                                </div>
-                            </Form.Item>
-                        </Form>
-                    </Col>
-                </Row>
-            </div>
-        );
-    }
+                                    Save
+                                </Button>
+                            </div>
+                        </Form.Item>
+                    </Form>
+                </Col>
+            </Row>
+        </div>
+    );
 }
 
 const ContainerStyle: CSSProperties = {
@@ -159,9 +139,3 @@ const columnStyle: CSSProperties = {
     marginTop: '10rem',
     paddingBottom: '8rem',
 };
-
-export default withRouter(AddNewProduct);
-
-async function saveNewProductMockApi() {
-    return new Promise((res) => setTimeout(() => res('success'), 2000));
-}

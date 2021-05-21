@@ -11,8 +11,20 @@ export interface Product {
     description: string;
 }
 
+export interface NewProduct {
+    title: string;
+    price: number;
+    imageUrl: string;
+    qty: number;
+    category: String[];
+    description: string;
+}
+
 interface ProductValue {
     getProduct: (_id: string) => Promise<Product>;
+    updateProduct: (product: Product) => void;
+    newProduct: (product: NewProduct) => Promise<Product>;
+    deleteProduct: (product: Product) => void;
     allProducts: Product[];
 }
 
@@ -38,8 +50,29 @@ function ProductProvider({ children }: Props) {
             `/api/product/${_id}`,
             'GET'
         );
-        console.log(product);
         return product;
+    };
+
+    const newProduct = async (product: NewProduct) => {
+        const body = { ...product };
+        const newProduct = await makeRequest('/api/product', 'POST', body);
+        const products = await makeRequest('/api/product', 'GET');
+        setAllProducts(products);
+        return newProduct;
+    };
+
+    const updateProduct = async (product: Product) => {
+        const body = { ...product };
+        await makeRequest(`/api/product/${product._id}`, 'PUT', body);
+        const products = await makeRequest('/api/product', 'GET');
+        setAllProducts(products);
+    };
+
+    const deleteProduct = async (product: Product) => {
+        const body = { ...product };
+        await makeRequest(`/api/product/${product._id}`, 'DELETE', body);
+        const products = await makeRequest('/api/product', 'GET');
+        setAllProducts(products);
     };
 
     return (
@@ -47,6 +80,9 @@ function ProductProvider({ children }: Props) {
             value={{
                 allProducts,
                 getProduct,
+                updateProduct,
+                newProduct,
+                deleteProduct,
             }}
         >
             {children}
