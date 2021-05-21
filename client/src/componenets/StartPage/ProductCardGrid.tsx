@@ -1,19 +1,22 @@
 import { CSSProperties, useContext } from 'react';
 import { Card, Col, List, Row, message } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
-import { ProductContext } from '../../contexts/ProductContext';
+import { Product, ProductContext } from '../../contexts/ProductContext';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../../contexts/CartContext';
+
+interface Props {
+    products: Product[];
+}
 
 const { Meta } = Card;
 const success = () => {
     message.success('The product was added to the cart', 5);
 };
-export default function ProductCardGrid() {
+export default function ProductCardGrid(props: Props) {
     const cartContext = useContext(CartContext);
     const { addProductToCart } = cartContext;
-    const productContext = useContext(ProductContext);
-    const { allProducts } = productContext;
+    const { products } = props;
 
     return (
         <Row style={cardContainer}>
@@ -28,7 +31,7 @@ export default function ProductCardGrid() {
                         xl: 4,
                         xxl: 4,
                     }}
-                    dataSource={allProducts}
+                    dataSource={products}
                     renderItem={(item) => (
                         <List.Item>
                             <Link to={'/product/' + item._id}>

@@ -1,7 +1,10 @@
-import { CSSProperties, useState, useContext } from 'react';
+import { CSSProperties, useState, useContext, useEffect } from 'react';
 import { Form, Input, InputNumber, Button, Col, Row, message } from 'antd';
 import { NewProduct, ProductContext } from '../../contexts/ProductContext';
 import { useHistory } from 'react-router-dom';
+import { Select } from 'antd';
+
+const { Option } = Select;
 
 const layout = {
     labelCol: {
@@ -31,7 +34,7 @@ const success = () => {
 export default function AddNewProduct() {
     const history = useHistory();
     const productContext = useContext(ProductContext);
-    const { newProduct } = productContext;
+    const { newProduct, allCategories } = productContext;
     const [buttonSaveLoading, setButtonSaveLoading] = useState(false);
 
     const onFinish = async (product: NewProduct) => {
@@ -39,6 +42,10 @@ export default function AddNewProduct() {
         await newProduct(product);
         success();
         history.push('/product-list');
+    };
+
+    const handleChange = (value: string) => {
+        console.log(value);
     };
 
     return (
@@ -91,7 +98,24 @@ export default function AddNewProduct() {
                         >
                             <Input />
                         </Form.Item>
-
+                        <Form.Item
+                            name={'category'}
+                            label='Categories'
+                            rules={[{ required: true }]}
+                        >
+                            <Select
+                                mode='tags'
+                                style={{ width: '100%' }}
+                                onChange={handleChange}
+                                tokenSeparators={[',']}
+                            >
+                                {allCategories.map((category) => (
+                                    <Option value={category} key={category}>
+                                        {category}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
                         <Form.Item
                             name={'qty'}
                             label='Storage qty'
