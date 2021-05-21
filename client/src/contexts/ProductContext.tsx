@@ -29,7 +29,7 @@ function ProductProvider({children}: Props) {
         async function getProduct() {
             
             console.log('HEJ')
-            const products = await makeRequest('/api/products', 'GET');
+            const products = await makeRequest('/api/product', 'GET');
             console.log(products, 'HEJ')
             setAllProducts(products);
         }
