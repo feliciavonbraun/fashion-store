@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const OrderItemSchema = new mongoose.Schema({
-    // product: { type: Product }, // denna typningen???
+    product: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
     qty: { type: Number },
 });
 
@@ -13,18 +13,16 @@ const AddressSchema = new mongoose.Schema({
 });
 
 const OrderSchema = new mongoose.Schema({
-    orderItem: { type: OrderItemSchema }, // denna ska va en [], hur????
+    orderItem: { type: [OrderItemSchema] }, 
     address: { type: AddressSchema },
 
     totalprice: { type: Number },
     isSent: { type: Boolean },
     createdAt: { type: Date },
 
-    // delivery: objectId, 
-    // user: objectId,  
+    delivery: {type: mongoose.Schema.Types.ObjectId, ref: "delivery"}, 
+    user: {type: mongoose.Schema.Types.ObjectId, ref: "user"},  
 });
 
 const OrderModel = mongoose.model('order', OrderSchema);
 module.exports = OrderModel;
-
-// SE ÖVER DENNA FIL 
