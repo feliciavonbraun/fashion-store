@@ -25,13 +25,15 @@ app.use(orderRouter);
 app.use(userRouter);
 app.use(deliveryRouter);
 
+
+
 /* ERROR HANDLING */
 app.use((req, res) => {
-	res.status(404).json("Wrong");
-});
-app.use((err, req, res, next) => {
-	console.error(err);
-	res.status(500).json(err.message);
+    res.status(404).json('Wrong')
+})
+app.use((err, req, res) => {
+    console.error(err);
+    res.status(500).json(err.message);
 });
 
 /* CONNECT TO DATABASE */

@@ -2,22 +2,26 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, List, Row, } from "antd";
 import { Component, CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import { Product } from "../ProductItemsList";
+import { Product, ProductContext } from "../../contexts/ProductContext"
 
 interface State {
-    products?: Product[]; 
+    allProducts: Product[]
 }
-class ProductList extends Component < {}, State>{
+
+class ProductList extends Component {
+    static contextType = ProductContext;
 
     state: State = {
-        products: []
+        allProducts: []
     }
 
     componentDidMount() {
-        this.setState({ products: JSON.parse(localStorage.getItem('products') as string) || []});
+        let getProduct = this.context;
+        this.setState({allProducts: getProduct})
     }
 
     render() {
+        console.log(this.state.allProducts)
         return (
             <Row style={containerStyle}>
                 <Col style={columnStyle}>
@@ -40,13 +44,13 @@ class ProductList extends Component < {}, State>{
                         xl: 1,
                         xxl: 1,
                         }}
-                        dataSource={this.state.products}
+                        dataSource={this.state.allProducts}
                         renderItem={item => (
                             <List.Item>
-                                <Link to={'/edit-product/' + item.id}>     
+                                <Link to={'/edit-product/' + item._id}>     
                                 <List.Item.Meta                    
-                                    avatar={<Avatar size={64} src={item.imageUrl} />} 
-                                    title={<Link to={'/edit-product/' + item.id}>{item.title}</Link>}
+                                    avatar={<Avatar size={64} src={item.image} />} 
+                                    title={<Link to={'/edit-product/' + item._id}>{item.name}</Link>}
                                     description={[item.description.split('.')[0],  
                                     ]}
                                 />  
