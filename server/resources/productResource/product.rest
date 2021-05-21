@@ -1,0 +1,47 @@
+GET http://localhost:4000/api/product
+
+###
+
+GET http://localhost:4000/api/product/:id
+Content-Type: application/json
+
+{
+    "_id": "60a544da597058b62ff8fed1"
+}
+
+###
+
+POST http://localhost:4000/api/product
+Content-Type: application/json
+
+{
+    "name": "BASIC TEE WITH PRINT",
+    "description": "Basic Tee is a round neck, short sleeve tee in jersey rib. It has a short sleeve that ends in elbow length. The fabric is the softest modal rib blended with elastane for good recovery.",
+    "price": "299",
+    "image": "https://github.com/msmalinosterberg/miniprojekt/blob/master/src/assets/prod5.png?raw=true",
+    "qty": "10",
+    "category": "Pants"
+}
+###
+
+PUT http://localhost:4000/api/product/:id
+Content-Type: application/json
+
+{
+    "name": "BASIC TEE WITH PRINT",
+    "description": "Basic Tee is a round neck, short sleeve tee in jersey rib. It has a short sleeve that ends in elbow length. The fabric is the softest modal rib blended with elastane for good recovery.",
+    "price": "299",
+    "image": "https://github.com/msmalinosterberg/miniprojekt/blob/master/src/assets/prod5.png?raw=true",
+    "qty": "9",
+    "category": "Pants",
+    "_id": "60a544da597058b62ff8fed1"
+}
+
+###
+
+DELETE http://localhost:4000/api/product/:id
+Content-Type: application/json
+
+{
+    "_id": "60a544da597058b62ff8fed1"
+}
