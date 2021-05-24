@@ -13,7 +13,7 @@ function Navbar() {
     return (
         <Header style={layoutStyle}>
             <Link to='/' style={logoLink}>
-                <img src={logo} alt='logo' style={logoStyle} />
+                <img src={logo} alt='logo' style={li} />
             </Link>
             <Menu mode='horizontal' style={menuStyle}>
                 <Menu.Item key='1' style={li}>
@@ -63,10 +63,6 @@ const logoLink: CSSProperties = {
     height: '100%',
 };
 
-const logoStyle: CSSProperties = {
-    height: '100%',
-};
-
 const iconStyle: CSSProperties = {
     fontSize: '2rem',
     color: 'white',
@@ -74,6 +70,7 @@ const iconStyle: CSSProperties = {
 };
 
 const li: CSSProperties = {
+    maxHeight: '100%',
     display: 'flex',
     alignItems: 'center',
 };
