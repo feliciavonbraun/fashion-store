@@ -84,7 +84,7 @@ export default function AddNewProduct() {
                             label='Price'
                             rules={[{ required: true }]}
                         >
-                            <InputNumber />
+                            <InputNumber min={1} />
                         </Form.Item>
 
                         <Form.Item
@@ -116,7 +116,7 @@ export default function AddNewProduct() {
                             label='Storage qty'
                             rules={[{ required: true }]}
                         >
-                            <Input />
+                            <InputNumber />
                         </Form.Item>
 
                         <Form.Item

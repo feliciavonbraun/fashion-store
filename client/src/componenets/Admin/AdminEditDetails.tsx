@@ -1,4 +1,4 @@
-import { Form, Input, Button, Col, Row, message } from 'antd';
+import { Form, Input, Button, Col, Row, message, InputNumber } from 'antd';
 import { CSSProperties, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
 import {
@@ -129,7 +129,10 @@ function AdminEditDetails(props: Props) {
                                 label='Price'
                                 rules={[{ required: true }]}
                             >
-                                <Input.TextArea defaultValue={product.price} />
+                                <InputNumber
+                                    min={1}
+                                    defaultValue={product.price}
+                                />
                             </Form.Item>
 
                             <Form.Item
@@ -172,7 +175,7 @@ function AdminEditDetails(props: Props) {
                                 label='Storage qty'
                                 rules={[{ required: true }]}
                             >
-                                <Input.TextArea defaultValue={product.qty} />
+                                <InputNumber defaultValue={product.qty} />
                             </Form.Item>
 
                             <Form.Item
