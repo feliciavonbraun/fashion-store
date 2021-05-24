@@ -15,9 +15,9 @@ import OrderProvider from "./contexts/OrderContext";
 
 function App() {
     return (
-        <OrderProvider>
+        <CartProvider>
             <ProductProvider>
-                <CartProvider>
+                <OrderProvider>
                     <Router>
                         <ScrollToTop />
                         <Navbar />
@@ -34,9 +34,9 @@ function App() {
                         </Switch>
                         <Footer2 />
                     </Router>
-                </CartProvider>
+                </OrderProvider>
             </ProductProvider>
-        </OrderProvider>
+        </CartProvider>
     );
 }
 
