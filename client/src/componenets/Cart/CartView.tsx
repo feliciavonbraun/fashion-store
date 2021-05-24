@@ -10,38 +10,38 @@ import CompleteOrder from './CompleteOrder';
 const { Step } = Steps;
 
 const steps = [
-  {
-    title: 'Your information',
-  },
-  {
-    title: 'Delivery',
-  },
-  {
-    title: 'Payment',
-  },
-  {
-    title: 'Complete order',
-  },
+    {
+        title: 'Your information',
+    },
+    {
+        title: 'Delivery',
+    },
+    {
+        title: 'Payment',
+    },
+    {
+        title: 'Complete order',
+    },
 ];
 
 interface State {
     current: number;
 }
-class CartView extends Component<{}, State> { 
-    context!: ContextType<typeof CartContext>
+class CartView extends Component<{}, State> {
+    context!: ContextType<typeof CartContext>;
     static contextType = CartContext;
 
     state: State = {
-        current: 0
-    }
+        current: 0,
+    };
 
     next = () => {
-        this.setState({ current: this.state.current + 1});
-    }
+        this.setState({ current: this.state.current + 1 });
+    };
 
     prev = () => {
-        this.setState({ current: this.state.current - 1});
-    }
+        this.setState({ current: this.state.current - 1 });
+    };
 
     render() {
         const { current } = this.state;
@@ -53,24 +53,41 @@ class CartView extends Component<{}, State> {
         };
         const StepsComponent = stepsComponents[current];
 
-        return(
+        return (
             <CartContext.Consumer>
                 {({ getTotalPriceProducts }) => {
                     return (
                         <Row style={cartViewContainerStyle}>
                             <CartItemsList />
-                            <h3 style={priceTextStyle}>Price products: {getTotalPriceProducts()  + ' kr '}</h3>
-                            <Steps current={this.state.current} style={{ marginTop: '7rem' }}>
-                                {steps.map(item => (
-                                <Step key={item.title} title={item.title} />
-                                ))}
-                            </Steps>
-                            <StepsComponent next={this.next} />
+                            {this.context.cart.length ? (
+                                <>
+                                    <h3 style={priceTextStyle}>
+                                        Price products:{' '}
+                                        {getTotalPriceProducts() + ' kr '}
+                                    </h3>
+                                    <Steps
+                                        current={this.state.current}
+                                        style={{ marginTop: '7rem' }}
+                                    >
+                                        {steps.map((item) => (
+                                            <Step
+                                                key={item.title}
+                                                title={item.title}
+                                            />
+                                        ))}
+                                    </Steps>
+                                    <StepsComponent next={this.next} />
+                                </>
+                            ) : (
+                                <h3 style={priceTextStyle}>
+                                    Your cart is empty
+                                </h3>
+                            )}
                         </Row>
-                    );    
+                    );
                 }}
             </CartContext.Consumer>
-        )
+        );
     }
 }
 
@@ -83,10 +100,10 @@ const cartViewContainerStyle: CSSProperties = {
     alignItems: 'space-around',
     width: '80%',
     margin: 'auto',
-    paddingBottom: "8rem",
-}
+    paddingBottom: '8rem',
+};
 
 const priceTextStyle: CSSProperties = {
     textAlign: 'center',
-    marginTop: '1rem'
-}
+    marginTop: '1rem',
+};
