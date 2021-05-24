@@ -23,7 +23,6 @@ function Sidebar(props: Props) {
         <Router>
             <Layout style={layout}>
                 <Sider breakpoint='lg' collapsedWidth='0' theme={'light'}>
-                    <div className='logo' />
                     <Menu
                         style={{ height: '100%' }}
                         mode='inline'
@@ -44,8 +43,8 @@ function Sidebar(props: Props) {
                     </Menu>
                 </Sider>
 
-                <Layout className='site-layout'>
-                    <Content style={mainContent}>
+                <Layout style={mainContent}>
+                    <Content style={contentStyle}>
                         <Route
                             exact
                             path={`${props.match.url}/product-list`}
@@ -83,7 +82,13 @@ const layout: CSSProperties = {
 
 const mainContent: CSSProperties = {
     flex: 1,
-    padding: '2rem 4rem',
     backgroundColor: 'white',
-    overflowX: 'auto',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+};
+
+const contentStyle: CSSProperties = {
+    boxSizing: 'border-box',
+    minWidth: '100vw',
+    padding: '2rem',
 };
