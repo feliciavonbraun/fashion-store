@@ -14,6 +14,7 @@ import ProductProvider from './contexts/ProductContext';
 import OrderProvider from "./contexts/OrderContext";
 import DeliveryProvider from './contexts/DeliveryContext';
 
+
 function App() {
     return (
         <OrderProvider>
@@ -24,7 +25,10 @@ function App() {
                         <ScrollToTop />
                         <Navbar />
                         <Switch>
-                            <Route path='/product/:id' component={ProductDetails} />
+                            <Route
+                                path='/product/:id'
+                                component={ProductDetails}
+                            />
                             <Route
                                 path='/ordersuccess'
                                 component={OrderSuccessMessage}
@@ -32,7 +36,7 @@ function App() {
                             <Route exact path='/' component={StartPageView} />
                             <Route path='/cart' component={CartView} />
                             <Route path='/login' component={LogIn} />
-                            <Route path='/sidebar' component={Sidebar} />
+                            <Route path='/user' component={Sidebar} />
                         </Switch>
                         <Footer2 />
                     </Router>
