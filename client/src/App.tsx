@@ -11,12 +11,15 @@ import StartPageView from './componenets/StartPage/StartPageView';
 import ScrollToTop from './componenets/ScrollToTop';
 import CartProvider from './contexts/CartContext';
 import ProductProvider from './contexts/ProductContext';
-import OrderProvider from './contexts/OrderContext';
+import OrderProvider from "./contexts/OrderContext";
+import DeliveryProvider from './contexts/DeliveryContext';
+
 
 function App() {
     return (
         <OrderProvider>
             <ProductProvider>
+                <DeliveryProvider>
                 <CartProvider>
                     <Router>
                         <ScrollToTop />
@@ -38,6 +41,7 @@ function App() {
                         <Footer2 />
                     </Router>
                 </CartProvider>
+            </DeliveryProvider>
             </ProductProvider>
         </OrderProvider>
     );
