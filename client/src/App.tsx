@@ -11,7 +11,7 @@ import StartPageView from './componenets/StartPage/StartPageView';
 import ScrollToTop from './componenets/ScrollToTop';
 import CartProvider from './contexts/CartContext';
 import ProductProvider from './contexts/ProductContext';
-import OrderProvider from "./contexts/OrderContext";
+import OrderProvider from './contexts/OrderContext';
 
 function App() {
     return (
@@ -22,7 +22,10 @@ function App() {
                         <ScrollToTop />
                         <Navbar />
                         <Switch>
-                            <Route path='/product/:id' component={ProductDetails} />
+                            <Route
+                                path='/product/:id'
+                                component={ProductDetails}
+                            />
                             <Route
                                 path='/ordersuccess'
                                 component={OrderSuccessMessage}
@@ -30,7 +33,7 @@ function App() {
                             <Route exact path='/' component={StartPageView} />
                             <Route path='/cart' component={CartView} />
                             <Route path='/login' component={LogIn} />
-                            <Route path='/sidebar' component={Sidebar} />
+                            <Route path='/user' component={Sidebar} />
                         </Switch>
                         <Footer2 />
                     </Router>

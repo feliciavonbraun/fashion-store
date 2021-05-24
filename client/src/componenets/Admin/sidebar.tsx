@@ -1,6 +1,12 @@
-import { Component, CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 import { Layout, Menu } from 'antd';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    withRouter,
+    RouteComponentProps,
+} from 'react-router-dom';
 
 import ProductList from './ProductList';
 import UserList from './UserList';
@@ -10,67 +16,79 @@ import AdminEditDetails from './AdminEditDetails';
 
 const { Content, Sider } = Layout;
 
-class Sidebar extends Component {
-    render() {
-        return (
-            <Router>
-                <Layout>
-                    <Sider style={siderStyle}>
-                        <div className='logo' />
-                        <Menu
-                            theme='dark'
-                            mode='inline'
-                            defaultSelectedKeys={['0']}
-                        >
-                            <Menu.Item key='1'>
-                                <span>Products</span>
-                                <Link to='/product-list' />
-                            </Menu.Item>
-                            <Menu.Item key='2'>
-                                <span>Orders</span>
-                                <Link to='/order-list' />
-                            </Menu.Item>
-                            <Menu.Item key='3'>
-                                <span>Users</span>
-                                <Link to='/user-list' />
-                            </Menu.Item>
-                        </Menu>
-                    </Sider>
+interface Props extends RouteComponentProps {}
 
-                    <Layout
-                        className='site-layout'
-                        style={{ marginLeft: 200, backgroundColor: 'white' }}
+function Sidebar(props: Props) {
+    return (
+        <Router>
+            <Layout style={layout}>
+                <Sider breakpoint='lg' collapsedWidth='0' theme={'light'}>
+                    <Menu
+                        style={{ height: '100%' }}
+                        mode='inline'
+                        defaultSelectedKeys={['1']}
                     >
-                        <Content>
-                            <Route
-                                exact
-                                path='/product-list'
-                                component={ProductList}
-                            />
-                            <Route
-                                path='/product-list/add-product'
-                                component={AddNewProduct}
-                            />
-                            <Route
-                                path='/product-list/edit-product/:id'
-                                component={AdminEditDetails}
-                            />
-                            <Route path='/order-list' component={OrderList} />
-                            <Route path='/user-list' component={UserList} />
-                        </Content>
-                    </Layout>
-                </Layout>
-            </Router>
-        );
-    }
-}
-export default Sidebar;
+                        <Menu.Item key='1'>
+                            <span>Products</span>
+                            <Link to={`${props.match.url}/product-list`} />
+                        </Menu.Item>
+                        <Menu.Item key='2'>
+                            <span>Orders</span>
+                            <Link to={`${props.match.url}/order-list`} />
+                        </Menu.Item>
+                        <Menu.Item key='3'>
+                            <span>Users</span>
+                            <Link to={`${props.match.url}/user-list`} />
+                        </Menu.Item>
+                    </Menu>
+                </Sider>
 
-const siderStyle: CSSProperties = {
-    overflow: 'auto',
-    height: '100%',
-    position: 'fixed',
-    left: 0,
-    marginTop: window.innerWidth > 768 ? '6rem' : '5rem',
-    zIndex: 100,
+                <Layout style={mainContent}>
+                    <Content style={contentStyle}>
+                        <Route
+                            exact
+                            path={`${props.match.url}/product-list`}
+                            component={ProductList}
+                        />
+                        <Route
+                            path={`${props.match.url}/product-list/add-product`}
+                            component={AddNewProduct}
+                        />
+                        <Route
+                            path={`${props.match.url}/product-list/edit-product/:id`}
+                            component={AdminEditDetails}
+                        />
+                        <Route
+                            path={`${props.match.url}/order-list`}
+                            component={OrderList}
+                        />
+                        <Route
+                            path={`${props.match.url}/user-list`}
+                            component={UserList}
+                        />
+                    </Content>
+                </Layout>
+            </Layout>
+        </Router>
+    );
+}
+
+export default withRouter(Sidebar);
+
+const layout: CSSProperties = {
+    paddingTop: window.innerWidth > 768 ? '6rem' : '5rem',
+    height: 'calc(100vh - 3rem)',
+};
+
+const mainContent: CSSProperties = {
+    flex: 1,
+    backgroundColor: 'white',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+};
+
+const contentStyle: CSSProperties = {
+    boxSizing: 'border-box',
+    minWidth: '100vw',
+    padding: '2rem',
 };
