@@ -1,5 +1,4 @@
-import { List, Row, Col } from 'antd';
-import { CSSProperties } from 'react';
+import { List } from 'antd';
 import UserListItem from './UserListItem';
 
 export default function UserList() {
