@@ -89,6 +89,6 @@ const mainContent: CSSProperties = {
 
 const contentStyle: CSSProperties = {
     boxSizing: 'border-box',
-    minWidth: '100vw',
+    minWidth: '18rem',
     padding: '2rem',
 };
