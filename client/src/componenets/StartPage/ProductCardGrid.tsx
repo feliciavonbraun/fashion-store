@@ -1,5 +1,5 @@
 import { CSSProperties, useContext } from 'react';
-import { Card, Col, List, Row, message, Spin } from 'antd';
+import { Card, Col, List, Row, message } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Product } from '../../contexts/ProductContext';
 import { Link } from 'react-router-dom';
