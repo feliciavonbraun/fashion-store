@@ -28,7 +28,7 @@ const steps = [
 
 function CartView() {
     const { getTotalPriceProducts } = useContext(CartContext);
-    const { loggedIn } = useContext(UserContext);
+    const { loggedin } = useContext(UserContext);
     const [current, setCurrent] = useState(0);
 
     const next = () => {
@@ -50,7 +50,7 @@ function CartView() {
             <h3 style={priceTextStyle}>
                 Price products: {getTotalPriceProducts() + ' kr '}
             </h3>
-            {!loggedIn ? (
+            {!loggedin ? (
                 <div
                     style={{
                         display: 'flex',
