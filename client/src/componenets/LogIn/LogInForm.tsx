@@ -13,18 +13,15 @@ function LogInForm(props: Props) {
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
 
-    const { loginUser, loggedIn } = useContext(UserContext);
+    const { loginUser, loggedin } = useContext(UserContext);
     let history = useHistory();
 
     useEffect(() => {
-        if (loggedIn) {
-            if (window.location.pathname === '/cart') {
-            } else {
-                history.push('/user/product-list');
-                if (!remember) {
-                    setEmail('');
-                    setPassword('');
-                }
+        if (loggedin) {
+            history.push('/user/product-list');
+            if (!remember) {
+                setEmail('');
+                setPassword('');
             }
         }
     });
