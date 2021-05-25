@@ -13,31 +13,32 @@ exports.getOneOrder = async (req, res) => {
 };
 
 exports.newOrder = async (req, res) => {
-    /* const { orderItem } = req.body; */
+    console.log(req.body);
+    const { orderItems } = req.body;
 
     /* REMOVES PRODUCTS IN ORDER THAT ARE NOT IN STOCK */
-    /*     const updatedOrderItem = orderItem.filter((i) => i.product.qty !== 0);
-     */
+    const updatedOrderItem = orderItems.filter((i) => i.product.qty !== 0);
+
     /* ALTERS QTY OF PRODUCT IN ORDER TO FIT AVAILABLE STOCK */
-    /* for (const item of updatedOrderItem) {
+    for (const item of updatedOrderItem) {
         const { product } = item;
         if (item.qty > product.qty) {
             item.qty = product.qty;
         }
-    } */
+    }
 
     /* const order = { ...req.body, orderItem: [...updatedOrderItem] }; */
     const doc = await OrderModel.create(req.body);
 
     /* UPDATES PRODUCT STOCK QUANTITY FOR EVERY ITEM IN ORDER */
-    /* for (const item of orderItem) {
+    for (const item of orderItems) {
         const { product } = item;
 
         await ProductModel.updateOne(
             { _id: product._id },
             { qty: product.qty - item.qty }
         );
-    } */
+    }
 
     res.status(201).json(doc);
 };

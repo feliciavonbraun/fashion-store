@@ -1,5 +1,5 @@
-import { List } from 'antd';
-import { CSSProperties } from 'react';
+import { Avatar, List } from 'antd';
+import React, { CSSProperties } from 'react';
 import { Order } from '../../contexts/OrderContext';
 import { PaymentCard } from '../Cart/PayCard';
 import { PaymentKlarna } from '../Cart/PayKlarna';
@@ -41,13 +41,16 @@ export default function OrderListItem(props: Props) {
                 renderItem={(orderItem) => (
                     <List.Item>
                         <List.Item.Meta
-                        // title={orderItem.product.title}
-                        // avatar={<Avatar src={orderItem.product.imageUrl} />}
-                        // description={orderItem.product.description}
+                            title={orderItem.product.title}
+                            avatar={<Avatar src={orderItem.product.imageUrl} />}
+                            description={orderItem.product.description}
                         />
                         <div style={itemInfo}>
                             <p>
-                                {/* Price: <b>{orderItem.price * orderItem.qty} kr</b> */}
+                                Price:{' '}
+                                <b>
+                                    {orderItem.product.price * orderItem.qty} kr
+                                </b>
                             </p>
                             <p style={marginLeft}>
                                 Quantity: <b>{orderItem.qty}</b>

@@ -4,15 +4,15 @@ import { CartContext } from '../../contexts/CartContext';
 import { Card, Col, Button } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Route } from 'react-router-dom';
-// import { OrderContext } from '../../contexts/OrderContext';
+import { OrderContext } from '../../contexts/OrderContext';
 
 export default function CompleteOrder() {
     const { handlePlaceOrder } = useContext(CartContext);
-    // const { newOrder } = useContext(OrderContext);
+    const { newOrder } = useContext(OrderContext);
 
     const onPlaceOrderClick = (history: any) => {
         handlePlaceOrder(history);
-        // newOrder()
+        newOrder();
     };
 
     return (
