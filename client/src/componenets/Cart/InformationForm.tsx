@@ -101,6 +101,5 @@ const formContainerStyle: CSSProperties = {
 };
 
 const columnStyle: CSSProperties = {
-  marginTop: '3rem',
-  marginBottom: '3rem',
+    marginBottom: '3rem',
 };

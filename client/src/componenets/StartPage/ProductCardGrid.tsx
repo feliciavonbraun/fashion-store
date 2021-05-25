@@ -1,4 +1,4 @@
-import { CSSProperties, useContext } from 'react';
+import React, { CSSProperties, useContext } from 'react';
 import { Card, Col, List, Row, message } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Product } from '../../contexts/ProductContext';
@@ -44,17 +44,23 @@ export default function ProductCardGrid(props: Props) {
                                         />
                                     }
                                     actions={[
-                                        <ShoppingCartOutlined
-                                            style={{ fontSize: '2rem' }}
-                                            onClick={(e) => {
-                                                success();
-                                                e.preventDefault();
-                                                addProductToCart(
-                                                    item,
-                                                    undefined
-                                                );
-                                            }}
-                                        />,
+                                        item.qty ? (
+                                            <ShoppingCartOutlined
+                                                style={{ fontSize: '2rem' }}
+                                                onClick={(e) => {
+                                                    success();
+                                                    e.preventDefault();
+                                                    addProductToCart(
+                                                        item,
+                                                        undefined
+                                                    );
+                                                }}
+                                            />
+                                        ) : (
+                                            <h3 style={{ color: 'grey' }}>
+                                                Out of stock
+                                            </h3>
+                                        ),
                                     ]}
                                 >
                                     <Meta

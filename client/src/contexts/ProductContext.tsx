@@ -29,6 +29,7 @@ interface ProductValue {
     updateProduct: (product: Product) => Promise<Product>;
     newProduct: (product: NewProduct) => Promise<Product>;
     deleteProduct: (product: Product) => Promise<Product>;
+    setAllProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 interface Props {
@@ -60,6 +61,13 @@ function ProductProvider({ children }: Props) {
         return categories;
     };
 
+    const updateProductsAndCategories = async () => {
+        const products = await getProducts();
+        setAllProducts(products);
+        const categories = await getCategories();
+        setAllCategories(categories);
+    };
+
     const getCategoryProducts = async (category: string) => {
         const categories = await makeRequest(
             `/api/product/category/${category}`,
@@ -79,10 +87,7 @@ function ProductProvider({ children }: Props) {
     const newProduct = async (product: NewProduct) => {
         const body = { ...product };
         const newProduct = await makeRequest('/api/product', 'POST', body);
-        const products = await getProducts();
-        setAllProducts(products);
-        const categories = await getCategories();
-        setAllCategories(categories);
+        await updateProductsAndCategories();
         return newProduct;
     };
 
@@ -93,10 +98,7 @@ function ProductProvider({ children }: Props) {
             'PUT',
             body
         );
-        const products = await getProducts();
-        setAllProducts(products);
-        const categories = await getCategories();
-        setAllCategories(categories);
+        await updateProductsAndCategories();
         return editedProduct;
     };
 
@@ -107,10 +109,7 @@ function ProductProvider({ children }: Props) {
             'DELETE',
             body
         );
-        const products = await getProducts();
-        setAllProducts(products);
-        const categories = await getCategories();
-        setAllCategories(categories);
+        await updateProductsAndCategories();
         return deletedProduct;
     };
 
@@ -125,6 +124,7 @@ function ProductProvider({ children }: Props) {
                 updateProduct,
                 newProduct,
                 deleteProduct,
+                setAllProducts,
             }}
         >
             {children}
