@@ -77,8 +77,8 @@ function OrderProvider({ children }: Props) {
         return oneProduct;
     };
 
-    async function newOrder() {
-        const body = { ...order };
+    async function newOrder(order: Order) {
+        const body = { ...order};
         const newOrder = await makeRequest('/api/order', 'POST', body);
         console.log('Nya ordern:', newOrder);
 
