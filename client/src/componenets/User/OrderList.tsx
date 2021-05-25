@@ -27,7 +27,7 @@ export default function OrderList() {
             </Col>
         </Row>
     );
-}
+};
 
 const containerStyle: CSSProperties = {
     display: 'flex',

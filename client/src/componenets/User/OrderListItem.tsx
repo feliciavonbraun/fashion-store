@@ -1,6 +1,9 @@
 import { List, Avatar } from "antd";
-import { CSSProperties } from "react";
+import { CSSProperties, useContext } from "react";
+import { CartContext } from "../../contexts/CartContext";
 import { Order } from "../../contexts/OrderContext";
+import { PaymentCard } from "../Cart/PayCard";
+import { PaymentKlarna } from "../Cart/PayKlarna";
 
 interface Props {
     order: Order;
@@ -9,19 +12,21 @@ interface Props {
 export default function Oli(props: Props) {
 
 
+    const { paymentInfo } = useContext(CartContext);
+
     // function handleChange = (value: string) => {
     //     console.log(value);
     // };
 
-    // function isKlarna(payment: any): payment is PaymentKlarna {
-    //     return payment && payment.ssn && typeof payment.ssn == "string";
-    // }
+    function isKlarna(payment: any): payment is PaymentKlarna {
+        return payment && payment.ssn && typeof payment.ssn == "string";
+    }
 
-    // function isCard(payment: any): payment is PaymentCard {
-    //     return (
-    //         payment && payment.cardNumber && typeof payment.cardNumber == "string"
-    //     );
-    // }
+    function isCard(payment: any): payment is PaymentCard {
+        return (
+            payment && payment.cardNumber && typeof payment.cardNumber == "string"
+        );
+    }
 
     return (
         <List.Item style={listItem}>
@@ -54,19 +59,19 @@ export default function Oli(props: Props) {
                     </List.Item>
                 )}
             ></List>
-            {/* <p style={orderInfo}>
-                {` Delivery method: ${props.order.deliveryMethod}`}
+            <p style={orderInfo}>
+                {` Delivery method: ${props.order.deliveryMethods}`}
             </p>
-            { isKlarna(props.order.paymentMethod) ? 
+            { isKlarna(paymentInfo) ? 
                 ( <p style={orderInfo}>Payment method: Klarna</p>) 
-            : isCard(props.order.paymentMethod) ? 
+            : isCard(paymentInfo) ? 
                 (<p style={orderInfo}>Payment method: Card</p>) 
             : (<p style={orderInfo}>Payment method: Swish</p>
             )}
-            <p style={orderInfo}>{`Total order price: ${props.order.totalPrice
-                } kr, incl delivery (VAT: ${props.order.totalPrice * 0.25
+            <p style={orderInfo}>{`Total order price: ${props.order.totalprice
+                } kr, incl delivery (VAT: ${props.order.totalprice * 0.25
                 } kr)`}
-            </p> */}
+            </p>
             <p style={status}>
                 Status: <b>{props.order.isSent ? "Sent" : "Proccessing"}</b>
             </p>

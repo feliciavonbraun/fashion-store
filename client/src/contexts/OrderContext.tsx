@@ -4,6 +4,7 @@ import { User } from "./UserContext";
 import { CartItem } from "../componenets/Cart/CartItemsList";
 import { UserInfo } from "../componenets/Cart/InformationForm";
 import { CartContext } from "./CartContext";
+import { DeliveryMethods } from "./DeliveryContext";
 
 
 // TODO: hämta prudukter ur local storage ur cartcontext 
@@ -19,11 +20,11 @@ export interface Order extends User {
     city: string, // in userInfo from CartContext
 
     _id: string, // skapas själv 
-    totalprice: string, // finns
+    totalprice: number, // finns
     isSent: boolean, 
     createdAt: Date, 
 
-    // delivery context 
+    deliveryMethods: DeliveryMethods[],
     user: User[],
     cart: CartItem[],
 
