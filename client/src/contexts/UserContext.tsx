@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { makeRequest } from "../makeRequest";
 
 export interface User {
@@ -12,16 +12,18 @@ export interface User {
 
 interface UserValue {
     loggedin: boolean,
-    emailExist: boolean,
+    adminRequests: [{}],
+    validEmail: boolean,
+    setValidEmail: (value: boolean) => void
 
     loginUser: (email: string, password: string) => Promise<void>,
     logoutUser: (id: string) => Promise<void>,
+    responseAdminRequest: (email: string, response: boolean) => Promise<void>
     registerUser: (
         firstname: string, 
         lastname: string, 
         email: string, 
         password: string, 
-        role: string,
         adminRequest: boolean,
         ) => Promise<void>,
 };
@@ -33,7 +35,12 @@ interface Props {
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({children}: Props) {
     const [loggedin, setLoggedin] = useState(false);
-    const [emailExist, setEmailExist] = useState(false);
+    const [validEmail, setValidEmail] = useState(false);
+    const [adminRequests, setAdminrequests] = useState<[{}]>([{}]);
+
+    useEffect(() => {
+        getAllAdminRequests()
+    });
 
     // REGISTER NEW USER
     async function registerUser(
@@ -41,7 +48,6 @@ function UserProvider({children}: Props) {
         lastname: string, 
         email: string, 
         password: string, 
-        role: string,
         adminRequest: boolean,
         ) {
         const newUser = {
@@ -49,16 +55,18 @@ function UserProvider({children}: Props) {
             lastname,
             email,
             password,
-            role,
             adminRequest,
         }
 
         const uniqueEmail = await makeRequest('/api/user/register', 'POST', newUser);
-
+        
         if (uniqueEmail) {
-            setEmailExist(false)
+            setValidEmail(true)
+            if (adminRequest) {
+                getAllAdminRequests()
+            }
         } else {
-            setEmailExist(true)
+            setValidEmail(false)
         }
     };
 
@@ -83,14 +91,30 @@ function UserProvider({children}: Props) {
         await makeRequest(`/api/user/logout/${id}`, 'DELETE')
     };
 
+    // GET ALL ADMIN REQUESTS
+    async function getAllAdminRequests() {
+        const allRequsts = await makeRequest('/api/user/admin', 'GET');
+        setAdminrequests(allRequsts)
+    };
+
+    // RESPONSE TO ADMIN REQUEST
+    async function responseAdminRequest(email: string, response: boolean) {
+        await makeRequest('/api/user/admin', 'PUT', {email, response});
+
+        getAllAdminRequests()
+    };
+
     return(
         <UserContext.Provider value =
             {{
                 loggedin,
-                emailExist,
+                adminRequests,
+                validEmail,
+                setValidEmail,
 
                 loginUser,
                 logoutUser,
+                responseAdminRequest,
                 registerUser,
             }}
         >

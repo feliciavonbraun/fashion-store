@@ -2,25 +2,29 @@ const UserModel = require('./userModel');
 const bcrypt = require('bcrypt');
 
 
-/* REGISTER USER OR admin */
+/* REGISTER USER */
 exports.registerUser = async (req, res) => {
     try {
-        
-        const password = await bcrypt.hash(req.body.password, 5);
-        const user = new UserModel({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            email: req.body.email,
-            password: password,
-            role: 'user',
-            adminRequest: req.body.adminRequest
-        });
+        const emailExist = await UserModel.findOne({ email: req.body.email })
 
-        await user.save()
-        res.status(201).json('You are registered!')
+        if (emailExist) {
+            res.status(400).json(false)
+        } else {
+            const password = await bcrypt.hash(req.body.password, 5);
+            const user = new UserModel({
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                password: password,
+                role: 'user',
+                adminRequest: req.body.adminRequest
+            });
+    
+            await user.save()
+            res.status(201).json(true)
+        }
     } catch (error) {
         console.log(error);
-        res.status(400).json('Email already exists')
     }
 
 };
@@ -30,22 +34,22 @@ exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email: email })
     
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-        res.status(400).json({message: 'Incorrect email or password'});
-        return;
+    if (!user || !await bcrypt.compare(password, user.password)) {
+        res.status(400).json('Incorrect email or password');
+        return false;
     }
 
     /* FRÅN CLIENT, FÖRFRÅGAN OM ATT BLI ADMIN */
-    if (req.body.adminRequest) {
+    if (user.adminRequest) {
         res.status(400).json('Waiting for response from Admin');
-        return;
+        return false;
     }
 
     req.session.id = user.id;
     req.session.email = user.email;
     req.session.role = user.role;
 
-    res.status(200).json({message: 'You are logged in'})
+    res.status(200).json('You are logged in')
 };
 
 /* LOG OUT SESSION */
@@ -60,30 +64,26 @@ exports.logoutUser = async (req, res) => {
 
 
 /* ADMIN STUFF */
-exports.getAllRequests = async (req, res) => {
+/* GET ALL ADMIN REQUESTS */
+exports.getAllAdminRequests = async (req, res) => {
     const allPendingRequests = await UserModel.find({ adminRequest: true });
     res.status(200).json(allPendingRequests);
-}
+};
 
+/* RESPONSE TO ADMIN REQUEST */
+exports.handleAdminRequest = async (req, res) => {
+    const { _id, accept} = req.body
 
+    const userToUpdate = await UserModel.findOne({ _id: _id})
+    userToUpdate.adminRequest = false
+    if (accept) {
+        userToUpdate.role = 'admin'
+        userToUpdate.save()
+        res.status(202).json(`${userToUpdate.firstname}'s role: admin`);
 
-function secure(req, res, next) {
-    if (req.session.email) {
-        next()
     } else {
-        res.status(401).json('You are not logged in')
+        userToUpdate.save()
+        res.status(202).json(`${userToUpdate.firstname}'s role: user`);
     }
-}
-
-function authorized(user) {
-    return [
-        secure,
-        (req, res, next) => {
-            if (req.session.role === 'admin') {
-                next();
-            } else {
-                res.status(403).json('You are not authorized')
-            }
-        }
-    ];
-}
+    console.log(userToUpdate)
+};

@@ -1,23 +1,38 @@
-import { CSSProperties } from "react";
+import { CSSProperties, useContext, useEffect, useState } from "react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { useHistory } from 'react-router';
+import { UserContext } from "../../contexts/UserContext";
 
 interface Props {
     toggleForm: (value: boolean) => void
 }
 
  function LogInForm(props: Props) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [remember, setRemember] = useState(false)
+
+    const { loginUser, loggedin } = useContext(UserContext)
     let history = useHistory()
 
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
-        history.push('/sidebar')
+    useEffect(() => {
+        if (loggedin) {
+            history.push('/sidebar')
+        }
+    })
+
+    function onFinish() {
+        loginUser(email, password)
+        if (!remember) {
+            setEmail('');
+            setPassword('');
+        }
     };
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
-    };
+    // const onFinishFailed = (errorInfo: any) => {
+    //     console.log('Failed:', errorInfo);
+    // };
 
     return (
         <Form
@@ -25,8 +40,9 @@ interface Props {
                 initialValues={{
                     remember: true,
                 }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
+                //onFinish={onFinish}
+                //onFinishFailed={onFinishFailed}
+                onSubmitCapture={onFinish}
             >
                 <Form.Item
                     name="email"
@@ -41,6 +57,8 @@ interface Props {
                     <Input
                         prefix={<UserOutlined style={inputIconStyle} />}
                         placeholder='E-mail'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         style={{ padding: '.8rem' }}
                     />
                 </Form.Item>
@@ -58,12 +76,21 @@ interface Props {
                         prefix={<LockOutlined style={inputIconStyle} />}
                         type='password'
                         placeholder='Password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         style={{ padding: '.8rem' }}
                     />
                 </Form.Item>
 
-                <Form.Item name="remember" valuePropName="checked" >
-                    <Checkbox>Remember me</Checkbox>
+                <Form.Item 
+                    name="remember" 
+                >
+                    <Checkbox 
+                        checked={remember} 
+                        onChange={() => setRemember(!remember)}
+                    >
+                        Remember me
+                    </Checkbox>
                 </Form.Item>
 
                 <Form.Item>

@@ -9,7 +9,6 @@ export async function makeRequest(url: string, method: string, body?: {}) {
         }
     })
     const result = await response.json();
-    console.log('makerequest')
     return result;
  } catch (error) {
      console.log(error)
