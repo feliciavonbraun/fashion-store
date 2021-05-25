@@ -78,7 +78,13 @@ class CartItemsList extends Component {
                                                     </span>,
                                                     <InputNumber
                                                         min={1}
-                                                        max={10}
+                                                        max={
+                                                            item.product.qty >
+                                                            10
+                                                                ? 10
+                                                                : item.product
+                                                                      .qty
+                                                        }
                                                         defaultValue={
                                                             item.quantity
                                                         }

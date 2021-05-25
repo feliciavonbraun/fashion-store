@@ -46,17 +46,31 @@ function ProductDetails(props: Props) {
                         <h2 style={titleStyle}>{product.title}</h2>
                         <h4>{product.description} </h4>
                         <h2 style={price}>{product.price + ' kr'} </h2>
-                        <Button
-                            type='primary'
-                            style={{
-                                marginTop: '1rem',
-                                width: '8rem',
-                                marginBottom: '6rem',
-                            }}
-                            onClick={handleAddClick}
-                        >
-                            Add to cart
-                        </Button>
+                        {product.qty ? (
+                            <Button
+                                type='primary'
+                                style={{
+                                    marginTop: '1rem',
+                                    width: '8rem',
+                                    marginBottom: '6rem',
+                                }}
+                                onClick={handleAddClick}
+                            >
+                                Add to cart
+                            </Button>
+                        ) : (
+                            <Button
+                                style={{
+                                    marginTop: '1rem',
+                                    width: '8rem',
+                                    marginBottom: '6rem',
+                                }}
+                                type='primary'
+                                disabled
+                            >
+                                Out of stock
+                            </Button>
+                        )}
                     </Col>
                 </>
             ) : null}
