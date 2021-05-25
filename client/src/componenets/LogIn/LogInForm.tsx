@@ -1,9 +1,8 @@
-
-import { CSSProperties, useContext, useEffect, useState } from "react";
+import { CSSProperties, useContext, useEffect, useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { useHistory } from 'react-router';
-import { UserContext } from "../../contexts/UserContext";
+import { UserContext } from '../../contexts/UserContext';
 
 interface Props {
     toggleForm?: (value: boolean) => void;
@@ -12,10 +11,9 @@ interface Props {
 function LogInForm(props: Props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [remember, setRemember] = useState(false)
+    const [remember, setRemember] = useState(false);
 
-
-    const { loginUser, loggedin } = useContext(UserContext)
+    const { loginUser, loggedin } = useContext(UserContext);
     let history = useHistory();
 
     useEffect(() => {
@@ -28,22 +26,20 @@ function LogInForm(props: Props) {
         }
     });
 
-
     function onFinish() {
         loginUser(email, password);
-    };
+    }
 
     return (
         <Form
-            name="login"
+            name='login'
             initialValues={{
                 remember: true,
             }}
-
             onFinish={onFinish}
         >
             <Form.Item
-                name="email"
+                name='email'
                 rules={[
                     {
                         type: 'email',
@@ -62,7 +58,7 @@ function LogInForm(props: Props) {
             </Form.Item>
 
             <Form.Item
-                name="password"
+                name='password'
                 rules={[
                     {
                         required: true,
@@ -80,15 +76,13 @@ function LogInForm(props: Props) {
                 />
             </Form.Item>
 
-            <Form.Item
-                name="remember"
-            >
+            <Form.Item name='remember'>
                 <Checkbox
                     checked={remember}
                     onChange={() => setRemember(!remember)}
                 >
                     Remember me
-                    </Checkbox>
+                </Checkbox>
             </Form.Item>
             <Form.Item>
                 <Button type='primary' htmlType='submit' style={logInButton}>

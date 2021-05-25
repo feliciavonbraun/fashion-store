@@ -14,14 +14,28 @@ exports.getOneOrder = async (req, res) => {
 
 exports.newOrder = async (req, res) => {
     const { orderItem } = req.body;
-    const doc = await OrderModel.create(req.body);
 
-    /* UPDATES PRODUCT QUANTITY FOR EVERY PRODUCT IN ORDER */
+    /* REMOVES PRODUCTS IN ORDER THAT ARE NOT IN STOCK */
+    const updatedOrderItem = orderItem.filter((i) => i.product.qty !== 0);
+
+    /* ALTERS QTY OF PRODUCT IN ORDER TO FIT AVAILABLE STOCK */
+    for (const item of updatedOrderItem) {
+        const { product } = item;
+        if (item.qty > product.qty) {
+            item.qty = product.qty;
+        }
+    }
+
+    const order = { ...req.body, orderItem: [...updatedOrderItem] };
+    const doc = await OrderModel.create(order);
+
+    /* UPDATES PRODUCT STOCK QUANTITY FOR EVERY ITEM IN ORDER */
     for (const item of orderItem) {
         const { product } = item;
+
         await ProductModel.updateOne(
             { _id: product._id },
-            { qty: product.qty - 1 }
+            { qty: product.qty - item.qty }
         );
     }
 
