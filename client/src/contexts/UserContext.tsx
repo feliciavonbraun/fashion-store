@@ -11,7 +11,8 @@ export interface User {
 };
 
 interface UserValue {
-    loggedin: boolean,
+    loggedIn: boolean,
+    loginResponse: string,
     adminRequests: [{}],
     validEmail: boolean,
     setValidEmail: (value: boolean) => void
@@ -34,7 +35,8 @@ interface Props {
 
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({children}: Props) {
-    const [loggedin, setLoggedin] = useState(false);
+    const [loginResponse, setLoginResponse] = useState('Login');
+    const [loggedIn, setLoggedin] = useState(false);
     const [validEmail, setValidEmail] = useState(false);
     const [adminRequests, setAdminrequests] = useState<[{}]>([{}]);
 
@@ -77,13 +79,20 @@ function UserProvider({children}: Props) {
             password,
         }
         
-        const correctLogin = await makeRequest('/api/user/login', 'POST', user);
-        
-        if (correctLogin) {
-            setLoggedin(true)
-        } else {
-            setLoggedin(false)
-        }
+        const loginResponse = await makeRequest('/api/user/login', 'POST', user);
+        switch(loginResponse){
+            case 'Login':
+                setLoginResponse('Login');
+                setLoggedin(true);
+                break;
+            case 'Pending admin request':
+                setLoginResponse('Pending admin request');
+                setLoggedin(false);
+                break;
+            default:
+                setLoginResponse('Incorrect e-mail or password');
+                setLoggedin(false);
+        }   
     };
 
     // LOG OUT USER
@@ -107,7 +116,8 @@ function UserProvider({children}: Props) {
     return(
         <UserContext.Provider value =
             {{
-                loggedin,
+                loggedIn,
+                loginResponse,
                 adminRequests,
                 validEmail,
                 setValidEmail,

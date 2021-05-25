@@ -9,11 +9,11 @@ interface Props {
     toggleForm?: (value: boolean) => void;
 }
 
-
 function LogInForm(props: Props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false)
+
 
     const { loginUser, loggedin } = useContext(UserContext)
     let history = useHistory();
@@ -24,22 +24,17 @@ function LogInForm(props: Props) {
             if (window.location.pathname === '/cart') { }
             else {
                 history.push('/user/product-list')
+                  if (!remember) {
+                  setEmail('');
+                  setPassword('');
             }
         }
 
     })
 
     function onFinish() {
-        loginUser(email, password)
-        if (!remember) {
-            setEmail('');
-            setPassword('');
-        }
+        loginUser(email, password);
     };
-
-    // const onFinishFailed = (errorInfo: any) => {
-    //     console.log('Failed:', errorInfo);
-    // };
 
     return (
         <Form
@@ -47,9 +42,8 @@ function LogInForm(props: Props) {
             initialValues={{
                 remember: true,
             }}
-            //onFinish={onFinish}
-            //onFinishFailed={onFinishFailed}
-            onSubmitCapture={onFinish}
+
+            onFinish={onFinish}
         >
             <Form.Item
                 name="email"

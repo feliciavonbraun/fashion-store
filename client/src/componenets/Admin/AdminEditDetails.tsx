@@ -65,14 +65,14 @@ function AdminEditDetails(props: Props) {
         const updatedProduct = { ...product, _id: _id };
         await updateProduct(updatedProduct);
         successSave();
-        history.push('/product-list');
+        history.goBack();
     };
 
     const handleDelete = async () => {
         setButtonDeleteLoading(true);
         await deleteProduct(product!);
         successDelete();
-        history.push('/product-list');
+        history.goBack();
     };
 
     return (
@@ -104,6 +104,7 @@ function AdminEditDetails(props: Props) {
                         EDIT
                     </h1>
                     <Form.Item
+                        initialValue={product.title}
                         name={'title'}
                         label='Title'
                         rules={[{ required: true }]}
@@ -139,6 +140,7 @@ function AdminEditDetails(props: Props) {
                     </Form.Item>
 
                     <Form.Item
+                        initialValue={product.category}
                         name={'category'}
                         label='Categories'
                         rules={[{ required: true }]}

@@ -18,11 +18,11 @@ import DeliveryProvider from './contexts/DeliveryContext';
 
 function App() {
     return (
-        <OrderProvider>
+        <CartProvider>
             <ProductProvider>
-                <DeliveryProvider>
-                <CartProvider>
+                  <DeliveryProvider>
                     <UserProvider>
+                       <OrderProvider>
                         <Router>
                             <ScrollToTop />
                             <Navbar />
@@ -39,11 +39,11 @@ function App() {
                             </Switch>
                             <Footer2 />
                         </Router>
+                      </OrderProvider>
                     </UserProvider>
-                </CartProvider>
             </DeliveryProvider>
-            </ProductProvider>
-        </OrderProvider>
+           </ProductProvider>
+        </CartProvider>
     );
 }
 

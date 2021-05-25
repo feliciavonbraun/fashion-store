@@ -26,9 +26,10 @@ interface ProductValue {
     getProduct: (_id: string) => Promise<Product>;
     getProducts: () => Promise<Product[]>;
     getCategoryProducts: (category: string) => Promise<Product[]>;
-    updateProduct: (product: Product) => void;
+    updateProduct: (product: Product) => Promise<Product>;
     newProduct: (product: NewProduct) => Promise<Product>;
-    deleteProduct: (product: Product) => void;
+    deleteProduct: (product: Product) => Promise<Product>;
+    setAllProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 interface Props {
@@ -60,6 +61,13 @@ function ProductProvider({ children }: Props) {
         return categories;
     };
 
+    const updateProductsAndCategories = async () => {
+        const products = await getProducts();
+        setAllProducts(products);
+        const categories = await getCategories();
+        setAllCategories(categories);
+    };
+
     const getCategoryProducts = async (category: string) => {
         const categories = await makeRequest(
             `/api/product/category/${category}`,
@@ -79,29 +87,30 @@ function ProductProvider({ children }: Props) {
     const newProduct = async (product: NewProduct) => {
         const body = { ...product };
         const newProduct = await makeRequest('/api/product', 'POST', body);
-        const products = await getProducts();
-        setAllProducts(products);
-        const categories = await getCategories();
-        setAllCategories(categories);
+        await updateProductsAndCategories();
         return newProduct;
     };
 
     const updateProduct = async (product: Product) => {
         const body = { ...product };
-        await makeRequest(`/api/product/${product._id}`, 'PUT', body);
-        const products = await getProducts();
-        setAllProducts(products);
-        const categories = await getCategories();
-        setAllCategories(categories);
+        const editedProduct = await makeRequest(
+            `/api/product/${product._id}`,
+            'PUT',
+            body
+        );
+        await updateProductsAndCategories();
+        return editedProduct;
     };
 
     const deleteProduct = async (product: Product) => {
         const body = { ...product };
-        await makeRequest(`/api/product/${product._id}`, 'DELETE', body);
-        const products = await getProducts();
-        setAllProducts(products);
-        const categories = await getCategories();
-        setAllCategories(categories);
+        const deletedProduct = await makeRequest(
+            `/api/product/${product._id}`,
+            'DELETE',
+            body
+        );
+        await updateProductsAndCategories();
+        return deletedProduct;
     };
 
     return (
@@ -115,6 +124,7 @@ function ProductProvider({ children }: Props) {
                 updateProduct,
                 newProduct,
                 deleteProduct,
+                setAllProducts,
             }}
         >
             {children}
