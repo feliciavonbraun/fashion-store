@@ -1,7 +1,7 @@
 const express = require('express');
 const userRouter = express.Router();
 const controller = require('./userController');
-const { adminSecure, secure } = require('../../middleware/auth')
+const { adminSecure, secure } = require('../../middleware/auth');
 
 // Lägg till secure
 userRouter.post('/api/user/register', controller.registerUser);
@@ -10,6 +10,6 @@ userRouter.delete('/api/user/logout', controller.logoutUser);
 
 /* ADMIN STUFF */
 userRouter.get('/api/user/admin', controller.getAllAdminRequests);
-userRouter.patch('/api/user/admin', adminSecure, controller.handleAdminRequest)
+userRouter.put('/api/user/admin', adminSecure, controller.handleAdminRequest);
 
-module.exports = userRouter; 
+module.exports = userRouter;
