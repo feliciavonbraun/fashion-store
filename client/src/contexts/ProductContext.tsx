@@ -26,9 +26,9 @@ interface ProductValue {
     getProduct: (_id: string) => Promise<Product>;
     getProducts: () => Promise<Product[]>;
     getCategoryProducts: (category: string) => Promise<Product[]>;
-    updateProduct: (product: Product) => void;
+    updateProduct: (product: Product) => Promise<Product>;
     newProduct: (product: NewProduct) => Promise<Product>;
-    deleteProduct: (product: Product) => void;
+    deleteProduct: (product: Product) => Promise<Product>;
 }
 
 interface Props {
@@ -88,20 +88,30 @@ function ProductProvider({ children }: Props) {
 
     const updateProduct = async (product: Product) => {
         const body = { ...product };
-        await makeRequest(`/api/product/${product._id}`, 'PUT', body);
+        const editedProduct = await makeRequest(
+            `/api/product/${product._id}`,
+            'PUT',
+            body
+        );
         const products = await getProducts();
         setAllProducts(products);
         const categories = await getCategories();
         setAllCategories(categories);
+        return editedProduct;
     };
 
     const deleteProduct = async (product: Product) => {
         const body = { ...product };
-        await makeRequest(`/api/product/${product._id}`, 'DELETE', body);
+        const deletedProduct = await makeRequest(
+            `/api/product/${product._id}`,
+            'DELETE',
+            body
+        );
         const products = await getProducts();
         setAllProducts(products);
         const categories = await getCategories();
         setAllCategories(categories);
+        return deletedProduct;
     };
 
     return (
