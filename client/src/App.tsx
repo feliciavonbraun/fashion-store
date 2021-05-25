@@ -13,11 +13,14 @@ import CartProvider from './contexts/CartContext';
 import ProductProvider from './contexts/ProductContext';
 import OrderProvider from "./contexts/OrderContext";
 import UserProvider from "./contexts/UserContext"
+import DeliveryProvider from './contexts/DeliveryContext';
+
 
 function App() {
     return (
         <OrderProvider>
             <ProductProvider>
+                <DeliveryProvider>
                 <CartProvider>
                     <UserProvider>
                         <Router>
@@ -32,12 +35,13 @@ function App() {
                                 <Route exact path='/' component={StartPageView} />
                                 <Route path='/cart' component={CartView} />
                                 <Route path='/login' component={LogIn} />
-                                <Route path='/sidebar' component={Sidebar} />
+                                <Route path='/user' component={Sidebar} />
                             </Switch>
                             <Footer2 />
                         </Router>
                     </UserProvider>
                 </CartProvider>
+            </DeliveryProvider>
             </ProductProvider>
         </OrderProvider>
     );

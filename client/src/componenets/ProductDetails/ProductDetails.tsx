@@ -16,15 +16,18 @@ function ProductDetails(props: Props) {
     const { getProduct } = productContext;
     const cartContext = useContext(CartContext);
     const { addProductToCart } = cartContext;
+    const _id = props.match.params.id;
     const [product, setProduct] = useState<Product>();
 
     useEffect(() => {
         const fetch = async () => {
-            const product = await getProduct(props.match.params.id);
+            const product = await getProduct(_id);
             setProduct(product);
         };
         fetch();
-    }, [props.match.params.id, getProduct]);
+    }, [_id, getProduct]);
+
+    console.log(_id);
 
     const handleAddClick = () => {
         success();
@@ -33,26 +36,30 @@ function ProductDetails(props: Props) {
 
     return (
         <Row style={detailContainer}>
-            <Col lg={{ span: 10 }} style={columnStyle}>
-                <Image src={product?.imageUrl} />
-            </Col>
+            {product ? (
+                <>
+                    <Col lg={{ span: 10 }} style={columnStyle}>
+                        <Image src={product.imageUrl} />
+                    </Col>
 
-            <Col lg={{ span: 10 }} style={columnStyle}>
-                <h2 style={titleStyle}>{product?.title}</h2>
-                <h4>{product?.description} </h4>
-                <h2 style={price}>{product?.price + ' kr'} </h2>
-                <Button
-                    type='primary'
-                    style={{
-                        marginTop: '1rem',
-                        width: '8rem',
-                        marginBottom: '6rem',
-                    }}
-                    onClick={handleAddClick}
-                >
-                    Add to cart
-                </Button>
-            </Col>
+                    <Col lg={{ span: 10 }} style={columnStyle}>
+                        <h2 style={titleStyle}>{product.title}</h2>
+                        <h4>{product.description} </h4>
+                        <h2 style={price}>{product.price + ' kr'} </h2>
+                        <Button
+                            type='primary'
+                            style={{
+                                marginTop: '1rem',
+                                width: '8rem',
+                                marginBottom: '6rem',
+                            }}
+                            onClick={handleAddClick}
+                        >
+                            Add to cart
+                        </Button>
+                    </Col>
+                </>
+            ) : null}
         </Row>
     );
 }

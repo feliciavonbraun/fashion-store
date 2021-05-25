@@ -1,3 +1,4 @@
+
 import { CSSProperties, useContext, useEffect, useState } from "react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Checkbox } from 'antd';
@@ -5,8 +6,9 @@ import { useHistory } from 'react-router';
 import { UserContext } from "../../contexts/UserContext";
 
 interface Props {
-    toggleForm: (value: boolean) => void
+    toggleForm: (value: boolean) => void;
 }
+
 
  function LogInForm(props: Props) {
     const [email, setEmail] = useState('');
@@ -18,7 +20,7 @@ interface Props {
 
     useEffect(() => {
         if (loggedin) {
-            history.push('/sidebar')
+            history.push('/user/product-list')
         }
     })
 
@@ -50,7 +52,7 @@ interface Props {
                         {
                             type: 'email',
                             required: true,
-                            message: 'Please input your email',
+                            message: 'Please input your e-mail',
                         },
                     ]}
                 >
@@ -92,35 +94,28 @@ interface Props {
                         Remember me
                     </Checkbox>
                 </Form.Item>
-
-                <Form.Item>
-                    
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            style={logInButton}
-                        >
-                            Log in
-                        </Button>
-                    
-                </Form.Item>
-                <h3 style={registerButton} onClick={() => props.toggleForm(true)}>
-                    Register now
-                </h3>
-            </Form>
-    )
+            <Form.Item>
+                <Button type='primary' htmlType='submit' style={logInButton}>
+                    Log in
+                </Button>
+            </Form.Item>
+            <h3 style={registerButton} onClick={() => props.toggleForm(true)}>
+                Register now
+            </h3>
+        </Form>
+    );
 }
 
 const inputIconStyle: CSSProperties = {
     fontSize: '1.2rem',
-    marginRight: '1rem'
-}
+    marginRight: '1rem',
+};
 
 const logInButton: CSSProperties = {
     width: '100%',
     fontSize: '1rem',
     height: '2.5rem',
-}
+};
 
 const registerButton: CSSProperties = {
     color: '#1890ff',
@@ -129,6 +124,6 @@ const registerButton: CSSProperties = {
     textAlign: 'center',
     marginBottom: '1rem',
     cursor: 'pointer',
-}
+};
 
-export default LogInForm
+export default LogInForm;

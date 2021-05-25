@@ -5,9 +5,8 @@ import { PaymentCard } from '../componenets/Cart/PayCard';
 import { PaymentKlarna } from '../componenets/Cart/PayKlarna';
 import { PaymentSwish } from '../componenets/Cart/PaySwish';
 import {
-    DeliveryMethod,
-    deliveryMethods,
-} from '../componenets/deliveryMethods';
+    DeliveryMethods,
+} from '../contexts/DeliveryContext';
 import { IReceipt } from '../componenets/OrderSuccess/Reciept';
 import { Product } from '../contexts/ProductContext';
 
@@ -19,6 +18,13 @@ const emptyUser: UserInfo = {
     zipcode: '',
     city: '',
 };
+
+const emptyDelivery: DeliveryMethods  = {
+    _id: '',
+    company: '',
+    time: 0,
+    price: 0
+}
 
 export type PaymentMethod = PaymentCard | PaymentSwish | PaymentKlarna;
 
@@ -38,7 +44,7 @@ const emptyReceipt: IReceipt = {
 };
 interface State {
     cart: CartItem[];
-    deliveryMethod: DeliveryMethod;
+    deliveryMethod: DeliveryMethods;
     userInfo: UserInfo;
     paymentInfo: PaymentMethod;
     receipt: IReceipt;
@@ -47,7 +53,7 @@ interface State {
 
 interface ContextValue extends State {
     addProductToCart: (product: Product, quantity: number | undefined) => void;
-    setDeliveryMethod: (method: DeliveryMethod) => void;
+    setDeliveryMethod: (method: DeliveryMethods) => void;
     deleteProductFromCart: (id: string) => void;
     getTotalPrice: () => void;
     getTotalPriceProducts: () => void;
@@ -59,7 +65,7 @@ interface ContextValue extends State {
 
 export const CartContext = createContext<ContextValue>({
     cart: [],
-    deliveryMethod: deliveryMethods[0],
+    deliveryMethod: emptyDelivery,
     userInfo: emptyUser,
     paymentInfo: defaultPayment,
     receipt: emptyReceipt,
@@ -78,7 +84,7 @@ export const CartContext = createContext<ContextValue>({
 class CartProvider extends Component<{}, State> {
     state: State = {
         cart: [],
-        deliveryMethod: deliveryMethods[0],
+        deliveryMethod: emptyDelivery,
         userInfo: emptyUser,
         paymentInfo: defaultPayment,
         receipt: emptyReceipt,
@@ -118,7 +124,7 @@ class CartProvider extends Component<{}, State> {
         return cartItems;
     };
 
-    setDeliveryMethod = (method: DeliveryMethod) => {
+    setDeliveryMethod = (method: DeliveryMethods) => {
         this.setState({ deliveryMethod: method });
     };
 
@@ -172,7 +178,7 @@ class CartProvider extends Component<{}, State> {
 
     clearCart = () => {
         this.setState({
-            deliveryMethod: deliveryMethods[0],
+            deliveryMethod: emptyDelivery,
             cart: [],
         });
         localStorage.setItem('cartItems', JSON.stringify([]));

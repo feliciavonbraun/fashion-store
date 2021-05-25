@@ -5,6 +5,17 @@ exports.getAllProducts = async (req, res) => {
     res.status(200).json(docs);
 };
 
+exports.getCategories = async (req, res) => {
+    const docs = await Product.find({}).distinct('category');
+    res.status(200).json(docs);
+};
+
+exports.getCategoryProducts = async (req, res) => {
+    const category = req.params.category;
+    const docs = await Product.find({ category: category });
+    res.status(200).json(docs);
+};
+
 exports.getProduct = async (req, res) => {
     const _id = req.params.id;
     const doc = await Product.findOne({ _id: _id });
