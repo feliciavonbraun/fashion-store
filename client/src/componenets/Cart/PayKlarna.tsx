@@ -18,6 +18,8 @@ const validateMessages = {
         range: '${label} must be between ${min} and ${max}',
     },
 }; 
+
+// sätt dessa i adressInterfacet i OrderContext
 export interface PaymentKlarna {
     ssn: string;
     // name: string;
@@ -29,7 +31,7 @@ export interface PaymentKlarna {
 }
 interface Props {
     next(): void;
-}
+};
 class PayKlarna extends Component<Props> {
     context!: ContextType<typeof CartContext>
     static contextType = CartContext;

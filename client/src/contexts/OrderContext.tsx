@@ -1,52 +1,42 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { makeRequest } from "../makeRequest";
 import { User } from "./UserContext";
-import { CartItem } from "../componenets/Cart/CartItemsList";
-import { UserInfo } from "../componenets/Cart/InformationForm";
 import { CartContext } from "./CartContext";
 import { DeliveryMethods } from "./DeliveryContext";
+// import { CartItem } from "../componenets/Cart/CartItemsList";
 
 
-// TODO: hämta prudukter ur local storage ur cartcontext 
-// ta in de andra contexterna 
-
-export interface Order extends User {    
+interface OrderItem {
     product: string, // in cart from CartContext
     qty: number, // in cart from CartContext
+};
 
+interface Address {
     phone: number, // in userInfo from CartContext
     street: string, // in userInfo from CartContext
     zipcode: number, // in userInfo from CartContext
     city: string, // in userInfo from CartContext
+};
 
-    _id: string, // skapas själv 
+export interface Order extends User {    
+    orderItems: OrderItem[],
+    address: Address,
+
+    _id: string,
     totalprice: number, // finns
     isSent: boolean, 
     createdAt: Date, 
 
     deliveryMethods: DeliveryMethods[],
     user: User[],
-    cart: CartItem[],
 
-
-    
+    // cart: CartItem[],
 };
-
-interface NewOrder {
-    cart: CartItem[],
-    getTotalPrice: any,
-    userInfo: UserInfo,
-
-    isSent: boolean, 
-    createdAt: Date,
-
-    user: User[],
-}
 
 interface OrderValue {
     allOrders: Order[],
     getOneOrder: (_id: string) => void,
-    newOrder: (newOrder: NewOrder) => void,
+    newOrder: (order: Order) => void,
     updateOrder: (isSent: boolean) => void,
 };
 
@@ -64,8 +54,8 @@ function OrderProvider({ children }: Props) { // children kan skrivas annorlunda
     const { cart } = useContext(CartContext);
     console.log('Cart Items:', cart)
 
-    const { getTotalPrice } = useContext(CartContext);
-    console.log('totalPrice:', getTotalPrice);
+    // const { getTotalPrice } = useContext(CartContext);
+    // console.log('totalPrice:', getTotalPrice);
 
     const { userInfo } = useContext(CartContext);
     console.log('userInfo:', userInfo) // innehåller för mkt saker 
@@ -84,13 +74,13 @@ function OrderProvider({ children }: Props) { // children kan skrivas annorlunda
         return oneProduct;
     };
 
-    async function newOrder(order: NewOrder) {
+    async function newOrder() {
         // allt i interfacet + det importerade
 
-        const body = { ...order }
-        const newOrder = await makeRequest('/api/order', 'POST', body);
-        console.log('Nya ordern:', newOrder);
-        return newOrder;
+        // const body = { ...order }
+        // const newOrder = await makeRequest('/api/order', 'POST', body);
+        // console.log('Nya ordern:', newOrder);
+        // return newOrder;
     };
 
     async function updateOrder(isSent: boolean) {
