@@ -89,6 +89,7 @@ const mainContent: CSSProperties = {
 
 const contentStyle: CSSProperties = {
     flex: 1,
+    minHeight: 'auto',
     minWidth: '18rem',
     padding: '3rem 2rem',
 };

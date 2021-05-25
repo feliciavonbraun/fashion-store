@@ -91,7 +91,6 @@ function UserProvider({ children }: Props) {
         );
 
         if (uniqueEmail) {
-            setUser(newUser);
             setValidEmail(true);
             if (adminRequest) {
                 getAllAdminRequests();
@@ -108,23 +107,13 @@ function UserProvider({ children }: Props) {
             password,
         };
 
-        const loginResponse = await makeRequest(
-            '/api/user/login',
-            'POST',
-            user
-        );
-        switch (loginResponse) {
-            case 'Login':
-                setLoginResponse('Login');
-                setLoggedin(true);
-                break;
-            case 'Pending admin request':
-                setLoginResponse('Pending admin request');
-                setLoggedin(false);
-                break;
-            default:
-                setLoginResponse('Incorrect e-mail or password');
-                setLoggedin(false);
+        const res = await makeRequest('/api/user/login', 'POST', user);
+        if (res.email) {
+            setUser(res);
+            setLoggedin(true);
+        } else {
+            setLoggedin(false);
+            setLoginResponse(res);
         }
     }
 

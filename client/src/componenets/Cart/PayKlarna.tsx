@@ -59,9 +59,9 @@ function PayKlarna(props: Props) {
                     onFinish={onFinish}
                     initialValues={{
                         klarna: {
-                            firstname: user?.firstname,
-                            lastname: user?.lastname,
-                            email: user?.email,
+                            firstname: user.firstname,
+                            lastname: user.lastname,
+                            email: user.email,
                         },
                     }}
                 >
@@ -81,31 +81,23 @@ function PayKlarna(props: Props) {
                     <Form.Item
                         name={['klarna', 'firstname']}
                         label='Firstname'
-                        initialValue={user.firstname}
                         rules={[{ required: true }]}
                     >
-                        <Input
-                            defaultValue={user.firstname}
-                            value={user.firstname}
-                        >
-                            {user.firstname}
-                        </Input>
+                        <Input value={user.firstname} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'lastname']}
                         label='Lastname'
-                        initialValue={user.lastname}
                         rules={[{ required: true }]}
                     >
-                        <Input value={user.lastname} disabled />
+                        <Input defaultValue={user.lastname} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'email']}
                         label='Email'
-                        initialValue={user.email}
                         rules={[{ type: 'email', required: true }]}
                     >
-                        <Input value={user.email} disabled />
+                        <Input defaultValue={user.email} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'phone']}
