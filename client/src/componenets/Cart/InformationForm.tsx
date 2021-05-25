@@ -102,6 +102,5 @@ class InformationForm extends Component<Props> {
 }
 
 const columnStyle: CSSProperties = {
-    marginTop: '3rem',
     marginBottom: '3rem',
 }
