@@ -13,7 +13,7 @@ export default function OrderListItem(props: Props) {
     //     console.log(value);
     // };
 
-    function isKlarna(payment: any): payment is PaymentKlarna {
+    /* function isKlarna(payment: any): payment is PaymentKlarna {
         return payment && payment.ssn && typeof payment.ssn == 'string';
     }
 
@@ -23,7 +23,7 @@ export default function OrderListItem(props: Props) {
             payment.cardNumber &&
             typeof payment.cardNumber == 'string'
         );
-    }
+    } */
 
     return (
         <List.Item style={listItem}>
@@ -59,16 +59,16 @@ export default function OrderListItem(props: Props) {
                     </List.Item>
                 )}
             ></List>
-            <p style={orderInfo}>
+            {/* <p style={orderInfo}>
                 {`Delivery method: ${props.order.deliveryMethod}`}
-            </p>
-            {isKlarna(props.order.deliveryMethod) ? (
+            </p> */}
+            {/* {isKlarna(props.order.deliveryMethod) ? (
                 <p style={orderInfo}>Payment method: Klarna</p>
             ) : isCard(props.order.deliveryMethod) ? (
                 <p style={orderInfo}>Payment method: Card</p>
             ) : (
                 <p style={orderInfo}>Payment method: Swish</p>
-            )}
+            )} */}
             <p style={orderInfo}>
                 {`Total order price: ${
                     props.order.totalprice

@@ -4,10 +4,6 @@ import { Product } from '../../contexts/ProductContext';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../../contexts/CartContext';
 
-/* export interface CartItem {
-    product: Product;
-    qty: number;
-} */
 class CartItemsList extends Component {
     context!: ContextType<typeof CartContext>;
     static contextType = CartContext;
