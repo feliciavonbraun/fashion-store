@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import { UserContext } from "../../contexts/UserContext";
 
 interface Props {
-    toggleForm: (value: boolean) => void;
+    toggleForm?: (value: boolean) => void;
 }
 
 function LogInForm(props: Props) {
@@ -14,17 +14,22 @@ function LogInForm(props: Props) {
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false)
 
-    const { loginUser, loggedIn } = useContext(UserContext)
-    let history = useHistory()
+
+    const { loginUser, loggedin } = useContext(UserContext)
+    let history = useHistory();
+
 
     useEffect(() => {
-        if (loggedIn) {
-            history.push('/user/product-list')
-            if (!remember) {
-                setEmail('');
-                setPassword('');
+        if (loggedin) {
+            if (window.location.pathname === '/cart') { }
+            else {
+                history.push('/user/product-list')
+                  if (!remember) {
+                  setEmail('');
+                  setPassword('');
             }
         }
+
     })
 
     function onFinish() {
@@ -37,6 +42,7 @@ function LogInForm(props: Props) {
             initialValues={{
                 remember: true,
             }}
+
             onFinish={onFinish}
         >
             <Form.Item
@@ -47,7 +53,6 @@ function LogInForm(props: Props) {
                         required: true,
                         message: 'Please input your e-mail',
                     },
-                    
                 ]}
             >
                 <Input
@@ -93,7 +98,7 @@ function LogInForm(props: Props) {
                     Log in
                 </Button>
             </Form.Item>
-            <h3 style={registerButton} onClick={() => props.toggleForm(true)}>
+            <h3 style={registerButton} onClick={() => props.toggleForm!(true)}>
                 Register now
             </h3>
         </Form>

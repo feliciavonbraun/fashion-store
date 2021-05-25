@@ -1,16 +1,12 @@
 import { Button, Radio, Row } from 'antd';
-import { Component, CSSProperties, useContext, useState } from 'react';
+import {  CSSProperties, useContext } from 'react';
 import {CartContext} from '../../contexts/CartContext';
-import { DeliveryMethods, DeliveryContext} from '../../contexts/DeliveryContext';
+import { DeliveryContext} from '../../contexts/DeliveryContext';
 
 interface Props {
   next(): void;  
 }
 
-interface State {
-  setDeliveryMethod: DeliveryMethods[],
-  value: number,
-}
 
 
 function DeliverySelection(props: Props) {
@@ -62,7 +58,6 @@ const deliveryContainer: CSSProperties = {
   flexDirection: 'column',
   width: '90%',
   margin: 'auto',
-  paddingTop: '3rem',
   paddingBottom: '3rem'
 }
 
@@ -81,6 +76,3 @@ const deliveryCompanyStyle: CSSProperties = {
   fontWeight: 'bold',
 }
 
-function setDeliveryMethods(method: DeliveryMethods) {
-  throw new Error('Function not implemented.');
-}
