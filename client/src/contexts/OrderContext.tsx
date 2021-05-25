@@ -9,7 +9,7 @@ import { CartContext } from "./CartContext";
 // TODO: hämta prudukter ur local storage ur cartcontext 
 // ta in de andra contexterna 
 
-export interface Order extends User {
+export interface Order extends User {    
     product: string, // in cart from CartContext
     qty: number, // in cart from CartContext
 
@@ -25,6 +25,8 @@ export interface Order extends User {
 
     // delivery context 
     user: User[],
+    cart: CartItem[],
+
 
     
 };
@@ -56,6 +58,7 @@ export const OrderContext = createContext<OrderValue>({} as OrderValue);
 function OrderProvider({ children }: Props) { // children kan skrivas annorlunda
 
     const [allOrders, setAllOrders] = useState<Order[]>([]);
+    console.log('allOrders:', allOrders)
 
     const { cart } = useContext(CartContext);
     console.log('Cart Items:', cart)
@@ -69,14 +72,14 @@ function OrderProvider({ children }: Props) { // children kan skrivas annorlunda
     useEffect(() => {
         async function getOrders() {
             const orders = await makeRequest('/api/order', 'GET');
-            console.log('ORDERS:', orders)
+            console.log('Orders in useEffect:', orders)
             setAllOrders(orders);
         }
         getOrders();
     }, [setAllOrders]);
 
     async function getOneOrder(_id: string) {
-        const oneProduct: Order = await makeRequest(`/api/product/${_id}`, 'GET');
+        const oneProduct: Order = await makeRequest(`/api/order/${_id}`, 'GET');
         return oneProduct;
     };
 
@@ -84,7 +87,7 @@ function OrderProvider({ children }: Props) { // children kan skrivas annorlunda
         // allt i interfacet + det importerade
 
         const body = { ...order }
-        const newOrder = await makeRequest('/api/product', 'POST', body);
+        const newOrder = await makeRequest('/api/order', 'POST', body);
         console.log('Nya ordern:', newOrder);
         return newOrder;
     };
