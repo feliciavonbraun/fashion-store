@@ -1,5 +1,5 @@
-import { List, Col, Row } from 'antd';
-import { CSSProperties, useContext } from 'react';
+import { List } from 'antd';
+import { useContext } from 'react';
 // import { Order } from "../../interfaces";
 import { OrderContext } from '../../contexts/OrderContext';
 import OrderListItem from './OrderListItem';

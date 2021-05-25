@@ -55,7 +55,6 @@ function AdminEditDetails(props: Props) {
         const fetch = async () => {
             const product = await getProduct(_id);
             setProduct(product);
-            console.log(product);
         };
         fetch();
     }, [_id, getProduct]);

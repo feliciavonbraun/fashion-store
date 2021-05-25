@@ -5,7 +5,6 @@ import AdminReqListItem from './AdminReqListItem';
 
 export default function AdminReqList() {
     const { adminRequests } = useContext(UserContext);
-    console.log(adminRequests);
 
     return (
         <>

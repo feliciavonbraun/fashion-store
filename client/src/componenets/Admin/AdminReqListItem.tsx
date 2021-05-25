@@ -1,5 +1,4 @@
-import { Checkbox, List } from 'antd';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { Button, List, Radio, RadioChangeEvent, Space } from 'antd';
 import { useContext } from 'react';
 import { User, UserContext } from '../../contexts/UserContext';
 
@@ -11,13 +10,26 @@ export default function AdminReqListItem(props: Props) {
     const { firstname, lastname, email } = props.user;
     const { responseAdminRequest } = useContext(UserContext);
 
-    const handleChange = (e: CheckboxChangeEvent) => {
-        responseAdminRequest(props.user, true);
+    const handleClick = (response: boolean) => {
+        responseAdminRequest(props.user, response);
     };
 
     return (
         <List.Item
-            actions={[<Checkbox onChange={handleChange}>Approved</Checkbox>]}
+            actions={[
+                <>
+                    <Button
+                        style={{ marginRight: '0.5rem' }}
+                        onClick={() => handleClick(true)}
+                        type='primary'
+                    >
+                        Approve
+                    </Button>
+                    <Button onClick={() => handleClick(false)} type='text'>
+                        Reject
+                    </Button>
+                </>,
+            ]}
         >
             <List.Item.Meta
                 style={{ wordBreak: 'break-word' }}
