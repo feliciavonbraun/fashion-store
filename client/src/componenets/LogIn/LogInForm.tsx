@@ -1,23 +1,40 @@
-import { CSSProperties } from "react";
+
+import { CSSProperties, useContext, useEffect, useState } from "react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { useHistory } from 'react-router';
+import { UserContext } from "../../contexts/UserContext";
 
 interface Props {
-    toggleForm: (value: boolean) => void
+    toggleForm: (value: boolean) => void;
 }
 
+
  function LogInForm(props: Props) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [remember, setRemember] = useState(false)
+
+    const { loginUser, loggedin } = useContext(UserContext)
     let history = useHistory()
 
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
-        history.push('/sidebar')
+    useEffect(() => {
+        if (loggedin) {
+            history.push('/user/product-list')
+        }
+    })
+
+    function onFinish() {
+        loginUser(email, password)
+        if (!remember) {
+            setEmail('');
+            setPassword('');
+        }
     };
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
-    };
+    // const onFinishFailed = (errorInfo: any) => {
+    //     console.log('Failed:', errorInfo);
+    // };
 
     return (
         <Form
@@ -25,8 +42,9 @@ interface Props {
                 initialValues={{
                     remember: true,
                 }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
+                //onFinish={onFinish}
+                //onFinishFailed={onFinishFailed}
+                onSubmitCapture={onFinish}
             >
                 <Form.Item
                     name="email"
@@ -34,13 +52,15 @@ interface Props {
                         {
                             type: 'email',
                             required: true,
-                            message: 'Please input your email',
+                            message: 'Please input your e-mail',
                         },
                     ]}
                 >
                     <Input
                         prefix={<UserOutlined style={inputIconStyle} />}
                         placeholder='E-mail'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         style={{ padding: '.8rem' }}
                     />
                 </Form.Item>
@@ -58,42 +78,44 @@ interface Props {
                         prefix={<LockOutlined style={inputIconStyle} />}
                         type='password'
                         placeholder='Password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         style={{ padding: '.8rem' }}
                     />
                 </Form.Item>
 
-                <Form.Item name="remember" valuePropName="checked" >
-                    <Checkbox>Remember me</Checkbox>
+                <Form.Item 
+                    name="remember" 
+                >
+                    <Checkbox 
+                        checked={remember} 
+                        onChange={() => setRemember(!remember)}
+                    >
+                        Remember me
+                    </Checkbox>
                 </Form.Item>
-
-                <Form.Item>
-                    
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            style={logInButton}
-                        >
-                            Log in
-                        </Button>
-                    
-                </Form.Item>
-                <h3 style={registerButton} onClick={() => props.toggleForm(true)}>
-                    Register now
-                </h3>
-            </Form>
-    )
+            <Form.Item>
+                <Button type='primary' htmlType='submit' style={logInButton}>
+                    Log in
+                </Button>
+            </Form.Item>
+            <h3 style={registerButton} onClick={() => props.toggleForm(true)}>
+                Register now
+            </h3>
+        </Form>
+    );
 }
 
 const inputIconStyle: CSSProperties = {
     fontSize: '1.2rem',
-    marginRight: '1rem'
-}
+    marginRight: '1rem',
+};
 
 const logInButton: CSSProperties = {
     width: '100%',
     fontSize: '1rem',
     height: '2.5rem',
-}
+};
 
 const registerButton: CSSProperties = {
     color: '#1890ff',
@@ -102,6 +124,6 @@ const registerButton: CSSProperties = {
     textAlign: 'center',
     marginBottom: '1rem',
     cursor: 'pointer',
-}
+};
 
-export default LogInForm
+export default LogInForm;

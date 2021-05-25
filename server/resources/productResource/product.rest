@@ -2,6 +2,19 @@ GET http://localhost:4000/api/product
 
 ###
 
+GET http://localhost:4000/api/category
+
+###
+
+GET http://localhost:4000/api/product/category
+Content-Type: application/json
+
+{
+    "category": "Pants"
+}
+
+###
+
 GET http://localhost:4000/api/product/:id
 Content-Type: application/json
 

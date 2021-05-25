@@ -1,30 +1,33 @@
 import { Button, Radio, Row } from 'antd';
-import { Component, ContextType, CSSProperties } from 'react';
-import { CartContext } from '../../contexts/CartContext';
-import { calculateDeliveryDay, DeliveryMethod, deliveryMethods } from '../deliveryMethods';
-interface Props {
-  next(): void;
-}
-class DeliverySection extends Component<Props> {
-  context!: ContextType<typeof CartContext>
-  static contextType = CartContext;
+import { Component, CSSProperties, useContext, useState } from 'react';
+import {CartContext} from '../../contexts/CartContext';
+import { DeliveryMethods, DeliveryContext} from '../../contexts/DeliveryContext';
 
-  state = {
-    value: 1,
-  };
+interface Props {
+  next(): void;  
+}
+
+interface State {
+  setDeliveryMethod: DeliveryMethods[],
+  value: number,
+}
+
+
+function DeliverySelection(props: Props) {
+  const deliveryContext = useContext(DeliveryContext)
+  const {allDeliveryMethods, calculateDeliveryDay} = deliveryContext;
+  const cartContext = useContext(CartContext)
+  const {setDeliveryMethod} = cartContext;
   
-  onChange = (e: any) => {
-    const { setDeliveryMethod } = this.context;
-    this.setState({
-      value: e.target.value,
-    });
-    const method = deliveryMethods.filter((item: DeliveryMethod) => item.id === e.target.value)[0];
+  const handleChange = (e: any) => {
+    const method = e.target.value;
     setDeliveryMethod(method);
   };
 
-  mapMethodToRadio() {
-    return deliveryMethods.map(item =>
-      <Radio value={item.id} style={{ marginTop: '2rem' }}>
+
+  const mapMethodToRadio = () => {
+    return allDeliveryMethods.map(item =>
+      <Radio value={item} style={{ marginTop: '2rem' }}>
         <span style={deliveryCompanyStyle}>{item.company}</span>
         <br/>
         <span style={deliveryTextStyle}>{'Delivery on ' + calculateDeliveryDay(item.time)}</span>
@@ -34,27 +37,25 @@ class DeliverySection extends Component<Props> {
     );
   }
 
-  render() {
-    const { value } = this.state;
 
     return (
       <Row style={deliveryContainer}>
           <h2>
               Delivery
           </h2>
-          <Radio.Group onChange={this.onChange} value={value}>
-            {this.mapMethodToRadio()}
+          <Radio.Group onChange={handleChange}>
+            {mapMethodToRadio()}
           </Radio.Group>
           <br/>
-          <Button type="primary" style={buttonStyle} onClick={this.props.next}>
+          <Button type="primary" style={buttonStyle} onClick={props.next}>
             Next
           </Button>
       </Row>
-    );
-  }
+
+          )
 }
 
-export default DeliverySection;
+export default DeliverySelection;
 
 const deliveryContainer: CSSProperties = {
   display: 'flex',
@@ -78,4 +79,8 @@ const deliveryTextStyle: CSSProperties = {
 
 const deliveryCompanyStyle: CSSProperties = {
   fontWeight: 'bold',
+}
+
+function setDeliveryMethods(method: DeliveryMethods) {
+  throw new Error('Function not implemented.');
 }

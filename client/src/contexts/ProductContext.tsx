@@ -7,7 +7,7 @@ export interface Product {
     price: number;
     imageUrl: string;
     qty: number;
-    category: String[];
+    category: string[];
     description: string;
 }
 
@@ -16,16 +16,19 @@ export interface NewProduct {
     price: number;
     imageUrl: string;
     qty: number;
-    category: String[];
+    category: string[];
     description: string;
 }
 
 interface ProductValue {
-    getProduct: (_id: string) => Promise<Product>;
-    updateProduct: (product: Product) => void;
-    newProduct: (product: NewProduct) => Promise<Product>;
-    deleteProduct: (product: Product) => void;
     allProducts: Product[];
+    allCategories: string[];
+    getProduct: (_id: string) => Promise<Product>;
+    getProducts: () => Promise<Product[]>;
+    getCategoryProducts: (category: string) => Promise<Product[]>;
+    updateProduct: (product: Product) => Promise<Product>;
+    newProduct: (product: NewProduct) => Promise<Product>;
+    deleteProduct: (product: Product) => Promise<Product>;
 }
 
 interface Props {
@@ -35,15 +38,35 @@ interface Props {
 export const ProductContext = createContext<ProductValue>({} as ProductValue);
 function ProductProvider({ children }: Props) {
     const [allProducts, setAllProducts] = useState<Product[]>([]);
+    const [allCategories, setAllCategories] = useState<string[]>([]);
 
     useEffect(() => {
-        async function getProducts() {
-            const products = await makeRequest('/api/product', 'GET');
+        const fetchData = async () => {
+            const products = await getProducts();
+            const categories = await getCategories();
             setAllProducts(products);
-            console.log(products);
-        }
-        getProducts();
-    }, [setAllProducts]);
+            setAllCategories(categories);
+        };
+        fetchData();
+    }, []);
+
+    const getProducts = async () => {
+        const products = await makeRequest('/api/product', 'GET');
+        return products;
+    };
+
+    const getCategories = async () => {
+        const categories = await makeRequest('/api/product/category', 'GET');
+        return categories;
+    };
+
+    const getCategoryProducts = async (category: string) => {
+        const categories = await makeRequest(
+            `/api/product/category/${category}`,
+            'GET'
+        );
+        return categories;
+    };
 
     const getProduct = async (_id: string) => {
         const product: Product = await makeRequest(
@@ -56,30 +79,49 @@ function ProductProvider({ children }: Props) {
     const newProduct = async (product: NewProduct) => {
         const body = { ...product };
         const newProduct = await makeRequest('/api/product', 'POST', body);
-        const products = await makeRequest('/api/product', 'GET');
+        const products = await getProducts();
         setAllProducts(products);
+        const categories = await getCategories();
+        setAllCategories(categories);
         return newProduct;
     };
 
     const updateProduct = async (product: Product) => {
         const body = { ...product };
-        await makeRequest(`/api/product/${product._id}`, 'PUT', body);
-        const products = await makeRequest('/api/product', 'GET');
+        const editedProduct = await makeRequest(
+            `/api/product/${product._id}`,
+            'PUT',
+            body
+        );
+        const products = await getProducts();
         setAllProducts(products);
+        const categories = await getCategories();
+        setAllCategories(categories);
+        return editedProduct;
     };
 
     const deleteProduct = async (product: Product) => {
         const body = { ...product };
-        await makeRequest(`/api/product/${product._id}`, 'DELETE', body);
-        const products = await makeRequest('/api/product', 'GET');
+        const deletedProduct = await makeRequest(
+            `/api/product/${product._id}`,
+            'DELETE',
+            body
+        );
+        const products = await getProducts();
         setAllProducts(products);
+        const categories = await getCategories();
+        setAllCategories(categories);
+        return deletedProduct;
     };
 
     return (
         <ProductContext.Provider
             value={{
                 allProducts,
+                allCategories,
                 getProduct,
+                getProducts,
+                getCategoryProducts,
                 updateProduct,
                 newProduct,
                 deleteProduct,

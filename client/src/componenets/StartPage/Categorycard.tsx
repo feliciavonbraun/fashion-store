@@ -1,44 +1,56 @@
-import {  Menu, Row } from "antd";
-import React, { Component, CSSProperties } from "react";
+import { Row, Select } from 'antd';
+import React, {
+    CSSProperties,
+    Dispatch,
+    SetStateAction,
+    useContext,
+} from 'react';
+import { ProductContext } from '../../contexts/ProductContext';
 
-
-class CategoryMenu extends Component {
-    render() {
-        
-        return(
-            <div>
-                <Row style={categoryMenuContainer}>
-                    <Menu mode="horizontal" style={MenuStyle}>
-                      <Menu.Item >Skirts</Menu.Item>
-                        <Menu.Item >Tops</Menu.Item>
-                        <Menu.Item >Dresses</Menu.Item>
-                        <Menu.Item >Trousers</Menu.Item>
-                    </Menu>
-                </Row>
-            </div>
-        )
-    }
+interface Props {
+    setCategory: Dispatch<SetStateAction<string | undefined>>;
 }
 
-export default CategoryMenu;
+const { Option } = Select;
+
+export default function CategoryMenu(props: Props) {
+    const productContext = useContext(ProductContext);
+    const { allCategories } = productContext;
+    const { setCategory } = props;
+
+    const handleChange = (category: string) => {
+        setCategory(category);
+    };
+
+    return (
+        <div>
+            <Row style={categoryMenuContainer}>
+                <Select
+                    onChange={handleChange}
+                    defaultValue={'All products'}
+                    style={{ minWidth: '8rem' }}
+                >
+                    <Option value={''} key={'All products'}>
+                        All products
+                    </Option>
+                    {allCategories.map((category) => (
+                        <>
+                            <Option value={category} key={category}>
+                                {category}
+                            </Option>
+                        </>
+                    ))}
+                </Select>
+            </Row>
+        </div>
+    );
+}
 
 const categoryMenuContainer: CSSProperties = {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    width: '100%',
-    height: '1rem',
-    margin: '0',
-   
-}
-
-const MenuStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'row',
-}
-
-// const linkStyle: CSSProperties = {
-//    fontWeight: 400,
-//    borderBottom: '0.1rem solid black'
-// }
+    width: '80%',
+    paddingTop: '2rem',
+    margin: 'auto',
+};

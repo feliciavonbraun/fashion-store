@@ -12,30 +12,37 @@ import ScrollToTop from './componenets/ScrollToTop';
 import CartProvider from './contexts/CartContext';
 import ProductProvider from './contexts/ProductContext';
 import OrderProvider from "./contexts/OrderContext";
+import UserProvider from "./contexts/UserContext"
+import DeliveryProvider from './contexts/DeliveryContext';
+
 
 function App() {
     return (
         <CartProvider>
             <ProductProvider>
-                <OrderProvider>
-                    <Router>
-                        <ScrollToTop />
-                        <Navbar />
-                        <Switch>
-                            <Route path='/product/:id' component={ProductDetails} />
-                            <Route
-                                path='/ordersuccess'
-                                component={OrderSuccessMessage}
-                            />
-                            <Route exact path='/' component={StartPageView} />
-                            <Route path='/cart' component={CartView} />
-                            <Route path='/login' component={LogIn} />
-                            <Route path='/sidebar' component={Sidebar} />
-                        </Switch>
-                        <Footer2 />
-                    </Router>
-                </OrderProvider>
-            </ProductProvider>
+                  <DeliveryProvider>
+                    <UserProvider>
+                       <OrderProvider>
+                        <Router>
+                            <ScrollToTop />
+                            <Navbar />
+                            <Switch>
+                                <Route path='/product/:id' component={ProductDetails} />
+                                <Route
+                                    path='/ordersuccess'
+                                    component={OrderSuccessMessage}
+                                />
+                                <Route exact path='/' component={StartPageView} />
+                                <Route path='/cart' component={CartView} />
+                                <Route path='/login' component={LogIn} />
+                                <Route path='/user' component={Sidebar} />
+                            </Switch>
+                            <Footer2 />
+                        </Router>
+                      </OrderProvider>
+                    </UserProvider>
+            </DeliveryProvider>
+           </ProductProvider>
         </CartProvider>
     );
 }
