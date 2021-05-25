@@ -1,5 +1,5 @@
-import { Form, Input, Button, Col, Row, message } from 'antd';
-import { CSSProperties, useContext, useEffect, useState } from 'react';
+import { Form, Input, Button, message, InputNumber } from 'antd';
+import { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
 import {
     NewProduct,
@@ -77,150 +77,128 @@ function AdminEditDetails(props: Props) {
 
     return (
         <div>
-            <Row style={ContainerStyle}>
-                <Col span={24} style={columnStyle}>
-                    {product ? (
-                        <Form
-                            {...layout}
-                            name='nest-messages'
-                            onFinish={onFinish}
-                            validateMessages={validateMessages}
-                            initialValues={{
-                                product: {
-                                    title: product.title,
-                                    description: product.description,
-                                    price: product.price,
-                                    imageUrl: product.imageUrl,
-                                    qty: product.qty,
-                                },
+            {product ? (
+                <Form
+                    {...layout}
+                    name='nest-messages'
+                    onFinish={onFinish}
+                    validateMessages={validateMessages}
+                    initialValues={{
+                        product: {
+                            title: product.title,
+                            description: product.description,
+                            price: product.price,
+                            imageUrl: product.imageUrl,
+                            qty: product.qty,
+                        },
+                    }}
+                >
+                    <h1
+                        style={{
+                            margin: '1rem 0',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        EDIT
+                    </h1>
+                    <Form.Item
+                        name={'title'}
+                        label='Title'
+                        rules={[{ required: true }]}
+                    >
+                        <Input.TextArea defaultValue={product.title} />
+                    </Form.Item>
+
+                    <Form.Item
+                        initialValue={product.description}
+                        name={'description'}
+                        label='Description'
+                        rules={[{ required: true }]}
+                    >
+                        <Input.TextArea defaultValue={product.description} />
+                    </Form.Item>
+
+                    <Form.Item
+                        initialValue={product.price}
+                        name={'price'}
+                        label='Price'
+                        rules={[{ required: true }]}
+                    >
+                        <InputNumber min={1} defaultValue={product.price} />
+                    </Form.Item>
+
+                    <Form.Item
+                        initialValue={product.imageUrl}
+                        name={'imageUrl'}
+                        label='ImageUrl'
+                        rules={[{ required: true }]}
+                    >
+                        <Input.TextArea defaultValue={product.imageUrl} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name={'category'}
+                        label='Categories'
+                        rules={[{ required: true }]}
+                    >
+                        <Select
+                            defaultValue={product.category}
+                            mode='tags'
+                            style={{ width: '100%' }}
+                            tokenSeparators={[',']}
+                        >
+                            {allCategories.map((category) => (
+                                <Option
+                                    checked={true}
+                                    value={category}
+                                    key={category}
+                                >
+                                    {category}
+                                </Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item
+                        initialValue={product.qty}
+                        name={'qty'}
+                        label='Storage qty'
+                        rules={[{ required: true }]}
+                    >
+                        <InputNumber defaultValue={product.qty} />
+                    </Form.Item>
+
+                    <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
                             }}
                         >
-                            <h1
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    fontWeight: 'bold',
-                                }}
+                            <Button
+                                type='primary'
+                                htmlType='submit'
+                                loading={buttonSaveLoading}
                             >
-                                EDIT
-                            </h1>
-                            <Form.Item
-                                name={'title'}
-                                label='Title'
-                                rules={[{ required: true }]}
-                            >
-                                <Input.TextArea defaultValue={product.title} />
-                            </Form.Item>
+                                Save
+                            </Button>
 
-                            <Form.Item
-                                initialValue={product.description}
-                                name={'description'}
-                                label='Description'
-                                rules={[{ required: true }]}
+                            <Button
+                                type='primary'
+                                danger
+                                onClick={handleDelete}
+                                loading={buttonDeleteLoading}
                             >
-                                <Input.TextArea
-                                    defaultValue={product.description}
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                initialValue={product.price}
-                                name={'price'}
-                                label='Price'
-                                rules={[{ required: true }]}
-                            >
-                                <Input.TextArea defaultValue={product.price} />
-                            </Form.Item>
-
-                            <Form.Item
-                                initialValue={product.imageUrl}
-                                name={'imageUrl'}
-                                label='ImageUrl'
-                                rules={[{ required: true }]}
-                            >
-                                <Input.TextArea
-                                    defaultValue={product.imageUrl}
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                name={'category'}
-                                label='Categories'
-                                rules={[{ required: true }]}
-                            >
-                                <Select
-                                    defaultValue={product.category}
-                                    mode='tags'
-                                    style={{ width: '100%' }}
-                                    tokenSeparators={[',']}
-                                >
-                                    {allCategories.map((category) => (
-                                        <Option
-                                            checked={true}
-                                            value={category}
-                                            key={category}
-                                        >
-                                            {category}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-
-                            <Form.Item
-                                initialValue={product.qty}
-                                name={'qty'}
-                                label='Storage qty'
-                                rules={[{ required: true }]}
-                            >
-                                <Input.TextArea defaultValue={product.qty} />
-                            </Form.Item>
-
-                            <Form.Item
-                                wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                    }}
-                                >
-                                    <Button
-                                        type='primary'
-                                        htmlType='submit'
-                                        loading={buttonSaveLoading}
-                                    >
-                                        Save
-                                    </Button>
-
-                                    <Button
-                                        type='primary'
-                                        danger
-                                        onClick={handleDelete}
-                                        loading={buttonDeleteLoading}
-                                    >
-                                        Delete
-                                    </Button>
-                                </div>
-                            </Form.Item>
-                        </Form>
-                    ) : null}
-                </Col>
-            </Row>
+                                Delete
+                            </Button>
+                        </div>
+                    </Form.Item>
+                </Form>
+            ) : null}
         </div>
     );
 }
 
 export default withRouter(AdminEditDetails);
-
-const ContainerStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'space-around',
-    width: '70%',
-    margin: 'auto',
-};
-
-const columnStyle: CSSProperties = {
-    marginTop: '10rem',
-    paddingBottom: '8rem',
-};

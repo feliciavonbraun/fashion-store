@@ -1,4 +1,4 @@
-import { Menu, Row } from 'antd';
+import { Row, Select } from 'antd';
 import React, {
     CSSProperties,
     Dispatch,
@@ -11,25 +11,36 @@ interface Props {
     setCategory: Dispatch<SetStateAction<string | undefined>>;
 }
 
+const { Option } = Select;
+
 export default function CategoryMenu(props: Props) {
     const productContext = useContext(ProductContext);
     const { allCategories } = productContext;
     const { setCategory } = props;
 
-    const handleClick = (category: string) => {
+    const handleChange = (category: string) => {
         setCategory(category);
     };
 
     return (
         <div>
             <Row style={categoryMenuContainer}>
-                <Menu mode='horizontal' style={MenuStyle}>
+                <Select
+                    onChange={handleChange}
+                    defaultValue={'All products'}
+                    style={{ minWidth: '8rem' }}
+                >
+                    <Option value={''} key={'All products'}>
+                        All products
+                    </Option>
                     {allCategories.map((category) => (
-                        <Menu.Item onClick={() => handleClick(category)}>
-                            {category}
-                        </Menu.Item>
+                        <>
+                            <Option value={category} key={category}>
+                                {category}
+                            </Option>
+                        </>
                     ))}
-                </Menu>
+                </Select>
             </Row>
         </div>
     );
@@ -37,20 +48,9 @@ export default function CategoryMenu(props: Props) {
 
 const categoryMenuContainer: CSSProperties = {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    width: '100%',
-    height: '1rem',
-    margin: '0',
+    width: '80%',
+    paddingTop: '2rem',
+    margin: 'auto',
 };
-
-const MenuStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'row',
-};
-
-// const linkStyle: CSSProperties = {
-//    fontWeight: 400,
-//    borderBottom: '0.1rem solid black'
-// }

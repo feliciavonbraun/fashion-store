@@ -89,10 +89,10 @@ const cartViewContainerStyle: CSSProperties = {
     alignItems: 'space-around',
     width: '80%',
     margin: 'auto',
-    paddingBottom: "8rem",
-}
+    paddingBottom: '8rem',
+};
 
 const priceTextStyle: CSSProperties = {
     textAlign: 'center',
-    marginTop: '1rem'
-}
+    marginTop: '1rem',
+};

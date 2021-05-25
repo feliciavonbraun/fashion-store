@@ -1,5 +1,5 @@
-import { CSSProperties, useState, useContext } from 'react';
-import { Form, Input, InputNumber, Button, Col, Row, message } from 'antd';
+import { useState, useContext } from 'react';
+import { Form, Input, InputNumber, Button, message } from 'antd';
 import { NewProduct, ProductContext } from '../../contexts/ProductContext';
 import { useHistory } from 'react-router-dom';
 import { Select } from 'antd';
@@ -46,113 +46,95 @@ export default function AddNewProduct() {
 
     return (
         <div>
-            <Row style={ContainerStyle}>
-                <Col span={24} style={columnStyle}>
-                    <Form
-                        {...layout}
-                        name='nest-messages'
-                        onFinish={onFinish}
-                        validateMessages={validateMessages}
+            <Form
+                {...layout}
+                name='nest-messages'
+                onFinish={onFinish}
+                validateMessages={validateMessages}
+            >
+                <h1
+                    style={{
+                        margin: '1rem 0',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        fontWeight: 'bold',
+                    }}
+                >
+                    ADD NEW PRODUCT{' '}
+                </h1>
+                <Form.Item
+                    name={'title'}
+                    label='Title'
+                    rules={[{ required: true }]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    name={'description'}
+                    label='Description'
+                    rules={[{ required: true }]}
+                >
+                    <Input.TextArea />
+                </Form.Item>
+
+                <Form.Item
+                    name={'price'}
+                    label='Price'
+                    rules={[{ required: true }]}
+                >
+                    <InputNumber min={1} />
+                </Form.Item>
+
+                <Form.Item
+                    name={'imageUrl'}
+                    label='ImageUrl'
+                    rules={[{ required: true }]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    name={'category'}
+                    label='Categories'
+                    rules={[{ required: true }]}
+                >
+                    <Select
+                        mode='tags'
+                        style={{ width: '100%' }}
+                        tokenSeparators={[',']}
                     >
-                        <h1
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            ADD NEW PRODUCT{' '}
-                        </h1>
-                        <Form.Item
-                            name={'title'}
-                            label='Title'
-                            rules={[{ required: true }]}
-                        >
-                            <Input />
-                        </Form.Item>
+                        {allCategories.map((category) => (
+                            <Option value={category} key={category}>
+                                {category}
+                            </Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name={'qty'}
+                    label='Storage qty'
+                    rules={[{ required: true }]}
+                >
+                    <InputNumber />
+                </Form.Item>
 
-                        <Form.Item
-                            name={'description'}
-                            label='Description'
-                            rules={[{ required: true }]}
+                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                            loading={buttonSaveLoading}
                         >
-                            <Input.TextArea />
-                        </Form.Item>
-
-                        <Form.Item
-                            name={'price'}
-                            label='Price'
-                            rules={[{ required: true }]}
-                        >
-                            <InputNumber />
-                        </Form.Item>
-
-                        <Form.Item
-                            name={'imageUrl'}
-                            label='ImageUrl'
-                            rules={[{ required: true }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            name={'category'}
-                            label='Categories'
-                            rules={[{ required: true }]}
-                        >
-                            <Select
-                                mode='tags'
-                                style={{ width: '100%' }}
-                                tokenSeparators={[',']}
-                            >
-                                {allCategories.map((category) => (
-                                    <Option value={category} key={category}>
-                                        {category}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                        <Form.Item
-                            name={'qty'}
-                            label='Storage qty'
-                            rules={[{ required: true }]}
-                        >
-                            <Input />
-                        </Form.Item>
-
-                        <Form.Item
-                            wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
-                        >
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                }}
-                            >
-                                <Button
-                                    type='primary'
-                                    htmlType='submit'
-                                    loading={buttonSaveLoading}
-                                >
-                                    Save
-                                </Button>
-                            </div>
-                        </Form.Item>
-                    </Form>
-                </Col>
-            </Row>
+                            Save
+                        </Button>
+                    </div>
+                </Form.Item>
+            </Form>
         </div>
     );
 }
-
-const ContainerStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'space-around',
-    width: '70%',
-    margin: 'auto',
-};
-
-const columnStyle: CSSProperties = {
-    marginTop: '10rem',
-    paddingBottom: '8rem',
-};
