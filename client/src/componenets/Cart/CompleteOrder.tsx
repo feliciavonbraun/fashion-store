@@ -1,24 +1,26 @@
-import { Component, ContextType, CSSProperties } from 'react';
+// import { Component, ContextType, CSSProperties, useContext } from 'react';
+import { CSSProperties, useContext } from 'react';
 import { CartContext } from '../../contexts/CartContext';
 import { Card, Col, Button } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Route } from 'react-router-dom';
+// import { OrderContext } from '../../contexts/OrderContext';
 
-class CompleteOrder extends Component {
-    context!: ContextType<typeof CartContext>
-    static contextType = CartContext;
+export default function CompleteOrder() {
 
-    onPlaceOrderClick = (history: any) => {
-        const { handlePlaceOrder } = this.context;
+    const { handlePlaceOrder } = useContext(CartContext);
+    // const { newOrder } = useContext(OrderContext);
+
+    const onPlaceOrderClick = (history: any) => {
         handlePlaceOrder(history);
-    }
+        // newOrder()
+    };
 
-    render() {
-        return(
-            <CartContext.Consumer>
-                {({ cart, deliveryMethod, getTotalPrice, disablePlaceOrderButton }) => {
-                    return (
-                        <>
+    return (
+        <CartContext.Consumer>
+            {({ cart, deliveryMethod, getTotalPrice, disablePlaceOrderButton }) => {
+                return (
+                    <>
                         <Col span={24} style={buttonContainerStyle}>
                             <Card title="Order summary" style={{ width: '80%', marginTop: '7rem' }}>
                                 <p>Products: {cart.map((item) => item.quantity + ' ' + item.product.title.concat(', '))}</p>
@@ -32,22 +34,19 @@ class CompleteOrder extends Component {
                                     type="primary"
                                     icon={<CheckCircleOutlined />}
                                     size={'large'}
-                                    onClick={() => this.onPlaceOrderClick(history)}
+                                    onClick={() => onPlaceOrderClick(history)}
                                     loading={disablePlaceOrderButton}
                                 >
                                     <strong> Place order</strong>
                                 </Button>
-                            )}/>
+                            )} />
                         </Col>
-                        </>
-                    );    
-                }}
-            </CartContext.Consumer>
-        )
-    }
-}
-
-export default CompleteOrder;
+                    </>
+                );
+            }}
+        </CartContext.Consumer>
+    )
+};
 
 const buttonContainerStyle: CSSProperties = {
     display: 'flex',
@@ -56,4 +55,4 @@ const buttonContainerStyle: CSSProperties = {
     alignItems: 'center',
     marginTop: '-3rem',
     marginBottom: '8rem'
-}
+};
