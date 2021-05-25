@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const { ProductSchema } = require('../productResource/productModel');
 
 const OrderItemSchema = new mongoose.Schema({
-    product: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
+    product: { type: ProductSchema },
     qty: { type: Number },
 });
 
@@ -13,15 +14,15 @@ const AddressSchema = new mongoose.Schema({
 });
 
 const OrderSchema = new mongoose.Schema({
-    orderItems: { type: [OrderItemSchema] }, 
+    orderItems: { type: [OrderItemSchema] },
     address: { type: AddressSchema },
 
     totalprice: { type: Number },
     isSent: { type: Boolean },
-    createdAt: { type: Date },
+    createdAt: { type: Number },
 
-    delivery: {type: mongoose.Schema.Types.ObjectId, ref: "delivery"}, 
-    user: {type: mongoose.Schema.Types.ObjectId, ref: "user"},  
+    delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'delivery' },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
 });
 
 const OrderModel = mongoose.model('order', OrderSchema);

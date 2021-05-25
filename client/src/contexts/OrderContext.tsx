@@ -1,44 +1,49 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { makeRequest } from "../makeRequest";
-import { User } from "./UserContext";
-import { CartContext } from "./CartContext";
-import { DeliveryMethods } from "./DeliveryContext";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { makeRequest } from '../makeRequest';
+import { UserContext } from './UserContext';
+import { CartContext } from './CartContext';
 // import { CartItem } from "../componenets/Cart/CartItemsList";
-import { ProductContext } from './ProductContext';
+import { Product, ProductContext } from './ProductContext';
 
-interface OrderItem {
-    product: string, // in cart from CartContext
-    qty: number, // in cart from CartContext
-};
+export interface OrderItem {
+    product: Product; // in cart from CartContext
+    qty: number; // in cart from CartContext
+}
 
-interface Address {
-    phone: number, // in userInfo from CartContext
-    street: string, // in userInfo from CartContext
-    zipcode: number, // in userInfo from CartContext
-    city: string, // in userInfo from CartContext
-};
+export interface Address {
+    phone: number; // in userInfo from CartContext
+    street: string; // in userInfo from CartContext
+    zipcode: number; // in userInfo from CartContext
+    city: string; // in userInfo from CartContext
+}
 
-export interface Order extends User {    
-    orderItems: OrderItem[],
-    address: Address,
+export interface Order {
+    orderItems: OrderItem[];
+    address: Address;
 
-    _id: string,
-    totalprice: number, // finns
-    isSent: boolean, 
-    createdAt: Date, 
+    _id: string;
+    totalprice: number; // finns
+    isSent: boolean;
+    createdAt: Number;
 
-    deliveryMethods: DeliveryMethods[],
-    user: User[],
+    deliveryMethod: string;
+    user: string;
+}
 
-    // cart: CartItem[],
-};
+interface NewOrder {
+    orderItems: OrderItem[];
+    address: Address;
+    totalprice: number; // finns
+    isSent: boolean;
+    createdAt: Number;
+}
 
 interface OrderValue {
-    allOrders: Order[],
-    getOneOrder: (_id: string) => void,
-    newOrder: (order: Order) => void,
-    updateOrder: (isSent: boolean) => void,
-};
+    allOrders: Order[];
+    getOneOrder: (_id: string) => void;
+    newOrder: () => void;
+    updateOrder: (isSent: boolean) => void;
+}
 
 interface Props {
     children: Object;
@@ -50,17 +55,9 @@ function OrderProvider({ children }: Props) {
     // children kan skrivas annorlunda
 
     const [allOrders, setAllOrders] = useState<Order[]>([]);
-    console.log('allOrders:', allOrders);
 
-    const { cart } = useContext(CartContext);
-    console.log('Cart Items:', cart);
-
-    // const { getTotalPrice } = useContext(CartContext);
-    // console.log('totalPrice:', getTotalPrice);
-
-    const { userInfo } = useContext(CartContext);
-    console.log('userInfo:', userInfo); // innehåller för mkt saker
-
+    const { cart, getTotalPrice } = useContext(CartContext);
+    const { address } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
     useEffect(() => {
@@ -75,11 +72,17 @@ function OrderProvider({ children }: Props) {
     async function getOneOrder(_id: string) {
         const oneProduct: Order = await makeRequest(`/api/order/${_id}`, 'GET');
         return oneProduct;
-    };
+    }
 
-    async function newOrder(order: Order) {
-        const body = { ...order};
-        const newOrder = await makeRequest('/api/order', 'POST', body);
+    async function newOrder() {
+        const order: NewOrder = {
+            orderItems: cart,
+            address: address,
+            totalprice: getTotalPrice(),
+            isSent: false,
+            createdAt: Date.now(),
+        };
+        const newOrder = await makeRequest('/api/order', 'POST', order);
         console.log('Nya ordern:', newOrder);
 
         /* Updates products in product context, since qty has changed */
@@ -87,11 +90,11 @@ function OrderProvider({ children }: Props) {
         setAllProducts(products);
 
         return newOrder;
-    };
+    }
 
     async function updateOrder(isSent: boolean) {
         // isSent ska endast kunna uppdateras
-    };
+    }
 
     return (
         <OrderContext.Provider

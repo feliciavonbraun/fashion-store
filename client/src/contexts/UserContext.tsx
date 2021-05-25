@@ -1,3 +1,4 @@
+import { Address } from './OrderContext';
 import { createContext, useEffect, useState } from 'react';
 import { makeRequest } from '../makeRequest';
 
@@ -10,13 +11,31 @@ export interface User {
     adminRequest: boolean;
 }
 
+const emptyAddress: Address = {
+    phone: 0,
+    street: '',
+    zipcode: 0,
+    city: '',
+};
+
+const emptyUser: User = {
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+    role: 'user',
+    adminRequest: false,
+};
+
 interface UserValue {
     loggedin: boolean;
     loginResponse: string;
     adminRequests: User[];
+    user: User;
+    address: Address;
     validEmail: boolean;
     setValidEmail: (value: boolean) => void;
-
+    setAddress: React.Dispatch<React.SetStateAction<Address>>;
     loginUser: (email: string, password: string) => Promise<void>;
     logoutUser: (id: string) => Promise<void>;
     responseAdminRequest: (user: User, response: boolean) => Promise<void>;
@@ -25,6 +44,7 @@ interface UserValue {
         lastname: string,
         email: string,
         password: string,
+        role: 'admin' | 'user',
         adminRequest: boolean
     ) => Promise<void>;
 }
@@ -36,6 +56,8 @@ interface Props {
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
     const [loginResponse, setLoginResponse] = useState('Login');
+    const [user, setUser] = useState<User>(emptyUser);
+    const [address, setAddress] = useState<Address>(emptyAddress);
     const [loggedin, setLoggedin] = useState(false);
     const [validEmail, setValidEmail] = useState(false);
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
@@ -50,6 +72,7 @@ function UserProvider({ children }: Props) {
         lastname: string,
         email: string,
         password: string,
+        role: 'admin' | 'user',
         adminRequest: boolean
     ) {
         const newUser = {
@@ -57,6 +80,7 @@ function UserProvider({ children }: Props) {
             lastname,
             email,
             password,
+            role,
             adminRequest,
         };
 
@@ -67,6 +91,7 @@ function UserProvider({ children }: Props) {
         );
 
         if (uniqueEmail) {
+            setUser(newUser);
             setValidEmail(true);
             if (adminRequest) {
                 getAllAdminRequests();
@@ -133,8 +158,10 @@ function UserProvider({ children }: Props) {
                 loginResponse,
                 adminRequests,
                 validEmail,
+                user,
+                address,
                 setValidEmail,
-
+                setAddress,
                 loginUser,
                 logoutUser,
                 responseAdminRequest,
