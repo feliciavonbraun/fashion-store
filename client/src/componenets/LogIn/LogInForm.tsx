@@ -1,71 +1,99 @@
-import { CSSProperties } from 'react';
+
+import { CSSProperties, useContext, useEffect, useState } from "react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { useHistory } from 'react-router';
+import { UserContext } from "../../contexts/UserContext";
 
 interface Props {
     toggleForm: (value: boolean) => void;
 }
 
-function LogInForm(props: Props) {
-    let history = useHistory();
 
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
-        history.push('/user/product-list');
+ function LogInForm(props: Props) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [remember, setRemember] = useState(false)
+
+    const { loginUser, loggedin } = useContext(UserContext)
+    let history = useHistory()
+
+    useEffect(() => {
+        if (loggedin) {
+            history.push('/user/product-list')
+        }
+    })
+
+    function onFinish() {
+        loginUser(email, password)
+        if (!remember) {
+            setEmail('');
+            setPassword('');
+        }
     };
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
-    };
+    // const onFinishFailed = (errorInfo: any) => {
+    //     console.log('Failed:', errorInfo);
+    // };
 
     return (
         <Form
-            name='login'
-            initialValues={{
-                remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-        >
-            <Form.Item
-                name='email'
-                rules={[
-                    {
-                        type: 'email',
-                        required: true,
-                        message: 'Please input your email',
-                    },
-                ]}
+                name="login"
+                initialValues={{
+                    remember: true,
+                }}
+                //onFinish={onFinish}
+                //onFinishFailed={onFinishFailed}
+                onSubmitCapture={onFinish}
             >
-                <Input
-                    prefix={<UserOutlined style={inputIconStyle} />}
-                    placeholder='E-mail'
-                    style={{ padding: '.8rem' }}
-                />
-            </Form.Item>
+                <Form.Item
+                    name="email"
+                    rules={[
+                        {
+                            type: 'email',
+                            required: true,
+                            message: 'Please input your e-mail',
+                        },
+                    ]}
+                >
+                    <Input
+                        prefix={<UserOutlined style={inputIconStyle} />}
+                        placeholder='E-mail'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        style={{ padding: '.8rem' }}
+                    />
+                </Form.Item>
 
-            <Form.Item
-                name='password'
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please input your password',
-                    },
-                ]}
-            >
-                <Input.Password
-                    prefix={<LockOutlined style={inputIconStyle} />}
-                    type='password'
-                    placeholder='Password'
-                    style={{ padding: '.8rem' }}
-                />
-            </Form.Item>
+                <Form.Item
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your password',
+                        },
+                    ]}
+                >
+                    <Input.Password
+                        prefix={<LockOutlined style={inputIconStyle} />}
+                        type='password'
+                        placeholder='Password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        style={{ padding: '.8rem' }}
+                    />
+                </Form.Item>
 
-            <Form.Item name='remember' valuePropName='checked'>
-                <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-
+                <Form.Item 
+                    name="remember" 
+                >
+                    <Checkbox 
+                        checked={remember} 
+                        onChange={() => setRemember(!remember)}
+                    >
+                        Remember me
+                    </Checkbox>
+                </Form.Item>
             <Form.Item>
                 <Button type='primary' htmlType='submit' style={logInButton}>
                     Log in
