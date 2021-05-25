@@ -1,86 +1,94 @@
-import { createContext, useEffect, useState } from "react";
-import { makeRequest } from "../makeRequest";
+import { createContext, useEffect, useState } from 'react';
+import { makeRequest } from '../makeRequest';
 
 export interface User {
-    firstname: string,
-    lastname: string,
-    email: string,
-    password: string,
-    role: 'admin' | 'user',
-    adminRequest: boolean,
-};
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+    role: 'admin' | 'user';
+    adminRequest: boolean;
+}
 
 interface UserValue {
-    loggedIn: boolean,
-    loginResponse: string,
-    adminRequests: [{}],
-    validEmail: boolean,
-    setValidEmail: (value: boolean) => void
+    loggedIn: boolean;
+    loginResponse: string;
+    adminRequests: User[];
+    validEmail: boolean;
+    setValidEmail: (value: boolean) => void;
 
-    loginUser: (email: string, password: string) => Promise<void>,
-    logoutUser: (id: string) => Promise<void>,
-    responseAdminRequest: (email: string, response: boolean) => Promise<void>
+    loginUser: (email: string, password: string) => Promise<void>;
+    logoutUser: (id: string) => Promise<void>;
+    responseAdminRequest: (user: User, response: boolean) => Promise<void>;
     registerUser: (
-        firstname: string, 
-        lastname: string, 
-        email: string, 
-        password: string, 
-        adminRequest: boolean,
-        ) => Promise<void>,
-};
+        firstname: string,
+        lastname: string,
+        email: string,
+        password: string,
+        adminRequest: boolean
+    ) => Promise<void>;
+}
 
 interface Props {
     children: Object;
-};
+}
 
 export const UserContext = createContext<UserValue>({} as UserValue);
-function UserProvider({children}: Props) {
+function UserProvider({ children }: Props) {
     const [loginResponse, setLoginResponse] = useState('Login');
     const [loggedIn, setLoggedin] = useState(false);
     const [validEmail, setValidEmail] = useState(false);
-    const [adminRequests, setAdminrequests] = useState<[{}]>([{}]);
+    const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
     useEffect(() => {
-        getAllAdminRequests()
-    });
+        getAllAdminRequests();
+    }, []);
 
     // REGISTER NEW USER
     async function registerUser(
-        firstname: string, 
-        lastname: string, 
-        email: string, 
-        password: string, 
-        adminRequest: boolean,
-        ) {
+        firstname: string,
+        lastname: string,
+        email: string,
+        password: string,
+        adminRequest: boolean
+    ) {
         const newUser = {
             firstname,
             lastname,
             email,
             password,
             adminRequest,
-        }
+        };
 
-        const uniqueEmail = await makeRequest('/api/user/register', 'POST', newUser);
-        
+        const uniqueEmail = await makeRequest(
+            '/api/user/register',
+            'POST',
+            newUser
+        );
+
         if (uniqueEmail) {
-            setValidEmail(true)
+            setValidEmail(true);
             if (adminRequest) {
-                getAllAdminRequests()
+                getAllAdminRequests();
             }
         } else {
-            setValidEmail(false)
+            setValidEmail(false);
         }
-    };
+    }
 
     // LOG IN USER
     async function loginUser(email: string, password: string) {
         const user = {
             email,
             password,
-        }
-        
-        const loginResponse = await makeRequest('/api/user/login', 'POST', user);
-        switch(loginResponse){
+        };
+
+        const loginResponse = await makeRequest(
+            '/api/user/login',
+            'POST',
+            user
+        );
+        switch (loginResponse) {
             case 'Login':
                 setLoginResponse('Login');
                 setLoggedin(true);
@@ -92,30 +100,35 @@ function UserProvider({children}: Props) {
             default:
                 setLoginResponse('Incorrect e-mail or password');
                 setLoggedin(false);
-        }   
-    };
+        }
+    }
 
     // LOG OUT USER
     async function logoutUser(id: string) {
-        await makeRequest(`/api/user/logout/${id}`, 'DELETE')
-    };
+        await makeRequest(`/api/user/logout/${id}`, 'DELETE');
+    }
 
     // GET ALL ADMIN REQUESTS
     async function getAllAdminRequests() {
         const allRequsts = await makeRequest('/api/user/admin', 'GET');
-        setAdminrequests(allRequsts)
-    };
+        setAdminrequests(allRequsts);
+    }
 
     // RESPONSE TO ADMIN REQUEST
-    async function responseAdminRequest(email: string, response: boolean) {
-        await makeRequest('/api/user/admin', 'PUT', {email, response});
+    async function responseAdminRequest(user: User, response: boolean) {
+        if (response) {
+            user.role = 'admin';
+        } else {
+            user.role = 'user';
+        }
+        await makeRequest('/api/user/admin', 'PUT', { ...user });
 
-        getAllAdminRequests()
-    };
+        getAllAdminRequests();
+    }
 
-    return(
-        <UserContext.Provider value =
-            {{
+    return (
+        <UserContext.Provider
+            value={{
                 loggedIn,
                 loginResponse,
                 adminRequests,
@@ -128,9 +141,9 @@ function UserProvider({children}: Props) {
                 registerUser,
             }}
         >
-            { children }
+            {children}
         </UserContext.Provider>
-    )
+    );
 }
 
 export default UserProvider;
