@@ -20,8 +20,8 @@ const validateMessages = {
 }; 
 export interface PaymentKlarna {
     ssn: string;
-    name: string;
-    email: string;
+    // name: string;
+    // email: string;
     phone: string;
     street: string;
     zipcode: string;
@@ -61,8 +61,8 @@ class PayKlarna extends Component<Props> {
                                     onFinish={this.onFinish}
                                     initialValues={{
                                         klarna: {
-                                            name: userInfo?.name,
-                                            email: userInfo?.email,
+                                            // name: userInfo?.name,
+                                            // email: userInfo?.email,
                                             phone: userInfo?.phone,
                                             street: userInfo?.street,
                                             zipcode: userInfo?.zipcode,

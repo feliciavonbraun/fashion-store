@@ -14,6 +14,8 @@ const validateMessages = {
     range: '${label} must be between ${min} and ${max}',
   },
 };
+
+// sätt dessa i adressInterfacet i OrderContext
 export interface PaymentSwish {
   phone: string;
 }
