@@ -18,10 +18,12 @@ const validateMessages = {
         range: '${label} must be between ${min} and ${max}',
     },
 }; 
+
+// sätt dessa i adressInterfacet i OrderContext
 export interface PaymentKlarna {
     ssn: string;
-    name: string;
-    email: string;
+    // name: string;
+    // email: string;
     phone: string;
     street: string;
     zipcode: string;
@@ -29,7 +31,7 @@ export interface PaymentKlarna {
 }
 interface Props {
     next(): void;
-}
+};
 class PayKlarna extends Component<Props> {
     context!: ContextType<typeof CartContext>
     static contextType = CartContext;
@@ -61,8 +63,8 @@ class PayKlarna extends Component<Props> {
                                     onFinish={this.onFinish}
                                     initialValues={{
                                         klarna: {
-                                            name: userInfo?.name,
-                                            email: userInfo?.email,
+                                            // name: userInfo?.name,
+                                            // email: userInfo?.email,
                                             phone: userInfo?.phone,
                                             street: userInfo?.street,
                                             zipcode: userInfo?.zipcode,

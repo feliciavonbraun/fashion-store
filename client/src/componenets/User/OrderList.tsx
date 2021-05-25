@@ -21,4 +21,4 @@ export default function OrderList() {
             renderItem={(order) => <OrderListItem order={order} />}
         ></List>
     );
-}
+};

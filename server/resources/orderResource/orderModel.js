@@ -13,7 +13,7 @@ const AddressSchema = new mongoose.Schema({
 });
 
 const OrderSchema = new mongoose.Schema({
-    orderItem: { type: [OrderItemSchema] }, 
+    orderItems: { type: [OrderItemSchema] }, 
     address: { type: AddressSchema },
 
     totalprice: { type: Number },

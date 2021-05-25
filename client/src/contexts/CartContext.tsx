@@ -11,8 +11,8 @@ import { IReceipt } from '../componenets/OrderSuccess/Reciept';
 import { Product } from '../contexts/ProductContext';
 
 const emptyUser: UserInfo = {
-    name: '',
-    email: '',
+    // name: '',
+    // email: '',
     phone: '',
     street: '',
     zipcode: '',
