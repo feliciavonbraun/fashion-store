@@ -28,8 +28,8 @@ export default function OrderListItem(props: Props) {
     return (
         <List.Item style={listItem}>
             <List.Item.Meta title={`Order: ${props.order._id}`} />
-            {/*             <p style={orderInfo}>{props.order.user.firstname}</p>
-            <p style={orderInfo}>{props.order.user.email}</p> */}
+            <p style={orderInfo}>{props.order.user.firstname}</p>
+            <p style={orderInfo}>{props.order.user.email}</p>
             <p style={orderInfo}>{props.order.address.phone}</p>
             <p style={orderInfo}>{props.order.address.street}</p>
             <p style={orderInfo}>{props.order.address.city}</p>
@@ -59,9 +59,9 @@ export default function OrderListItem(props: Props) {
                     </List.Item>
                 )}
             ></List>
-            {/* <p style={orderInfo}>
-                {`Delivery method: ${props.order.deliveryMethod}`}
-            </p> */}
+            <p style={orderInfo}>
+                {`Delivery method: ${props.order.delivery.company}`}
+            </p>
             {/* {isKlarna(props.order.deliveryMethod) ? (
                 <p style={orderInfo}>Payment method: Klarna</p>
             ) : isCard(props.order.deliveryMethod) ? (

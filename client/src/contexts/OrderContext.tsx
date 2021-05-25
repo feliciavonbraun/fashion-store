@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { makeRequest } from '../makeRequest';
-import { UserContext } from './UserContext';
+import { User, UserContext } from './UserContext';
 import { CartContext } from './CartContext';
 // import { CartItem } from "../componenets/Cart/CartItemsList";
 import { Product, ProductContext } from './ProductContext';
+import { DeliveryMethod } from './DeliveryContext';
 
 export interface OrderItem {
     product: Product; // in cart from CartContext
@@ -26,8 +27,8 @@ export interface Order {
     isSent: boolean;
     createdAt: Number;
 
-    deliveryMethod: string;
-    user: string;
+    delivery: DeliveryMethod;
+    user: User;
 }
 
 interface NewOrder {
@@ -36,6 +37,8 @@ interface NewOrder {
     totalprice: number; // finns
     isSent: boolean;
     createdAt: Number;
+    delivery: string;
+    user: string;
 }
 
 interface OrderValue {
@@ -56,18 +59,19 @@ function OrderProvider({ children }: Props) {
 
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
-    const { cart, getTotalPrice } = useContext(CartContext);
-    const { address } = useContext(UserContext);
+    const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
+    const { address, user } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
     useEffect(() => {
-        async function getOrders() {
-            const orders = await makeRequest('/api/order', 'GET');
-            console.log('Orders in useEffect:', orders);
-            setAllOrders(orders);
-        }
         getOrders();
     }, [setAllOrders]);
+
+    async function getOrders() {
+        const orders = await makeRequest('/api/order', 'GET');
+        console.log('Orders in useEffect:', orders);
+        setAllOrders(orders);
+    }
 
     async function getOneOrder(_id: string) {
         const oneProduct: Order = await makeRequest(`/api/order/${_id}`, 'GET');
@@ -81,14 +85,16 @@ function OrderProvider({ children }: Props) {
             totalprice: getTotalPrice(),
             isSent: false,
             createdAt: Date.now(),
+            delivery: deliveryMethod._id,
+            user: user._id,
         };
         const newOrder = await makeRequest('/api/order', 'POST', order);
         console.log('Nya ordern:', newOrder);
 
         /* Updates products in product context, since qty has changed */
+        getOrders();
         const products = await getProducts();
         setAllProducts(products);
-
         return newOrder;
     }
 

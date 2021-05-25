@@ -28,12 +28,10 @@ function DeliveryProvider({ children }: Props) {
     useEffect(() => {
         async function getDeliveryMethods() {
             const delivery = await makeRequest('/api/delivery', 'GET');
-            console.log(delivery, 'HEJDÅ');
             setDeliveryMethod(delivery);
         }
         getDeliveryMethods();
     }, [setDeliveryMethod]);
-    console.log('TEST');
 
     const calculateDeliveryDay = (timeInHours: number) => {
         const today = new Date();

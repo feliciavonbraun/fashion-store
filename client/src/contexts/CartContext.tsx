@@ -9,6 +9,7 @@ import { IReceipt } from '../componenets/OrderSuccess/Reciept';
 import { Product } from '../contexts/ProductContext';
 
 const emptyUser: User = {
+    _id: '',
     firstname: '',
     lastname: '',
     email: '',
