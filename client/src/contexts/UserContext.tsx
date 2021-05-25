@@ -11,7 +11,7 @@ export interface User {
 }
 
 interface UserValue {
-    loggedIn: boolean;
+    loggedin: boolean;
     loginResponse: string;
     adminRequests: User[];
     validEmail: boolean;
@@ -36,7 +36,7 @@ interface Props {
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
     const [loginResponse, setLoginResponse] = useState('Login');
-    const [loggedIn, setLoggedin] = useState(false);
+    const [loggedin, setLoggedin] = useState(false);
     const [validEmail, setValidEmail] = useState(false);
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
@@ -129,7 +129,7 @@ function UserProvider({ children }: Props) {
     return (
         <UserContext.Provider
             value={{
-                loggedIn,
+                loggedin,
                 loginResponse,
                 adminRequests,
                 validEmail,
