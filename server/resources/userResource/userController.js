@@ -35,21 +35,19 @@ exports.loginUser = async (req, res) => {
     const user = await UserModel.findOne({ email: email })
     
     if (!user || !await bcrypt.compare(password, user.password)) {
-        res.status(400).json('Incorrect email or password');
-        return false;
+        res.status(400).json('Incorrect e-mail or password');
     }
 
     /* FRÅN CLIENT, FÖRFRÅGAN OM ATT BLI ADMIN */
-    if (user.adminRequest) {
-        res.status(400).json('Waiting for response from Admin');
-        return false;
+    if (user.adminRequest == true) {
+        res.status(400).json('Pending admin request');
     }
 
     req.session.id = user.id;
     req.session.email = user.email;
     req.session.role = user.role;
 
-    res.status(200).json('You are logged in')
+    res.status(200).json('Login')
 };
 
 /* LOG OUT SESSION */

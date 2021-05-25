@@ -9,91 +9,85 @@ interface Props {
     toggleForm: (value: boolean) => void;
 }
 
-
- function LogInForm(props: Props) {
+function LogInForm(props: Props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false)
 
-    const { loginUser, loggedin } = useContext(UserContext)
+    const { loginUser, loggedIn } = useContext(UserContext)
     let history = useHistory()
 
     useEffect(() => {
-        if (loggedin) {
+        if (loggedIn) {
             history.push('/user/product-list')
+            if (!remember) {
+                setEmail('');
+                setPassword('');
+            }
         }
     })
 
     function onFinish() {
-        loginUser(email, password)
-        if (!remember) {
-            setEmail('');
-            setPassword('');
-        }
+        loginUser(email, password);
     };
-
-    // const onFinishFailed = (errorInfo: any) => {
-    //     console.log('Failed:', errorInfo);
-    // };
 
     return (
         <Form
-                name="login"
-                initialValues={{
-                    remember: true,
-                }}
-                //onFinish={onFinish}
-                //onFinishFailed={onFinishFailed}
-                onSubmitCapture={onFinish}
+            name="login"
+            initialValues={{
+                remember: true,
+            }}
+            onFinish={onFinish}
+        >
+            <Form.Item
+                name="email"
+                rules={[
+                    {
+                        type: 'email',
+                        required: true,
+                        message: 'Please input your e-mail',
+                    },
+                    
+                ]}
             >
-                <Form.Item
-                    name="email"
-                    rules={[
-                        {
-                            type: 'email',
-                            required: true,
-                            message: 'Please input your e-mail',
-                        },
-                    ]}
-                >
-                    <Input
-                        prefix={<UserOutlined style={inputIconStyle} />}
-                        placeholder='E-mail'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        style={{ padding: '.8rem' }}
-                    />
-                </Form.Item>
+                <Input
+                    prefix={<UserOutlined style={inputIconStyle} />}
+                    placeholder='E-mail'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{ padding: '.8rem' }}
+                />
+            </Form.Item>
 
-                <Form.Item
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password',
-                        },
-                    ]}
-                >
-                    <Input.Password
-                        prefix={<LockOutlined style={inputIconStyle} />}
-                        type='password'
-                        placeholder='Password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        style={{ padding: '.8rem' }}
-                    />
-                </Form.Item>
+            <Form.Item
+                name="password"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your password',
+                    },
+                ]}
+            >
+                <Input.Password
+                    prefix={<LockOutlined style={inputIconStyle} />}
+                    type='password'
+                    placeholder='Password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    style={{ padding: '.8rem' }}
+                />
+            </Form.Item>
 
-                <Form.Item 
-                    name="remember" 
+            <Form.Item
+                name="remember"
+            >
+                <Checkbox
+                    checked={remember}
+                    onChange={() => setRemember(!remember)}
                 >
-                    <Checkbox 
-                        checked={remember} 
-                        onChange={() => setRemember(!remember)}
-                    >
-                        Remember me
+                    Remember me
                     </Checkbox>
-                </Form.Item>
+            </Form.Item>
             <Form.Item>
                 <Button type='primary' htmlType='submit' style={logInButton}>
                     Log in
