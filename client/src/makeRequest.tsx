@@ -1,6 +1,5 @@
 export async function makeRequest(url: string, method: string, body?: {}) {
-   try {
-       
+    try {
         const response = await fetch(url, {
         method: method,
         body: JSON.stringify(body),
@@ -13,4 +12,4 @@ export async function makeRequest(url: string, method: string, body?: {}) {
  } catch (error) {
      console.log(error)
  }
-}
+};
