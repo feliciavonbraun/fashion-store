@@ -37,7 +37,6 @@ interface NewOrder {
     isSent: boolean;
     createdAt: Number;
     delivery: string;
-    user: string;
 }
 
 interface OrderValue {
@@ -59,7 +58,7 @@ function OrderProvider({ children }: Props) {
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
     const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
-    const { address, user } = useContext(UserContext);
+    const { address } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
     useEffect(() => {
@@ -84,7 +83,7 @@ function OrderProvider({ children }: Props) {
             isSent: false,
             createdAt: Date.now(),
             delivery: deliveryMethod._id,
-            user: user._id,
+            // få User från newOrder
         };
         const newOrder = await makeRequest('/api/order', 'POST', order);
 

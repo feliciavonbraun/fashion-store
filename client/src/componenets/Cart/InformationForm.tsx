@@ -58,11 +58,11 @@ export default function InformationForm(props: Props) {
         >
           <Form.Item name={['user', 'name']} label="Name"
             rules={[{ min: 2}]}>
-            <Input defaultValue={user.firstname} disabled />
+            <Input defaultValue={user?.firstname} disabled />
           </Form.Item>
           <Form.Item name={['user', 'email']} label="Email"
             rules={[{ min: 5, type: 'email' }]}>
-            <Input defaultValue={user.email} disabled/>
+            <Input defaultValue={user?.email} disabled/>
           </Form.Item>
           <Form.Item
             name={['user', 'phone']}
