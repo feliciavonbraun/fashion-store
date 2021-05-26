@@ -67,14 +67,14 @@ function UserProvider({ children }: Props) {
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
     const getUserOrders = useCallback(async () => {
-        console.log('hello');
+        console.log(user);
         const userOrders = await makeRequest(
             `/api/order/user/${user._id}`,
             'GET'
         );
         console.log(userOrders);
         setUserOrders(userOrders);
-    }, [user._id]);
+    }, [user]);
 
     useEffect(() => {
         getUserOrders();

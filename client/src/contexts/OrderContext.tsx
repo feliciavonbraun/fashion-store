@@ -45,7 +45,7 @@ interface OrderValue {
     allOrders: Order[];
     getOneOrder: (_id: string) => void;
     newOrder: () => void;
-    updateOrder: (isSent: boolean) => void;
+    updateOrder: (order: Order) => Promise<Order>;
 }
 
 interface Props {
@@ -69,7 +69,6 @@ function OrderProvider({ children }: Props) {
 
     async function getOrders() {
         const orders = await makeRequest('/api/order', 'GET');
-        console.log('Orders in useEffect:', orders);
         setAllOrders(orders);
     }
 
@@ -89,17 +88,24 @@ function OrderProvider({ children }: Props) {
             user: user._id,
         };
         const newOrder = await makeRequest('/api/order', 'POST', order);
-        console.log('Nya ordern:', newOrder);
 
-        /* Updates products in product context, since qty has changed */
+        /* Updates orders */
         getOrders();
+        /* Updates products in product context, since qty has changed */
         const products = await getProducts();
         setAllProducts(products);
+
         return newOrder;
     }
 
-    async function updateOrder(isSent: boolean) {
-        // isSent ska endast kunna uppdateras
+    async function updateOrder(order: Order) {
+        const updatedOrder = await makeRequest(
+            `/api/order/${order._id}`,
+            'PUT',
+            order
+        );
+        getOrders();
+        return updatedOrder;
     }
 
     return (

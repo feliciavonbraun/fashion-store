@@ -7,10 +7,15 @@ export default function OrderList() {
     const { userOrders } = useContext(UserContext);
 
     return (
-        <List
-            itemLayout='vertical'
-            dataSource={userOrders}
-            renderItem={(order) => <OrderListItem order={order} />}
-        ></List>
+        <>
+            <h1 style={{ fontWeight: 'bold', marginBottom: '2rem' }}>
+                YOUR ORDERS
+            </h1>
+            <List
+                itemLayout='vertical'
+                dataSource={userOrders}
+                renderItem={(order) => <OrderListItem order={order} />}
+            ></List>
+        </>
     );
 }

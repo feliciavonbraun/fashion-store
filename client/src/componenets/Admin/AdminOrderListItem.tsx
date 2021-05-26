@@ -1,6 +1,7 @@
-import { Avatar, List } from 'antd';
-import React, { CSSProperties } from 'react';
-import { Order } from '../../contexts/OrderContext';
+import { Avatar, List, Select } from 'antd';
+import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox/Checkbox';
+import React, { CSSProperties, useContext } from 'react';
+import { Order, OrderContext } from '../../contexts/OrderContext';
 import { PaymentCard } from '../Cart/PayCard';
 import { PaymentKlarna } from '../Cart/PayKlarna';
 
@@ -8,7 +9,8 @@ interface Props {
     order: Order;
 }
 
-export default function OrderListItem(props: Props) {
+export default function AdminOrderListItem(props: Props) {
+    const { updateOrder } = useContext(OrderContext);
     const { order } = props;
     // function handleChange = (value: string) => {
     //     console.log(value);
@@ -25,6 +27,12 @@ export default function OrderListItem(props: Props) {
             typeof payment.cardNumber == 'string'
         );
     } */
+
+    const changeOrderStatus = async (e: CheckboxChangeEvent) => {
+        const isSent = e.target.checked;
+        const updatedOrder = { ...order, isSent: isSent };
+        await updateOrder(updatedOrder);
+    };
 
     return (
         <List.Item style={listItem}>
@@ -75,9 +83,13 @@ export default function OrderListItem(props: Props) {
                     order.totalprice
                 } kr, incl delivery (VAT: ${order.totalprice * 0.25} kr)`}
             </p>
-            <p style={status}>
-                Status: <b>{order.isSent ? 'Sent' : 'Proccessing'}</b>
-            </p>
+            <p>Status: {order.isSent ? 'Sent' : 'Proccessing'}</p>
+            <Checkbox
+                defaultChecked={order.isSent}
+                onChange={changeOrderStatus}
+            >
+                Order has been sent
+            </Checkbox>
         </List.Item>
     );
 }

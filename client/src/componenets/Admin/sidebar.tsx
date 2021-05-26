@@ -13,6 +13,7 @@ import AdminReqList from './AdminReqList';
 import OrderList from '../User/OrderList';
 import AddNewProduct from './AddNewProduct';
 import AdminEditDetails from './AdminEditDetails';
+import AdminOrderList from './AdminOrderList';
 
 const { Content, Sider } = Layout;
 
@@ -40,6 +41,10 @@ function Sidebar(props: Props) {
                             <span>Admin Requests</span>
                             <Link to={`${props.match.url}/admin-list`} />
                         </Menu.Item>
+                        <Menu.Item key='4'>
+                            <span>Orders (Admin)</span>
+                            <Link to={`${props.match.url}/admin-order-list`} />
+                        </Menu.Item>
                     </Menu>
                 </Sider>
 
@@ -65,6 +70,10 @@ function Sidebar(props: Props) {
                         <Route
                             path={`${props.match.url}/admin-list`}
                             component={AdminReqList}
+                        />
+                        <Route
+                            path={`${props.match.url}/admin-order-list`}
+                            component={AdminOrderList}
                         />
                     </Content>
                 </Layout>
