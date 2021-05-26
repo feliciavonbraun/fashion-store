@@ -6,29 +6,34 @@ import { UserContext } from '../../contexts/UserContext';
 
 interface Props {
     toggleForm?: (value: boolean) => void;
-}
+};
 
 function LogInForm(props: Props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
 
-    const { loginUser, loggedin } = useContext(UserContext);
+    const { loginUser, user } = useContext(UserContext);
     let history = useHistory();
 
     useEffect(() => {
-        if (loggedin) {
-            history.push('/user/product-list');
+        if (user) {
+            if (user.role === 'user') {
+                history.push('/user/order-list');
+            } else {
+                history.push('/user/product-list');
+            }
+
             if (!remember) {
                 setEmail('');
                 setPassword('');
             }
         }
-    });
+    }, [user, remember, history]);
 
     function onFinish() {
         loginUser(email, password);
-    }
+    };
 
     return (
         <Form
