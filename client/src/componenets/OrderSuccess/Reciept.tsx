@@ -2,14 +2,12 @@ import { Component, ContextType, CSSProperties } from 'react';
 import { Card } from 'antd';
 import { CartContext, PaymentMethod } from '../../contexts/CartContext';
 import { OrderItem } from '../../contexts/OrderContext';
-import { User } from '../../contexts/UserContext';
 
 export interface IReceipt {
     cart: OrderItem[];
     deliveryMethod: string;
     totalPrice: number;
     paymentMethod: PaymentMethod;
-    user: User;
 }
 class Receipt extends Component {
     context!: ContextType<typeof CartContext>;

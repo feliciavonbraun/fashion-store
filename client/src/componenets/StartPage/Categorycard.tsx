@@ -34,11 +34,9 @@ export default function CategoryMenu(props: Props) {
                         All products
                     </Option>
                     {allCategories.map((category) => (
-                        <>
-                            <Option value={category} key={category}>
-                                {category}
-                            </Option>
-                        </>
+                        <Option value={category} key={category}>
+                            {category}
+                        </Option>
                     ))}
                 </Select>
             </Row>
@@ -52,5 +50,8 @@ const categoryMenuContainer: CSSProperties = {
     alignItems: 'center',
     width: '80%',
     paddingTop: '2rem',
-    margin: 'auto',
+    marginBottom: 'auto',
+    marginTop: 'auto',
+    marginRight: 'auto',
+    marginLeft: 'auto',
 };

@@ -54,15 +54,21 @@ export default function InformationForm(props: Props) {
           name='nest-messages'
           onValuesChange={onValuesChange}
           validateMessages={validateMessages}
+          initialValues={{
+            user: {
+              name: user?.firstname, 
+              email: user?.email
+            }
+          }}
           onFinish={onFinish}
         >
           <Form.Item name={['user', 'name']} label="Name"
-            rules={[{ min: 2}]}>
-            <Input defaultValue={user?.firstname} disabled />
+            rules={[{ min: 2, required: true}]}>
+            <Input disabled />
           </Form.Item>
           <Form.Item name={['user', 'email']} label="Email"
-            rules={[{ min: 5, type: 'email' }]}>
-            <Input defaultValue={user?.email} disabled/>
+            rules={[{ min: 5, type: 'email', required: true }]}>
+            <Input disabled/>
           </Form.Item>
           <Form.Item
             name={['user', 'phone']}
@@ -95,7 +101,7 @@ export default function InformationForm(props: Props) {
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 5 }}>
             <Button type='primary' htmlType='submit'>
               Next
-                        </Button>
+            </Button>
           </Form.Item>
         </Form>
       </Col>

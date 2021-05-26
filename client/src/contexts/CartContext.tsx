@@ -1,22 +1,12 @@
 import { Component, ContextType, createContext } from 'react';
 import { OrderItem } from '../contexts/OrderContext';
-import { User, UserContext } from '../contexts/UserContext';
+import { UserContext } from '../contexts/UserContext';
 import { PaymentCard } from '../componenets/Cart/PayCard';
 import { PaymentKlarna } from '../componenets/Cart/PayKlarna';
 import { PaymentSwish } from '../componenets/Cart/PaySwish';
 import { DeliveryMethod } from '../contexts/DeliveryContext';
 import { IReceipt } from '../componenets/OrderSuccess/Reciept';
 import { Product } from '../contexts/ProductContext';
-
-const emptyUser: User = {
-    _id: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    password: '',
-    role: 'user',
-    adminRequest: false,
-};
 
 const emptyDelivery: DeliveryMethod = {
     _id: '',
@@ -38,7 +28,6 @@ const emptyReceipt: IReceipt = {
     cart: [],
     deliveryMethod: '',
     totalPrice: 0,
-    user: emptyUser,
     paymentMethod: defaultPayment,
 };
 interface State {
@@ -50,6 +39,14 @@ interface State {
 }
 
 interface ContextValue extends State {
+    // cart: [],
+    // deliveryMethod: emptyDelivery,
+    // paymentInfo: defaultPayment,
+    // receipt: emptyReceipt,
+    // disablePlaceOrderButton: false,
+
+    // ovan är tillagt från nedaför tror inte vi behöver det? 
+
     addProductToCart: (product: Product, quantity: number | undefined) => void;
     setDeliveryMethod: (method: DeliveryMethod) => void;
     deleteProductFromCart: (id: string) => void;
@@ -58,23 +55,25 @@ interface ContextValue extends State {
     getBadgeQuantity: () => number;
     updatePaymentInfo: (paymentInfo: PaymentMethod) => void;
     handlePlaceOrder: (history: any) => void;
-}
+};
 
-export const CartContext = createContext<ContextValue>({
-    cart: [],
-    deliveryMethod: emptyDelivery,
-    paymentInfo: defaultPayment,
-    receipt: emptyReceipt,
-    disablePlaceOrderButton: false,
-    addProductToCart: () => {},
-    setDeliveryMethod: () => {},
-    deleteProductFromCart: () => {},
-    getTotalPrice: () => 0,
-    getTotalPriceProducts: () => {},
-    getBadgeQuantity: () => 0,
-    updatePaymentInfo: () => {},
-    handlePlaceOrder: () => {},
-});
+//Skrev en rad istället för deras 10. 
+export const CartContext = createContext<ContextValue>({} as ContextValue);
+// export const CartContext = createContext<ContextValue>({
+//     cart: [],
+//     deliveryMethod: emptyDelivery,
+//     paymentInfo: defaultPayment,
+//     receipt: emptyReceipt,
+//     disablePlaceOrderButton: false,
+//     addProductToCart: () => {},
+//     setDeliveryMethod: () => {},
+//     deleteProductFromCart: () => {},
+//     getTotalPrice: () => 0,
+//     getTotalPriceProducts: () => {},
+//     getBadgeQuantity: () => 0,
+//     updatePaymentInfo: () => {},
+//     handlePlaceOrder: () => {},
+// });
 
 class CartProvider extends Component<{}, State> {
     context!: ContextType<typeof UserContext>;
@@ -91,7 +90,7 @@ class CartProvider extends Component<{}, State> {
         this.setState({
             cart: JSON.parse(localStorage.getItem('cartItems') as string) || [],
         });
-    }
+    };
 
     addProductToCart = (product: Product, qty: number | undefined) => {
         let cartItems = this.state.cart;
@@ -163,7 +162,6 @@ class CartProvider extends Component<{}, State> {
     createReceipt = (): IReceipt => {
         return {
             cart: this.state.cart,
-            user: this.context.user!,
             deliveryMethod: this.state.deliveryMethod.company,
             totalPrice: this.getTotalPrice(),
             paymentMethod: { ...this.state.paymentInfo },
@@ -219,10 +217,10 @@ class CartProvider extends Component<{}, State> {
             </CartContext.Provider>
         );
     }
-}
+};
 
 export default CartProvider;
 
 async function createOrderMockApi() {
     return new Promise((res) => setTimeout(() => res('success'), 2000));
-}
+};

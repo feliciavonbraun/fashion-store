@@ -22,9 +22,9 @@ export interface Order {
     address: Address;
 
     _id: string;
-    totalprice: number; // finns
+    totalprice: number;
     isSent: boolean;
-    createdAt: Number;
+    createdAt: Date;
 
     delivery: DeliveryMethod;
     user: User;
@@ -33,9 +33,8 @@ export interface Order {
 interface NewOrder {
     orderItems: OrderItem[];
     address: Address;
-    totalprice: number; // finns
+    totalprice: number;
     isSent: boolean;
-    createdAt: Number;
     delivery: string;
 }
 
@@ -53,8 +52,6 @@ interface Props {
 export const OrderContext = createContext<OrderValue>({} as OrderValue);
 
 function OrderProvider({ children }: Props) {
-    // children kan skrivas annorlunda
-
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
     const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
@@ -71,8 +68,8 @@ function OrderProvider({ children }: Props) {
     }
 
     async function getOneOrder(_id: string) {
-        const oneProduct: Order = await makeRequest(`/api/order/${_id}`, 'GET');
-        return oneProduct;
+        const order = await makeRequest(`/api/order/${_id}`, 'GET');
+        return order;
     }
 
     async function newOrder() {
@@ -81,9 +78,7 @@ function OrderProvider({ children }: Props) {
             address: address,
             totalprice: getTotalPrice(),
             isSent: false,
-            createdAt: Date.now(),
             delivery: deliveryMethod._id,
-            // få User från newOrder
         };
         const newOrder = await makeRequest('/api/order', 'POST', order);
 

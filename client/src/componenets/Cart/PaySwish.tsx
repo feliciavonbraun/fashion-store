@@ -40,12 +40,8 @@ function PaySwish(props: Props) {
                     {...layout}
                     name='nest-messages'
                     validateMessages={validateMessages}
+                    initialValues={{ swish: { phone: address.phone } }}
                     onFinish={onFinish}
-                    initialValues={{
-                        swish: {
-                            phone: address.phone,
-                        },
-                    }}
                 >
                     <Form.Item
                         name={['swish', 'phone']}
@@ -58,7 +54,7 @@ function PaySwish(props: Props) {
                             },
                         ]}
                     >
-                        <Input value={address.phone} />
+                        <Input />
                     </Form.Item>
                     <Form.Item
                         wrapperCol={{

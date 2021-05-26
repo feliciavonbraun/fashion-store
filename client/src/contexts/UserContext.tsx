@@ -7,6 +7,14 @@ export interface User {
     firstname: string;
     lastname: string;
     email: string;
+    role: 'admin' | 'user';
+    adminRequest: boolean;
+}
+
+export interface NewUser {
+    firstname: string;
+    lastname: string;
+    email: string;
     password: string;
     role: 'admin' | 'user';
     adminRequest: boolean;
@@ -31,14 +39,7 @@ interface UserValue {
     loginUser: (email: string, password: string) => Promise<void>;
     logoutUser: (id: string) => Promise<void>;
     responseAdminRequest: (user: User, response: boolean) => Promise<void>;
-    registerUser: (
-        firstname: string,
-        lastname: string,
-        email: string,
-        password: string,
-        role: 'admin' | 'user',
-        adminRequest: boolean
-    ) => Promise<void>;
+    registerUser: (user: NewUser) => Promise<void>;
 }
 
 interface Props {
@@ -55,13 +56,9 @@ function UserProvider({ children }: Props) {
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
     const getUserOrders = useCallback(async () => {
-        if (!user) return
+        if (!user) return;
 
-        const userOrders = await makeRequest(
-            `/api/order/user/${user._id}`,
-            'GET'
-        );
-        console.log(userOrders);
+        const userOrders = await makeRequest(`/api/order/user/${user._id}`);
         setUserOrders(userOrders);
     }, [user]);
 
@@ -71,39 +68,23 @@ function UserProvider({ children }: Props) {
     }, [getUserOrders]);
 
     useEffect(() => {
-        (async function() {
+        (async function () {
             const user = await makeRequest('/api/user/auth');
-            setUser(user)
+            setUser(user);
         })();
     }, [setUser]);
 
     // REGISTER NEW USER
-    async function registerUser(
-        firstname: string,
-        lastname: string,
-        email: string,
-        password: string,
-        role: 'admin' | 'user',
-        adminRequest: boolean
-    ) {
-        const newUser = {
-            firstname,
-            lastname,
-            email,
-            password,
-            role,
-            adminRequest,
-        };
-
+    async function registerUser(user: NewUser) {
         const uniqueEmail = await makeRequest(
             '/api/user/register',
             'POST',
-            newUser
+            user
         );
 
         if (uniqueEmail) {
             setValidEmail(true);
-            if (adminRequest) {
+            if (user.adminRequest) {
                 getAllAdminRequests();
             }
         } else {
@@ -146,12 +127,10 @@ function UserProvider({ children }: Props) {
         } else {
             user.role = 'user';
         }
-        await makeRequest('/api/user/admin', 'PUT', { ...user });
-
+        await makeRequest('/api/user/admin', 'PUT', user);
         getAllAdminRequests();
     }
 
-    console.log(user)
     return (
         <UserContext.Provider
             value={{

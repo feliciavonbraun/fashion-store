@@ -35,7 +35,7 @@ GET http://localhost:4000/api/user/admin
 ###
 
 // Handle admin request
-PATCH http://localhost:4000/api/user/admin
+PUT http://localhost:4000/api/user/admin
 Content-Type: application/json
 
 {

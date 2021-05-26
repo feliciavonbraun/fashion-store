@@ -1,4 +1,4 @@
-import { Button, Radio, Row } from 'antd';
+import { Button, Radio, Row, Form } from 'antd';
 import { CSSProperties, useContext } from 'react';
 import { CartContext } from '../../contexts/CartContext';
 import { DeliveryContext } from '../../contexts/DeliveryContext';
@@ -8,40 +8,43 @@ interface Props {
 };
 
 function DeliverySelection(props: Props) {
-  const deliveryContext = useContext(DeliveryContext)
-  const { allDeliveryMethods, calculateDeliveryDay } = deliveryContext;
-  const cartContext = useContext(CartContext)
-  const { setDeliveryMethod } = cartContext;
+  const { allDeliveryMethods, calculateDeliveryDay } = useContext(DeliveryContext);
+  const { setDeliveryMethod } = useContext(CartContext);
 
   const handleChange = (e: any) => {
     const method = e.target.value;
     setDeliveryMethod(method);
   };
 
-  const mapMethodToRadio = () => {
-    return allDeliveryMethods.map(item =>
-      <Radio value={item} style={{ marginTop: '2rem' }}>
-        <span style={deliveryCompanyStyle}>{item.company}</span>
-        <br />
-        <span style={deliveryTextStyle}>{'Delivery on ' + calculateDeliveryDay(item.time)}</span>
-        <br />
-        <span style={deliveryTextStyle}>{item.price + ' kr '}</span>
-      </Radio>
-    );
+  const onFinish = (values: any) => {
+    console.log('Success:', values);
+    props.next();
   };
 
   return (
     <Row style={deliveryContainer}>
       <h2>
         Delivery
-          </h2>
-      <Radio.Group onChange={handleChange}>
-        {mapMethodToRadio()}
-      </Radio.Group>
+      </h2>
+      <Form onFinish={onFinish}>
+        <Form.Item name="Delivery Option" rules={[{ required: true }]}>
+          <Radio.Group onChange={handleChange}>
+            {allDeliveryMethods.map(item =>
+              <Radio value={item} style={{ marginTop: '2rem' }}>
+                <span style={deliveryCompanyStyle}>{item.company}</span>
+                <br />
+                <span style={deliveryTextStyle}>{'Delivery on ' + calculateDeliveryDay(item.time)}</span>
+                <br />
+                <span style={deliveryTextStyle}>{item.price + ' kr '}</span>
+              </Radio>
+            )};
+          </Radio.Group>
+        </Form.Item>
+        <Button type="primary" htmlType='submit' style={buttonStyle}>
+          Next
+        </Button>
+      </Form>
       <br />
-      <Button type="primary" style={buttonStyle} onClick={props.next}>
-        Next
-          </Button>
     </Row>
   )
 };

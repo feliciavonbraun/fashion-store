@@ -11,6 +11,6 @@ userRouter.get('/api/user/auth', secure, controller.getLoggedinUser);
 
 /* ADMIN STUFF */
 userRouter.get('/api/user/admin', adminSecure, controller.getAllAdminRequests);
-userRouter.patch('/api/user/admin', adminSecure, controller.handleAdminRequest);
+userRouter.put('/api/user/admin', adminSecure, controller.handleAdminRequest);
 
 module.exports = userRouter;
