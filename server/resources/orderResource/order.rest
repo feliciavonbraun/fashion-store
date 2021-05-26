@@ -6,7 +6,7 @@ GET http://localhost:4000/api/order/:id
 Content-Type: application/json
 
 {
-    "_id": ""
+    "_id": "60a767ce3b59f07246dc95d4"
 }
 
 ###
@@ -15,16 +15,25 @@ POST http://localhost:4000/api/order
 Content-Type: application/json
 
 {
-    "orderItem": [],
+    "orderItems": [
+        {
+            "product": "60a77166532290e262b50946",
+            "qty": 1
+        },
+        {
+            "product": "60a7732b532290e262b5094a",
+            "qty": 3
+        }
+    ],
     "address": {
-        "phone": "07217711111111111",
-        "street": "Hej",
+        "phone": "07217897979787",
+        "street": "yoyoyoyo",
         "zipcode": "12345",
-        "city": "Skene"
+        "city": "NYYYYASTE"
     },
-    "totalprice": "1000", 
+    "totalprice": "1999", 
     "orderProducts": "60a544da597058b62ff8fed1", 
-    "isSent": true
+    "isSent": false
 }
 
 ###
@@ -38,9 +47,9 @@ Content-Type: application/json
         "phone": "072177",
         "street": "Hej",
         "zipcode": "12345",
-        "city": "Skene"
+        "city": "SkenEEEE"
     },
     "totalprice": "1000", 
-    "orderProducts": "60a544da597058b62ff8fed1", 
-    "isSent": true
+    "orderProducts": "60a767ce3b59f07246dc95d4", 
+    "isSent": false
 }

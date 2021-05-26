@@ -17,11 +17,11 @@ function ProductList(props: Props) {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginTop: '2rem',
-                    marginBottom: '3rem',
                 }}
             >
-                <h1 style={{ fontWeight: 'bold' }}>ADMIN</h1>
+                <h1 style={{ fontWeight: 'bold', marginBottom: '2rem' }}>
+                    PRODUCTS
+                </h1>
                 <Link to={`${props.match.url}/add-product`}>
                     <Button type='primary' icon={<PlusOutlined />}>
                         Add product

@@ -58,6 +58,5 @@ const paymentContainerStyle: CSSProperties = {
   flexDirection: 'column',
   width: '90%',
   margin: 'auto',
-  paddingTop: '3rem',
   paddingBottom: '3rem'
 }

@@ -1,6 +1,7 @@
-import { Component, ContextType, CSSProperties } from 'react'
+import { CSSProperties, useContext } from 'react';
 import { Form, Input, Button, Row, Col } from 'antd';
 import { CartContext } from '../../contexts/CartContext';
+import { UserContext } from '../../contexts/UserContext';
 
 const layout = {
     labelCol: { span: 7 },
@@ -17,11 +18,13 @@ const validateMessages = {
     number: {
         range: '${label} must be between ${min} and ${max}',
     },
-}; 
+};
+
+// sätt dessa i adressInterfacet i OrderContext
 export interface PaymentKlarna {
     ssn: string;
-    name: string;
-    email: string;
+    // name: string;
+    // email: string;
     phone: string;
     street: string;
     zipcode: string;
@@ -30,87 +33,121 @@ export interface PaymentKlarna {
 interface Props {
     next(): void;
 }
-class PayKlarna extends Component<Props> {
-    context!: ContextType<typeof CartContext>
-    static contextType = CartContext;
+function PayKlarna(props: Props) {
+    const { user } = useContext(UserContext);
+    const { updatePaymentInfo } = useContext(CartContext);
 
-    onValuesChange = (values: any, allValues: any) => {
-        console.log('klarna', allValues)
-        const { updatePaymentInfo } = this.context;
+    /* const onValuesChange = (values: any, allValues: any) => {
+        console.log('klarna', allValues);
         updatePaymentInfo(allValues.klarna);
-    };
-    
-    onFinish = (values: any) => {
+    }; */
+
+    const onFinish = (values: any) => {
         console.log('Success:', values);
-        const { updatePaymentInfo } = this.context;
         updatePaymentInfo(values.klarna);
-        this.props.next();
+        props.next();
     };
 
-    render() {
-        return (
-            <CartContext.Consumer>
-                {({ userInfo }) => {
-                    return (
-                        <Row style={formContainerStyle}>
-                            <Col span={24} style={columnStyle}>
-                            <h2>Billing information</h2>
-                                <Form {...layout} 
-                                    name="nest-messages"  
-                                    validateMessages={validateMessages}
-                                    onFinish={this.onFinish}
-                                    initialValues={{
-                                        klarna: {
-                                            name: userInfo?.name,
-                                            email: userInfo?.email,
-                                            phone: userInfo?.phone,
-                                            street: userInfo?.street,
-                                            zipcode: userInfo?.zipcode,
-                                            city: userInfo?.city,
-                                        }
-                                    }}>
-                                <Form.Item name={['klarna', 'ssn']} label="SSN" 
-                                    rules={[{ min: 10, max: 10, required: true }]}>
-                                    <Input placeholder="YYMMDDXXXX"/>
-                                </Form.Item>
-                                <Form.Item name={['klarna', 'name']} label="Name" 
-                                    rules={[{ required: true }]}>
-                                    <Input/>
-                                </Form.Item>
-                                <Form.Item name={['klarna', 'email']} label="Email" 
-                                    rules={[{ type: 'email', required: true }]}>
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item name={['klarna', 'phone']} label="Phone" 
-                                    rules={[{ min: 10, max: 10, required: true }]}>
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item name={['klarna', 'street']} label="Street" 
-                                    rules={[{ required: true }]}>
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item name={['klarna', 'zipcode']} label="Zip-code" 
-                                    rules={[{ required: true }]}>
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item name={['klarna', 'city']} label="City" 
-                                    rules={[{ required: true }]}>
-                                    <Input />
-                                </Form.Item>
+    return (
+        <Row style={formContainerStyle}>
+            <Col span={24} style={columnStyle}>
+                <h2>Billing information</h2>
+                <Form
+                    {...layout}
+                    name='nest-messages'
+                    validateMessages={validateMessages}
+                    onFinish={onFinish}
+                    initialValues={{
+                        klarna: {
+                            firstname: user.firstname,
+                            lastname: user.lastname,
+                            email: user.email,
+                        },
+                    }}
+                >
+                    <Form.Item
+                        name={['klarna', 'ssn']}
+                        label='SSN'
+                        rules={[
+                            {
+                                min: 10,
+                                max: 10,
+                                required: true,
+                            },
+                        ]}
+                    >
+                        <Input placeholder='YYMMDDXXXX' />
+                    </Form.Item>
+                    <Form.Item
+                        name={['klarna', 'firstname']}
+                        label='Firstname'
+                        rules={[{ required: true }]}
+                    >
+                        <Input value={user.firstname} disabled />
+                    </Form.Item>
+                    <Form.Item
+                        name={['klarna', 'lastname']}
+                        label='Lastname'
+                        rules={[{ required: true }]}
+                    >
+                        <Input defaultValue={user.lastname} disabled />
+                    </Form.Item>
+                    <Form.Item
+                        name={['klarna', 'email']}
+                        label='Email'
+                        rules={[{ type: 'email', required: true }]}
+                    >
+                        <Input defaultValue={user.email} disabled />
+                    </Form.Item>
+                    <Form.Item
+                        name={['klarna', 'phone']}
+                        label='Phone'
+                        rules={[
+                            {
+                                min: 10,
+                                max: 10,
+                                required: true,
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name={['klarna', 'street']}
+                        label='Street'
+                        rules={[{ required: true }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name={['klarna', 'zipcode']}
+                        label='Zip-code'
+                        rules={[{ required: true }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name={['klarna', 'city']}
+                        label='City'
+                        rules={[{ required: true }]}
+                    >
+                        <Input />
+                    </Form.Item>
 
-                                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 7}}>
-                                    <Button type="primary" htmlType="submit">
-                                        Next
-                                    </Button>
-                                </Form.Item>
-                                </Form>
-                            </Col>
-                        </Row>
-                    );
-                }}
-            </CartContext.Consumer>
-        )
-    }
+                    <Form.Item
+                        wrapperCol={{
+                            ...layout.wrapperCol,
+                            offset: 7,
+                        }}
+                    >
+                        <Button type='primary' htmlType='submit'>
+                            Next
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Col>
+        </Row>
+    );
 }
 
 export default PayKlarna;
@@ -118,10 +155,10 @@ export default PayKlarna;
 const formContainerStyle: CSSProperties = {
     display: 'flex',
     width: '100%',
-    margin: 'auto'
-}
+    margin: 'auto',
+};
 
 const columnStyle: CSSProperties = {
     marginTop: '3rem',
     marginBottom: '3rem',
-}
+};

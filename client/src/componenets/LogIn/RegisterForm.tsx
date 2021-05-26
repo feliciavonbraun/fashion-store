@@ -1,13 +1,12 @@
-import { CSSProperties, useContext, useEffect, useState } from "react";
+import { CSSProperties, useContext, useEffect, useState } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
-import { UserContext } from "../../contexts/UserContext";
+import { UserContext } from '../../contexts/UserContext';
 
 interface Props {
-    toggleForm: (value: boolean) => void
+    toggleForm: (value: boolean) => void;
 }
 
 // TODO: Visa felmeddelande om användaren skriver in en mail som redan finns.
-
 
 function RegisterForm(props: Props) {
     const [firstname, setFirstname] = useState('');
@@ -16,14 +15,14 @@ function RegisterForm(props: Props) {
     const [password, setPassword] = useState('');
     const [adminRequest, setAdminRequest] = useState(false);
 
-    const { registerUser, validEmail, setValidEmail } = useContext(UserContext)
+    const { registerUser, validEmail, setValidEmail } = useContext(UserContext);
 
     useEffect(() => {
-        if(validEmail) {
-            props.toggleForm(false)
-            setValidEmail(false)
+        if (validEmail) {
+            props.toggleForm(false);
+            setValidEmail(false);
         }
-    })
+    });
 
     const onFinish = () => {
         registerUser(
@@ -31,8 +30,9 @@ function RegisterForm(props: Props) {
             lastname,
             email,
             password,
+            'user',
             adminRequest
-        )        
+        );
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -41,26 +41,26 @@ function RegisterForm(props: Props) {
 
     return (
         <Form
-            name="login"
+            name='login'
             initialValues={{
                 remember: true,
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
         >
-            <Form.Item
-                name="fullname"
-                style={{ marginBottom: '0' }}
-            >
+            <Form.Item name='fullname' style={{ marginBottom: '0' }}>
                 <Form.Item
-                    name="firstname"
+                    name='firstname'
                     rules={[
                         {
                             required: true,
                             message: 'Please input your firstname',
                         },
                     ]}
-                    style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                    style={{
+                        display: 'inline-block',
+                        width: 'calc(50% - 8px)',
+                    }}
                 >
                     <Input
                         placeholder='Firstname'
@@ -70,14 +70,18 @@ function RegisterForm(props: Props) {
                     />
                 </Form.Item>
                 <Form.Item
-                    name="lastname"
+                    name='lastname'
                     rules={[
                         {
                             required: true,
                             message: 'Please input your lastname',
                         },
                     ]}
-                    style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                    style={{
+                        display: 'inline-block',
+                        width: 'calc(50% - 8px)',
+                        margin: '0 8px',
+                    }}
                 >
                     <Input
                         placeholder='Lastname'
@@ -88,8 +92,9 @@ function RegisterForm(props: Props) {
                 </Form.Item>
             </Form.Item>
 
-            <Form.Item shouldUpdate
-                name="email"
+            <Form.Item
+                shouldUpdate
+                name='email'
                 rules={[
                     {
                         type: 'email',
@@ -106,10 +111,7 @@ function RegisterForm(props: Props) {
                 />
             </Form.Item>
 
-            <Form.Item
-                name='password-control'
-                style={{ marginBottom: '0' }}
-            >
+            <Form.Item name='password-control' style={{ marginBottom: '0' }}>
                 <Form.Item
                     name='password'
                     rules={[
@@ -118,7 +120,10 @@ function RegisterForm(props: Props) {
                             message: 'Please input your password',
                         },
                     ]}
-                    style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                    style={{
+                        display: 'inline-block',
+                        width: 'calc(50% - 8px)',
+                    }}
                 >
                     <Input.Password
                         placeholder='Password'
@@ -137,38 +142,40 @@ function RegisterForm(props: Props) {
                         },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
-                                if (!value || getFieldValue('password') === value) {
+                                if (
+                                    !value ||
+                                    getFieldValue('password') === value
+                                ) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error('Passwords does not match'))
-                            }
-                        })
+                                return Promise.reject(
+                                    new Error('Passwords does not match')
+                                );
+                            },
+                        }),
                     ]}
-                    style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                    style={{
+                        display: 'inline-block',
+                        width: 'calc(50% - 8px)',
+                        margin: '0 8px',
+                    }}
                 >
                     <Input.Password
                         placeholder='Repeat password'
                         style={{ padding: '.8rem' }}
                     />
                 </Form.Item>
-
             </Form.Item>
-            <Form.Item
-                name="admin-request"
-            >
+            <Form.Item name='admin-request'>
                 <Checkbox
                     checked={adminRequest}
                     onChange={() => setAdminRequest(!adminRequest)}
                 >
                     Send admin request
-                    </Checkbox>
+                </Checkbox>
             </Form.Item>
             <Form.Item>
-                <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={registerButton}
-                >
+                <Button type='primary' htmlType='submit' style={registerButton}>
                     Register
                 </Button>
             </Form.Item>
@@ -176,15 +183,14 @@ function RegisterForm(props: Props) {
                 Cancel
             </h3>
         </Form>
-    )
+    );
 }
-
 
 const registerButton: CSSProperties = {
     width: '100%',
     fontSize: '1rem',
     height: '2.5rem',
-}
+};
 
 const cancelButton: CSSProperties = {
     color: '#1890ff',
@@ -193,6 +199,6 @@ const cancelButton: CSSProperties = {
     textAlign: 'center',
     marginBottom: '1rem',
     cursor: 'pointer',
-}
+};
 
-export default RegisterForm
+export default RegisterForm;

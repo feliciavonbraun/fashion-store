@@ -1,48 +1,50 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { makeRequest } from '../makeRequest';
-import { User } from './UserContext';
-import { CartItem } from '../componenets/Cart/CartItemsList';
-import { UserInfo } from '../componenets/Cart/InformationForm';
+import { User, UserContext } from './UserContext';
 import { CartContext } from './CartContext';
-import { ProductContext } from './ProductContext';
+// import { CartItem } from "../componenets/Cart/CartItemsList";
+import { Product, ProductContext } from './ProductContext';
+import { DeliveryMethod } from './DeliveryContext';
 
-// TODO: hämta prudukter ur local storage ur cartcontext
-// ta in de andra contexterna
-
-export interface Order extends User {
-    product: string; // in cart from CartContext
+export interface OrderItem {
+    product: Product; // in cart from CartContext
     qty: number; // in cart from CartContext
+}
 
+export interface Address {
     phone: number; // in userInfo from CartContext
     street: string; // in userInfo from CartContext
     zipcode: number; // in userInfo from CartContext
     city: string; // in userInfo from CartContext
+}
 
-    _id: string; // skapas själv
-    totalprice: string; // finns
+export interface Order {
+    orderItems: OrderItem[];
+    address: Address;
+
+    _id: string;
+    totalprice: number; // finns
     isSent: boolean;
-    createdAt: Date;
+    createdAt: Number;
 
-    // delivery context
-    user: User[];
-    cart: CartItem[];
+    delivery: DeliveryMethod;
+    user: User;
 }
 
 interface NewOrder {
-    cart: CartItem[];
-    getTotalPrice: any;
-    userInfo: UserInfo;
-
+    orderItems: OrderItem[];
+    address: Address;
+    totalprice: number; // finns
     isSent: boolean;
-    createdAt: Date;
-
-    user: User[];
+    createdAt: Number;
+    delivery: string;
+    user: string;
 }
 
 interface OrderValue {
     allOrders: Order[];
     getOneOrder: (_id: string) => void;
-    newOrder: (newOrder: NewOrder) => void;
+    newOrder: () => void;
     updateOrder: (isSent: boolean) => void;
 }
 
@@ -56,44 +58,43 @@ function OrderProvider({ children }: Props) {
     // children kan skrivas annorlunda
 
     const [allOrders, setAllOrders] = useState<Order[]>([]);
-    console.log('allOrders:', allOrders);
 
-    const { cart } = useContext(CartContext);
-    console.log('Cart Items:', cart);
-
-    const { getTotalPrice } = useContext(CartContext);
-    console.log('totalPrice:', getTotalPrice);
-
-    const { userInfo } = useContext(CartContext);
-    console.log('userInfo:', userInfo); // innehåller för mkt saker
-
+    const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
+    const { address, user } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
     useEffect(() => {
-        async function getOrders() {
-            const orders = await makeRequest('/api/order', 'GET');
-            console.log('Orders in useEffect:', orders);
-            setAllOrders(orders);
-        }
         getOrders();
     }, [setAllOrders]);
+
+    async function getOrders() {
+        const orders = await makeRequest('/api/order', 'GET');
+        console.log('Orders in useEffect:', orders);
+        setAllOrders(orders);
+    }
 
     async function getOneOrder(_id: string) {
         const oneProduct: Order = await makeRequest(`/api/order/${_id}`, 'GET');
         return oneProduct;
     }
 
-    async function newOrder(order: NewOrder) {
-        // allt i interfacet + det importerade
-
-        const body = { ...order };
-        const newOrder = await makeRequest('/api/order', 'POST', body);
+    async function newOrder() {
+        const order: NewOrder = {
+            orderItems: cart,
+            address: address,
+            totalprice: getTotalPrice(),
+            isSent: false,
+            createdAt: Date.now(),
+            delivery: deliveryMethod._id,
+            user: user._id,
+        };
+        const newOrder = await makeRequest('/api/order', 'POST', order);
         console.log('Nya ordern:', newOrder);
 
         /* Updates products in product context, since qty has changed */
+        getOrders();
         const products = await getProducts();
         setAllProducts(products);
-
         return newOrder;
     }
 
