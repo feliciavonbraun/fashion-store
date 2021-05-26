@@ -28,7 +28,6 @@ const emptyAddress: Address = {
 };
 
 interface UserValue {
-    loggedin: boolean;
     userOrders: Order[];
     loginResponse: string;
     adminRequests: User[];
@@ -49,11 +48,10 @@ interface Props {
 
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
-    const [loginResponse, setLoginResponse] = useState('Login');
+    const [loginResponse, setLoginResponse] = useState('LoggedIn');
     const [user, setUser] = useState<User>();
     const [userOrders, setUserOrders] = useState<Order[]>([]);
     const [address, setAddress] = useState<Address>(emptyAddress);
-    const [loggedin, setLoggedin] = useState(false);
     const [validEmail, setValidEmail] = useState(false);
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
@@ -104,10 +102,8 @@ function UserProvider({ children }: Props) {
         const res = await makeRequest('/api/user/login', 'POST', user);
         if (res.email) {
             setUser(res);
-            setLoggedin(true);
-            setLoginResponse('Login');
+            setLoginResponse('LoggedIn');
         } else {
-            setLoggedin(false);
             setLoginResponse(res);
         }
     }
@@ -138,7 +134,6 @@ function UserProvider({ children }: Props) {
     return (
         <UserContext.Provider
             value={{
-                loggedin,
                 loginResponse,
                 adminRequests,
                 validEmail,

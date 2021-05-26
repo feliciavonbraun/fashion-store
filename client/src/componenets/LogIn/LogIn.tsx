@@ -19,7 +19,7 @@ function LogIn() {
           }
         </h2>
         <p style ={errorMessage}>
-          {loginResponse !== 'Login' && loginResponse}
+          {loginResponse !== 'LoggedIn' && loginResponse}
         </p>
         {toggleForm
           ? <RegisterForm toggleForm={(value) => setToggleForm(value)} />

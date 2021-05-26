@@ -1,11 +1,12 @@
-import { CSSProperties } from 'react';
-import { Layout, Menu } from 'antd';
+import { CSSProperties, useContext } from 'react';
+import { Button, Layout, Menu } from 'antd';
 import {
     BrowserRouter as Router,
     Route,
     Link,
     withRouter,
     RouteComponentProps,
+    useHistory,
 } from 'react-router-dom';
 
 import ProductList from './ProductList';
@@ -14,37 +15,66 @@ import OrderList from '../User/OrderList';
 import AddNewProduct from './AddNewProduct';
 import AdminEditDetails from './AdminEditDetails';
 import AdminOrderList from './AdminOrderList';
+import { UserContext } from '../../contexts/UserContext';
 
 const { Content, Sider } = Layout;
 
 interface Props extends RouteComponentProps {}
 
-function Sidebar(props: Props) {
+function Profile(props: Props) {
+    let history = useHistory();
+    const { user, logoutUser } = useContext(UserContext);
+
+    const checkRole = () => {
+        if (user){
+            if (user.role === 'admin') return true;
+            else return false 
+        } else return null
+    }
+
+    const handleLogOut = () => {
+        if (user) {
+            logoutUser(user?._id);
+            history.push('/');
+        };
+    };
+
     return (
         <Router>
             <Layout style={layout}>
                 <Sider breakpoint='lg' collapsedWidth='0' theme={'light'}>
                     <Menu
-                        style={{ height: '100%' }}
+                        style={sidebarStyle}
                         mode='inline'
-                        defaultSelectedKeys={['1']}
+                        defaultSelectedKeys={checkRole() ? ['1'] : ['4']}
                     >
-                        <Menu.Item key='1'>
-                            <span>Products</span>
-                            <Link to={`${props.match.url}/product-list`} />
-                        </Menu.Item>
-                        <Menu.Item key='2'>
-                            <span>Orders</span>
-                            <Link to={`${props.match.url}/order-list`} />
-                        </Menu.Item>
-                        <Menu.Item key='3'>
-                            <span>Admin Requests</span>
-                            <Link to={`${props.match.url}/admin-list`} />
-                        </Menu.Item>
-                        <Menu.Item key='4'>
-                            <span>Orders (Admin)</span>
-                            <Link to={`${props.match.url}/admin-order-list`} />
-                        </Menu.Item>
+                        {checkRole() 
+                            ?   <>
+                                    <Menu.Item key='1'>
+                                        <span>Products</span>
+                                        <Link to={`${props.match.url}/product-list`} />
+                                    </Menu.Item>
+                                    <Menu.Item key='2'>
+                                        <span>Admin Requests</span>
+                                        <Link to={`${props.match.url}/admin-list`} />
+                                    </Menu.Item>
+                                    <Menu.Item key='3'>
+                                        <span>Orders (Admin)</span>
+                                        <Link to={`${props.match.url}/admin-order-list`} />
+                                    </Menu.Item>
+                                </>
+                            :   <Menu.Item key='4'>
+                                    <span>Orders</span>
+                                    <Link to={`${props.match.url}/order-list`} />
+                                </Menu.Item>
+                        }
+                        <Button 
+                            type='primary' 
+                            style={logOutButton}
+                            onClick={handleLogOut}
+                        >
+                            Log out
+                        </Button>
                     </Menu>
                 </Sider>
 
@@ -82,11 +112,19 @@ function Sidebar(props: Props) {
     );
 }
 
-export default withRouter(Sidebar);
+export default withRouter(Profile);
 
 const layout: CSSProperties = {
     paddingTop: window.innerWidth > 768 ? '6rem' : '5rem',
     height: 'calc(100vh - 3rem)',
+};
+
+const sidebarStyle: CSSProperties = {
+    position: 'relative', 
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    height: '100%'
 };
 
 const mainContent: CSSProperties = {
@@ -102,3 +140,9 @@ const contentStyle: CSSProperties = {
     minWidth: '18rem',
     padding: '3rem 2rem',
 };
+
+const logOutButton: CSSProperties = {
+    position: 'absolute',
+    bottom: '3rem',
+    margin: '0 auto'
+}
