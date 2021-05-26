@@ -2,21 +2,20 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { makeRequest } from '../makeRequest';
 import { User, UserContext } from './UserContext';
 import { CartContext } from './CartContext';
-// import { CartItem } from "../componenets/Cart/CartItemsList";
 import { Product, ProductContext } from './ProductContext';
 import { DeliveryMethod } from './DeliveryContext';
 
 export interface OrderItem {
     product: Product; // in cart from CartContext
     qty: number; // in cart from CartContext
-}
+};
 
 export interface Address {
     phone: number; // in userInfo from CartContext
     street: string; // in userInfo from CartContext
     zipcode: number; // in userInfo from CartContext
     city: string; // in userInfo from CartContext
-}
+};
 
 export interface Order {
     orderItems: OrderItem[];
@@ -29,7 +28,7 @@ export interface Order {
 
     delivery: DeliveryMethod;
     user: User;
-}
+};
 
 interface NewOrder {
     orderItems: OrderItem[];
@@ -39,18 +38,18 @@ interface NewOrder {
     createdAt: Number;
     delivery: string;
     user: string;
-}
+};
 
 interface OrderValue {
     allOrders: Order[];
     getOneOrder: (_id: string) => void;
     newOrder: () => void;
     updateOrder: (isSent: boolean) => void;
-}
+};
 
 interface Props {
     children: Object;
-}
+};
 
 export const OrderContext = createContext<OrderValue>({} as OrderValue);
 
@@ -71,12 +70,12 @@ function OrderProvider({ children }: Props) {
         const orders = await makeRequest('/api/order', 'GET');
         console.log('Orders in useEffect:', orders);
         setAllOrders(orders);
-    }
+    };
 
     async function getOneOrder(_id: string) {
         const oneProduct: Order = await makeRequest(`/api/order/${_id}`, 'GET');
         return oneProduct;
-    }
+    };
 
     async function newOrder() {
         const order: NewOrder = {
@@ -96,11 +95,11 @@ function OrderProvider({ children }: Props) {
         const products = await getProducts();
         setAllProducts(products);
         return newOrder;
-    }
+    };
 
     async function updateOrder(isSent: boolean) {
         // isSent ska endast kunna uppdateras
-    }
+    };
 
     return (
         <OrderContext.Provider
@@ -114,5 +113,5 @@ function OrderProvider({ children }: Props) {
             {children}
         </OrderContext.Provider>
     );
-}
+};
 export default OrderProvider;

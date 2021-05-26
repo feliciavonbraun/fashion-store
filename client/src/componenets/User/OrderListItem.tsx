@@ -1,8 +1,8 @@
 import { Avatar, List } from 'antd';
 import React, { CSSProperties } from 'react';
 import { Order } from '../../contexts/OrderContext';
-import { PaymentCard } from '../Cart/PayCard';
-import { PaymentKlarna } from '../Cart/PayKlarna';
+// import { PaymentCard } from '../Cart/PayCard';
+// import { PaymentKlarna } from '../Cart/PayKlarna';
 
 interface Props {
     order: Order;
