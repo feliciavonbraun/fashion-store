@@ -32,51 +32,45 @@ function PaySwish(props: Props) {
         props.next();
     };
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-    updatePaymentInfo(values.swish);
-    props.next();
-  };
-
-  return (
-    <Row style={formContainerStyle}>
-      <Col span={24} style={columnStyle}>
-        <h2>Payment information</h2>
-        <Form
-          {...layout}
-          name='nest-messages'
-          validateMessages={validateMessages}
-          initialValues={{swish: {phone: address.phone}}}
-          onFinish={onFinish}
-        >
-          <Form.Item
-            name={['swish', 'phone']}
-            label='Phone'
-            rules={[
-              {
-                min: 10,
-                max: 10,
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              ...layout.wrapperCol,
-              offset: 7,
-            }}
-          >
-            <Button type='primary' htmlType='submit'>
-              Next
-            </Button>
-          </Form.Item>
-        </Form>
-      </Col>
-    </Row>
-  )
-};
+    return (
+        <Row style={formContainerStyle}>
+            <Col span={24} style={columnStyle}>
+                <h2>Payment information</h2>
+                <Form
+                    {...layout}
+                    name='nest-messages'
+                    validateMessages={validateMessages}
+                    initialValues={{ swish: { phone: address.phone } }}
+                    onFinish={onFinish}
+                >
+                    <Form.Item
+                        name={['swish', 'phone']}
+                        label='Phone'
+                        rules={[
+                            {
+                                min: 10,
+                                max: 10,
+                                required: true,
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        wrapperCol={{
+                            ...layout.wrapperCol,
+                            offset: 7,
+                        }}
+                    >
+                        <Button type='primary' htmlType='submit'>
+                            Next
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Col>
+        </Row>
+    );
+}
 
 export default PaySwish;
 
