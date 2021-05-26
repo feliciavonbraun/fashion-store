@@ -1,22 +1,12 @@
 import { Component, ContextType, createContext } from 'react';
 import { OrderItem } from '../contexts/OrderContext';
-import { User, UserContext } from '../contexts/UserContext';
+import { UserContext } from '../contexts/UserContext';
 import { PaymentCard } from '../componenets/Cart/PayCard';
 import { PaymentKlarna } from '../componenets/Cart/PayKlarna';
 import { PaymentSwish } from '../componenets/Cart/PaySwish';
 import { DeliveryMethod } from '../contexts/DeliveryContext';
 import { IReceipt } from '../componenets/OrderSuccess/Reciept';
 import { Product } from '../contexts/ProductContext';
-
-const emptyUser: User = {
-    _id: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    password: '',
-    role: 'user',
-    adminRequest: false,
-};
 
 const emptyDelivery: DeliveryMethod = {
     _id: '',
@@ -38,7 +28,6 @@ const emptyReceipt: IReceipt = {
     cart: [],
     deliveryMethod: '',
     totalPrice: 0,
-    user: emptyUser,
     paymentMethod: defaultPayment,
 };
 interface State {
@@ -163,7 +152,6 @@ class CartProvider extends Component<{}, State> {
     createReceipt = (): IReceipt => {
         return {
             cart: this.state.cart,
-            user: this.context.user!,
             deliveryMethod: this.state.deliveryMethod.company,
             totalPrice: this.getTotalPrice(),
             paymentMethod: { ...this.state.paymentInfo },

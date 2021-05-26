@@ -13,17 +13,19 @@ const AddressSchema = new mongoose.Schema({
     city: { type: String, required: [true, 'Please enter city'] },
 });
 
-const OrderSchema = new mongoose.Schema({
-    orderItems: { type: [OrderItemSchema] },
-    address: { type: AddressSchema },
+const OrderSchema = new mongoose.Schema(
+    {
+        orderItems: { type: [OrderItemSchema] },
+        address: { type: AddressSchema },
 
-    totalprice: { type: Number },
-    isSent: { type: Boolean },
-    createdAt: { type: Number },
+        totalprice: { type: Number },
+        isSent: { type: Boolean },
 
-    delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'delivery' },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-});
+        delivery: { type: mongoose.Schema.Types.ObjectId, ref: 'delivery' },
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+    },
+    { timestamps: true }
+);
 
 const OrderModel = mongoose.model('order', OrderSchema);
 module.exports = OrderModel;

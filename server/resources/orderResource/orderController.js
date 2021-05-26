@@ -16,35 +16,38 @@ exports.getOrder = async (req, res) => {
 };
 
 exports.getUserOrders = async (req, res) => {
-    const _id = req.params.id;
-    console.log(_id);
-    const docs = await OrderModel.find({ user: _id }).populate([
+    const user = req.session.id;
+    const docs = await OrderModel.find({ user: user }).populate([
         'delivery',
         'user',
     ]);
-    console.log(docs);
     res.status(200).json(docs);
 };
 
 exports.newOrder = async (req, res) => {
     const { orderItems } = req.body;
+    const user = req.session.id;
 
     /* REMOVES PRODUCTS IN ORDER THAT ARE NOT IN STOCK */
-    const updatedOrderItem = orderItems.filter((i) => i.product.qty !== 0);
+    const updatedOrderItems = orderItems.filter((i) => i.product.qty !== 0);
 
     /* ALTERS QTY OF PRODUCT IN ORDER TO FIT AVAILABLE STOCK */
-    for (const item of updatedOrderItem) {
+    for (const item of updatedOrderItems) {
         const { product } = item;
         if (item.qty > product.qty) {
             item.qty = product.qty;
         }
     }
 
-    const order = { ...req.body, orderItem: [...updatedOrderItem] };
+    const order = {
+        ...req.body,
+        user: user,
+        orderItems: [...updatedOrderItems],
+    };
     const doc = await OrderModel.create(order);
 
     /* UPDATES PRODUCT STOCK QUANTITY FOR EVERY ITEM IN ORDER */
-    for (const item of orderItems) {
+    for (const item of updatedOrderItems) {
         const { product } = item;
 
         await ProductModel.updateOne(

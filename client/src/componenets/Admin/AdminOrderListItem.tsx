@@ -1,9 +1,9 @@
-import { Avatar, List, Select } from 'antd';
+import { Avatar, List } from 'antd';
 import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox/Checkbox';
 import React, { CSSProperties, useContext } from 'react';
 import { Order, OrderContext } from '../../contexts/OrderContext';
-import { PaymentCard } from '../Cart/PayCard';
-import { PaymentKlarna } from '../Cart/PayKlarna';
+// import { PaymentCard } from '../Cart/PayCard';
+// import { PaymentKlarna } from '../Cart/PayKlarna';
 
 interface Props {
     order: Order;
@@ -116,8 +116,4 @@ const marginLeft: CSSProperties = {
 
 const orderInfo: CSSProperties = {
     margin: '0 0 0.25rem 0',
-};
-
-const status: CSSProperties = {
-    marginTop: '1rem',
 };

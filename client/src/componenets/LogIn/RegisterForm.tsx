@@ -1,6 +1,6 @@
-import { CSSProperties, useContext, useEffect, useState } from 'react';
+import { CSSProperties, useContext, useEffect } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
-import { UserContext } from '../../contexts/UserContext';
+import { NewUser, UserContext } from '../../contexts/UserContext';
 
 interface Props {
     toggleForm: (value: boolean) => void;
@@ -9,12 +9,6 @@ interface Props {
 // TODO: Visa felmeddelande om användaren skriver in en mail som redan finns.
 
 function RegisterForm(props: Props) {
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [adminRequest, setAdminRequest] = useState(false);
-
     const { registerUser, validEmail, setValidEmail } = useContext(UserContext);
 
     useEffect(() => {
@@ -24,15 +18,16 @@ function RegisterForm(props: Props) {
         }
     });
 
-    const onFinish = () => {
-        registerUser(
-            firstname,
-            lastname,
-            email,
-            password,
-            'user',
-            adminRequest
-        );
+    const onFinish = (form: any) => {
+        const user: NewUser = {
+            firstname: form.firstname,
+            lastname: form.lastname,
+            email: form.email,
+            adminRequest: form.adminRequest,
+            password: form.password,
+            role: 'user',
+        };
+        registerUser(user);
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -48,48 +43,36 @@ function RegisterForm(props: Props) {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
         >
-            <Form.Item name='fullname' style={{ marginBottom: '0' }}>
-                <Form.Item
-                    name='firstname'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your firstname',
-                        },
-                    ]}
-                    style={{
-                        display: 'inline-block',
-                        width: 'calc(50% - 8px)',
-                    }}
-                >
-                    <Input
-                        placeholder='Firstname'
-                        value={firstname}
-                        onChange={(e) => setFirstname(e.target.value)}
-                        style={{ padding: '.8rem' }}
-                    />
-                </Form.Item>
-                <Form.Item
-                    name='lastname'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your lastname',
-                        },
-                    ]}
-                    style={{
-                        display: 'inline-block',
-                        width: 'calc(50% - 8px)',
-                        margin: '0 8px',
-                    }}
-                >
-                    <Input
-                        placeholder='Lastname'
-                        value={lastname}
-                        onChange={(e) => setLastname(e.target.value)}
-                        style={{ padding: '.8rem' }}
-                    />
-                </Form.Item>
+            <Form.Item
+                name='firstname'
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your firstname',
+                    },
+                ]}
+                style={{
+                    display: 'inline-block',
+                    width: 'calc(50% - 8px)',
+                }}
+            >
+                <Input placeholder='Firstname' style={{ padding: '.8rem' }} />
+            </Form.Item>
+            <Form.Item
+                name='lastname'
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your lastname',
+                    },
+                ]}
+                style={{
+                    display: 'inline-block',
+                    width: 'calc(50% - 8px)',
+                    margin: '0 8px',
+                }}
+            >
+                <Input placeholder='Lastname' style={{ padding: '.8rem' }} />
             </Form.Item>
 
             <Form.Item
@@ -103,12 +86,7 @@ function RegisterForm(props: Props) {
                     },
                 ]}
             >
-                <Input
-                    placeholder='E-mail'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{ padding: '.8rem' }}
-                />
+                <Input placeholder='E-mail' style={{ padding: '.8rem' }} />
             </Form.Item>
 
             <Form.Item name='password-control' style={{ marginBottom: '0' }}>
@@ -127,8 +105,6 @@ function RegisterForm(props: Props) {
                 >
                     <Input.Password
                         placeholder='Password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                         style={{ padding: '.8rem' }}
                     />
                 </Form.Item>
@@ -166,13 +142,12 @@ function RegisterForm(props: Props) {
                     />
                 </Form.Item>
             </Form.Item>
-            <Form.Item name='admin-request'>
-                <Checkbox
-                    checked={adminRequest}
-                    onChange={() => setAdminRequest(!adminRequest)}
-                >
-                    Send admin request
-                </Checkbox>
+            <Form.Item
+                valuePropName='checked'
+                initialValue={false}
+                name='adminRequest'
+            >
+                <Checkbox defaultChecked={false}>Send admin request</Checkbox>
             </Form.Item>
             <Form.Item>
                 <Button type='primary' htmlType='submit' style={registerButton}>
