@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { makeRequest } from '../makeRequest';
 import { User, UserContext } from './UserContext';
 import { CartContext } from './CartContext';
-// import { CartItem } from "../componenets/Cart/CartItemsList";
 import { Product, ProductContext } from './ProductContext';
 import { DeliveryMethod } from './DeliveryContext';
 

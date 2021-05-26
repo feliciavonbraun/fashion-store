@@ -1,6 +1,7 @@
-import { Component, ContextType, CSSProperties } from 'react';
+import { CSSProperties, useContext } from 'react';
 import { Form, Input, Button, Row, Col } from 'antd';
 import { CartContext } from '../../contexts/CartContext';
+import { UserContext } from '../../contexts/UserContext';
 
 const layout = {
     labelCol: { span: 7 },
@@ -14,64 +15,65 @@ const validateMessages = {
         range: '${label} must be between ${min} and ${max}',
     },
 };
-
-// sätt dessa i adressInterfacet i OrderContext
 export interface PaymentSwish {
     phone: string;
 }
 interface Props {
     next(): void;
 }
-class PaySwish extends Component<Props> {
-    context!: ContextType<typeof CartContext>;
-    static contextType = CartContext;
 
-    onFinish = (values: any) => {
+function PaySwish(props: Props) {
+    const { updatePaymentInfo } = useContext(CartContext);
+    const { address } = useContext(UserContext);
+
+    const onFinish = (values: any) => {
         console.log('Success:', values);
-        const { updatePaymentInfo } = this.context;
         updatePaymentInfo(values.swish);
-        this.props.next();
+        props.next();
     };
 
-    render() {
-        return (
-            <Row style={formContainerStyle}>
-                <Col span={24} style={columnStyle}>
-                    <h2>Payment information</h2>
-                    <Form
-                        {...layout}
-                        name='nest-messages'
-                        validateMessages={validateMessages}
-                        onFinish={this.onFinish}
+    return (
+        <Row style={formContainerStyle}>
+            <Col span={24} style={columnStyle}>
+                <h2>Payment information</h2>
+                <Form
+                    {...layout}
+                    name='nest-messages'
+                    validateMessages={validateMessages}
+                    onFinish={onFinish}
+                    initialValues={{
+                        swish: {
+                            phone: address.phone,
+                        },
+                    }}
+                >
+                    <Form.Item
+                        name={['swish', 'phone']}
+                        label='Phone'
+                        rules={[
+                            {
+                                min: 10,
+                                max: 10,
+                                required: true,
+                            },
+                        ]}
                     >
-                        <Form.Item
-                            name={['swish', 'phone']}
-                            label='Phone'
-                            rules={[
-                                {
-                                    min: 10,
-                                    max: 10,
-                                    required: true,
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            wrapperCol={{
-                                ...layout.wrapperCol,
-                                offset: 7,
-                            }}
-                        >
-                            <Button type='primary' htmlType='submit'>
-                                Next
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-            </Row>
-        );
-    }
+                        <Input value={address.phone} />
+                    </Form.Item>
+                    <Form.Item
+                        wrapperCol={{
+                            ...layout.wrapperCol,
+                            offset: 7,
+                        }}
+                    >
+                        <Button type='primary' htmlType='submit'>
+                            Next
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Col>
+        </Row>
+    );
 }
 
 export default PaySwish;

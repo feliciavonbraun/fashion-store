@@ -20,7 +20,6 @@ const validateMessages = {
     },
 };
 
-// sätt dessa i adressInterfacet i OrderContext
 export interface PaymentKlarna {
     ssn: string;
     // name: string;
@@ -29,12 +28,13 @@ export interface PaymentKlarna {
     street: string;
     zipcode: string;
     city: string;
-}
+};
 interface Props {
     next(): void;
-}
+};
+
 function PayKlarna(props: Props) {
-    const { user } = useContext(UserContext);
+    const { user, address } = useContext(UserContext);
     const { updatePaymentInfo } = useContext(CartContext);
 
     /* const onValuesChange = (values: any, allValues: any) => {
@@ -62,6 +62,10 @@ function PayKlarna(props: Props) {
                             firstname: user.firstname,
                             lastname: user.lastname,
                             email: user.email,
+                            phone: address.phone,
+                            street: address.street,
+                            zipcode: address.zipcode,
+                            city: address.city
                         },
                     }}
                 >
@@ -76,7 +80,7 @@ function PayKlarna(props: Props) {
                             },
                         ]}
                     >
-                        <Input placeholder='YYMMDDXXXX' />
+                        <Input type='number' placeholder='YYMMDDXXXX' />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'firstname']}
@@ -106,7 +110,7 @@ function PayKlarna(props: Props) {
                             {
                                 min: 10,
                                 max: 10,
-                                required: true,
+                                required: true
                             },
                         ]}
                     >
@@ -148,8 +152,7 @@ function PayKlarna(props: Props) {
             </Col>
         </Row>
     );
-}
-
+};
 export default PayKlarna;
 
 const formContainerStyle: CSSProperties = {
