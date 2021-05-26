@@ -80,7 +80,7 @@ function PayKlarna(props: Props) {
                             },
                         ]}
                     >
-                        <Input placeholder='YYMMDDXXXX' />
+                        <Input type='number' placeholder='YYMMDDXXXX' />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'firstname']}
