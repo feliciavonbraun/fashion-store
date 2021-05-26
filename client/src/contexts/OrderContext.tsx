@@ -55,12 +55,15 @@ function OrderProvider({ children }: Props) {
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
     const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
-    const { address } = useContext(UserContext);
+    const { address, user } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
     useEffect(() => {
-        getOrders();
-    }, [setAllOrders]);
+        (async function () {
+            const orders = await makeRequest('/api/order', 'GET');
+            setAllOrders(orders);
+        })();
+    }, [user]);
 
     async function getOrders() {
         const orders = await makeRequest('/api/order', 'GET');
