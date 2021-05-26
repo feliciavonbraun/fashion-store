@@ -6,20 +6,21 @@ export interface DeliveryMethod {
     company: string;
     time: number;
     price: number;
-}
+};
 
 export interface DeliveryValue {
     allDeliveryMethods: DeliveryMethod[];
     calculateDeliveryDay: (timeInHours: number) => string;
-}
+};
 
 interface Props {
     children: object;
-}
+};
 
 export const DeliveryContext = createContext<DeliveryValue>(
     {} as DeliveryValue
 );
+
 function DeliveryProvider({ children }: Props) {
     const [allDeliveryMethods, setDeliveryMethod] = useState<DeliveryMethod[]>(
         []
@@ -50,6 +51,5 @@ function DeliveryProvider({ children }: Props) {
             {children}
         </DeliveryContext.Provider>
     );
-}
-
+};
 export default DeliveryProvider;
