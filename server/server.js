@@ -3,7 +3,6 @@ const deliveryRouter = require("./resources/deliveryResource/deliveryRouter");
 const productRouter = require('./resources/productResource/productRouter');
 const orderRouter = require('./resources/orderResource/orderRouter');
 const userRouter = require('./resources/userResource/userRouter');
-const cookieRouter = require('./resources/cookieResource/cookieRouter');
 const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 require('express-async-errors');
