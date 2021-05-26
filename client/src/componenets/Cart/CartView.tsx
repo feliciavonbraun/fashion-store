@@ -27,7 +27,7 @@ const steps = [
 ];
 
 function CartView() {
-    const { getTotalPriceProducts } = useContext(CartContext);
+    const { getTotalPriceProducts, cart } = useContext(CartContext);
     const { loggedin } = useContext(UserContext);
     const [current, setCurrent] = useState(0);
 
@@ -50,33 +50,35 @@ function CartView() {
             <h3 style={priceTextStyle}>
                 Price products: {getTotalPriceProducts() + ' kr '}
             </h3>
-            {!loggedin ? (
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        marginTop: '1rem',
-                        flexDirection: 'column',
-                    }}
-                >
-                    <h2 style={{ color: '#1890ff', marginBottom: '1.5rem' }}>
-                        Log in to place your order
-                    </h2>
-                    <LogInForm />
-                </div>
-            ) : (
-                <>
-                    <Steps
-                        current={current}
-                        style={{ marginTop: '7rem', marginBottom: '1rem' }}
+            {!cart.length ?
+                null
+                : !loggedin ? (
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginTop: '1rem',
+                            flexDirection: 'column',
+                        }}
                     >
-                        {steps.map((item) => (
-                            <Step key={item.title} title={item.title} />
-                        ))}
-                    </Steps>
-                    <StepsComponent next={next} />
-                </>
-            )}
+                        <h2 style={{ color: '#1890ff', marginBottom: '1.5rem' }}>
+                            Log in to place your order
+                    </h2>
+                        <LogInForm />
+                    </div>
+                ) : (
+                    <>
+                        <Steps
+                            current={current}
+                            style={{ marginTop: '7rem', marginBottom: '1rem' }}
+                        >
+                            {steps.map((item) => (
+                                <Step key={item.title} title={item.title} />
+                            ))}
+                        </Steps>
+                        <StepsComponent next={next} />
+                    </>
+                )}
         </Row>
     );
 }
