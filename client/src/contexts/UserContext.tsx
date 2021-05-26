@@ -19,22 +19,12 @@ const emptyAddress: Address = {
     city: '',
 };
 
-const emptyUser: User = {
-    _id: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    password: '',
-    role: 'user',
-    adminRequest: false,
-};
-
 interface UserValue {
     loggedin: boolean;
     userOrders: Order[];
     loginResponse: string;
     adminRequests: User[];
-    user: User;
+    user?: User;
     address: Address;
     validEmail: boolean;
     setValidEmail: (value: boolean) => void;
@@ -59,7 +49,7 @@ interface Props {
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
     const [loginResponse, setLoginResponse] = useState('Login');
-    const [user, setUser] = useState<User>(emptyUser);
+    const [user, setUser] = useState<User>();
     const [userOrders, setUserOrders] = useState<Order[]>([]);
     const [address, setAddress] = useState<Address>(emptyAddress);
     const [loggedin, setLoggedin] = useState(false);
@@ -67,7 +57,8 @@ function UserProvider({ children }: Props) {
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
     const getUserOrders = useCallback(async () => {
-        console.log(user);
+        if (!user) return
+
         const userOrders = await makeRequest(
             `/api/order/user/${user._id}`,
             'GET'
@@ -80,6 +71,13 @@ function UserProvider({ children }: Props) {
         getUserOrders();
         getAllAdminRequests();
     }, [getUserOrders]);
+
+    useEffect(() => {
+        (async function() {
+            const user = await makeRequest('/api/user/auth');
+            setUser(user)
+        })();
+    }, [setUser]);
 
     // REGISTER NEW USER
     async function registerUser(
@@ -126,6 +124,7 @@ function UserProvider({ children }: Props) {
         if (res.email) {
             setUser(res);
             setLoggedin(true);
+            setLoginResponse('Login');
         } else {
             setLoggedin(false);
             setLoginResponse(res);
@@ -134,6 +133,7 @@ function UserProvider({ children }: Props) {
 
     // LOG OUT USER
     async function logoutUser(id: string) {
+        setUser(undefined);
         await makeRequest(`/api/user/logout/${id}`, 'DELETE');
     }
 
@@ -155,6 +155,7 @@ function UserProvider({ children }: Props) {
         getAllAdminRequests();
     }
 
+    console.log(user)
     return (
         <UserContext.Provider
             value={{

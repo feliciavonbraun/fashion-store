@@ -20,6 +20,7 @@ app.use(
 		httpOnly: true,
 	})
 );
+
 /* ALL ROUTES */
 app.use(productRouter);
 app.use(orderRouter);
@@ -32,9 +33,10 @@ app.use(cookieRouter);
 app.use((req, res) => {
     res.status(404).json('Error: Could not find')
 })
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).json(err.message);
+	// Lägg till felmeddelande för tex. mongoose.
 });
 
 /* CONNECT TO DATABASE */

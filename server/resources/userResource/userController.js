@@ -30,7 +30,7 @@ exports.registerUser = async (req, res) => {
 /* LOG IN USER AND SET COOKIE */
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
-    const user = await UserModel.findOne({ email: email });
+    const user = await UserModel.findOne({ email: email }).select('+password');
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
         res.status(400).json('Incorrect e-mail or password');
@@ -45,6 +45,14 @@ exports.loginUser = async (req, res) => {
     req.session.email = user.email;
     req.session.role = user.role;
 
+    delete user.password
+
+    res.status(200).json(user);
+};
+
+/* Logged in user */
+exports.getLoggedinUser = async (req, res) => {
+    const user = await UserModel.findOne({ email: req.session.email });
     res.status(200).json(user);
 };
 

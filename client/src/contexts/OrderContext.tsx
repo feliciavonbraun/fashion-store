@@ -37,7 +37,6 @@ interface NewOrder {
     isSent: boolean;
     createdAt: Number;
     delivery: string;
-    user: string;
 }
 
 interface OrderValue {
@@ -84,7 +83,7 @@ function OrderProvider({ children }: Props) {
             isSent: false,
             createdAt: Date.now(),
             delivery: deliveryMethod._id,
-            user: user._id,
+            // få User från newOrder
         };
         const newOrder = await makeRequest('/api/order', 'POST', order);
 
