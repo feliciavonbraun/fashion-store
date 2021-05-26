@@ -13,7 +13,7 @@ function LogInForm(props: Props) {
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
 
-    const { loginUser, user } = useContext(UserContext);
+    const { loginUser, user, setLoginError } = useContext(UserContext);
     let history = useHistory();
 
     useEffect(() => {
@@ -95,7 +95,7 @@ function LogInForm(props: Props) {
                     Log in
                 </Button>
             </Form.Item>
-            <h3 style={registerButton} onClick={() => props.toggleForm!(true)}>
+            <h3 style={registerButton} onClick={() => {props.toggleForm!(true); setLoginError('none')}}>
                 Register now
             </h3>
         </Form>
