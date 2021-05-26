@@ -8,14 +8,14 @@ import { DeliveryMethod } from './DeliveryContext';
 export interface OrderItem {
     product: Product; // in cart from CartContext
     qty: number; // in cart from CartContext
-};
+}
 
 export interface Address {
     phone: number; // in userInfo from CartContext
     street: string; // in userInfo from CartContext
     zipcode: number; // in userInfo from CartContext
     city: string; // in userInfo from CartContext
-};
+}
 
 export interface Order {
     orderItems: OrderItem[];
@@ -28,7 +28,7 @@ export interface Order {
 
     delivery: DeliveryMethod;
     user: User;
-};
+}
 
 interface NewOrder {
     orderItems: OrderItem[];
@@ -38,18 +38,18 @@ interface NewOrder {
     createdAt: Number;
     delivery: string;
     user: string;
-};
+}
 
 interface OrderValue {
     allOrders: Order[];
     getOneOrder: (_id: string) => void;
     newOrder: () => void;
-    updateOrder: (isSent: boolean) => void;
-};
+    updateOrder: (order: Order) => Promise<Order>;
+}
 
 interface Props {
     children: Object;
-};
+}
 
 export const OrderContext = createContext<OrderValue>({} as OrderValue);
 
@@ -68,14 +68,13 @@ function OrderProvider({ children }: Props) {
 
     async function getOrders() {
         const orders = await makeRequest('/api/order', 'GET');
-        console.log('Orders in useEffect:', orders);
         setAllOrders(orders);
-    };
+    }
 
     async function getOneOrder(_id: string) {
         const oneProduct: Order = await makeRequest(`/api/order/${_id}`, 'GET');
         return oneProduct;
-    };
+    }
 
     async function newOrder() {
         const order: NewOrder = {
@@ -88,18 +87,25 @@ function OrderProvider({ children }: Props) {
             user: user._id,
         };
         const newOrder = await makeRequest('/api/order', 'POST', order);
-        console.log('Nya ordern:', newOrder);
 
-        /* Updates products in product context, since qty has changed */
+        /* Updates orders */
         getOrders();
+        /* Updates products in product context, since qty has changed */
         const products = await getProducts();
         setAllProducts(products);
-        return newOrder;
-    };
 
-    async function updateOrder(isSent: boolean) {
-        // isSent ska endast kunna uppdateras
-    };
+        return newOrder;
+    }
+
+    async function updateOrder(order: Order) {
+        const updatedOrder = await makeRequest(
+            `/api/order/${order._id}`,
+            'PUT',
+            order
+        );
+        getOrders();
+        return updatedOrder;
+    }
 
     return (
         <OrderContext.Provider
@@ -113,5 +119,5 @@ function OrderProvider({ children }: Props) {
             {children}
         </OrderContext.Provider>
     );
-};
+}
 export default OrderProvider;
