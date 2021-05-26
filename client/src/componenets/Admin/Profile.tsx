@@ -1,4 +1,4 @@
-import { CSSProperties, useContext } from 'react';
+import { CSSProperties, useContext, useEffect } from 'react';
 import { Button, Layout, Menu } from 'antd';
 import {
     BrowserRouter as Router,
@@ -25,18 +25,21 @@ function Profile(props: Props) {
     let history = useHistory();
     const { user, logoutUser } = useContext(UserContext);
 
-    const checkRole = () => {
-        if (user){
-            if (user.role === 'admin') return true;
-            else return false 
-        } else return null
-    }
-
-    const handleLogOut = () => {
-        if (user) {
-            logoutUser(user?._id);
+    useEffect(() => {
+        if (!user) {
             history.push('/');
-        };
+        }
+    }, [user, history]);
+
+    const checkRole = () => {
+        if (user) {
+            if (user.role === 'admin') return true;
+            else return false;
+        } else return null;
+    };
+
+    const handleLogOut = async () => {
+        await logoutUser();
     };
 
     return (
@@ -48,28 +51,35 @@ function Profile(props: Props) {
                         mode='inline'
                         defaultSelectedKeys={checkRole() ? ['1'] : ['4']}
                     >
-                        {checkRole() 
-                            ?   <>
-                                    <Menu.Item key='1'>
-                                        <span>Products</span>
-                                        <Link to={`${props.match.url}/product-list`} />
-                                    </Menu.Item>
-                                    <Menu.Item key='2'>
-                                        <span>Admin Requests</span>
-                                        <Link to={`${props.match.url}/admin-list`} />
-                                    </Menu.Item>
-                                    <Menu.Item key='3'>
-                                        <span>Orders (Admin)</span>
-                                        <Link to={`${props.match.url}/admin-order-list`} />
-                                    </Menu.Item>
-                                </>
-                            :   <Menu.Item key='4'>
-                                    <span>Orders</span>
-                                    <Link to={`${props.match.url}/order-list`} />
+                        {checkRole() ? (
+                            <>
+                                <Menu.Item key='1'>
+                                    <span>Products</span>
+                                    <Link
+                                        to={`${props.match.url}/product-list`}
+                                    />
                                 </Menu.Item>
-                        }
-                        <Button 
-                            type='primary' 
+                                <Menu.Item key='2'>
+                                    <span>Admin Requests</span>
+                                    <Link
+                                        to={`${props.match.url}/admin-list`}
+                                    />
+                                </Menu.Item>
+                                <Menu.Item key='3'>
+                                    <span>Orders (Admin)</span>
+                                    <Link
+                                        to={`${props.match.url}/admin-order-list`}
+                                    />
+                                </Menu.Item>
+                            </>
+                        ) : (
+                            <Menu.Item key='4'>
+                                <span>Orders</span>
+                                <Link to={`${props.match.url}/order-list`} />
+                            </Menu.Item>
+                        )}
+                        <Button
+                            type='primary'
                             style={logOutButton}
                             onClick={handleLogOut}
                         >
@@ -120,11 +130,11 @@ const layout: CSSProperties = {
 };
 
 const sidebarStyle: CSSProperties = {
-    position: 'relative', 
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    height: '100%'
+    height: '100%',
 };
 
 const mainContent: CSSProperties = {
@@ -144,5 +154,5 @@ const contentStyle: CSSProperties = {
 const logOutButton: CSSProperties = {
     position: 'absolute',
     bottom: '3rem',
-    margin: '0 auto'
-}
+    margin: '0 auto',
+};

@@ -37,7 +37,7 @@ interface UserValue {
     setValidEmail: (value: boolean) => void;
     setAddress: React.Dispatch<React.SetStateAction<Address>>;
     loginUser: (email: string, password: string) => Promise<void>;
-    logoutUser: (id: string) => Promise<void>;
+    logoutUser: () => Promise<void>;
     responseAdminRequest: (user: User, response: boolean) => Promise<void>;
     registerUser: (user: NewUser) => Promise<void>;
 }
@@ -70,7 +70,9 @@ function UserProvider({ children }: Props) {
     useEffect(() => {
         (async function () {
             const user = await makeRequest('/api/user/auth');
-            setUser(user);
+            if (user.email) {
+                setUser(user);
+            }
         })();
     }, [setUser]);
 
@@ -109,9 +111,9 @@ function UserProvider({ children }: Props) {
     }
 
     // LOG OUT USER
-    async function logoutUser(id: string) {
+    async function logoutUser() {
+        await makeRequest('/api/user/logout', 'DELETE');
         setUser(undefined);
-        await makeRequest(`/api/user/logout/${id}`, 'DELETE');
     }
 
     // GET ALL ADMIN REQUESTS
