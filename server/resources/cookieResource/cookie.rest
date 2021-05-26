@@ -1,2 +1,0 @@
-// Check role
-GET http://localhost:4000/cookie-session

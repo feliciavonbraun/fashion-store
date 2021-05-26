@@ -26,7 +26,6 @@ app.use(productRouter);
 app.use(orderRouter);
 app.use(userRouter);
 app.use(deliveryRouter);
-app.use(cookieRouter);
 
 
 /* ERROR HANDLING */
