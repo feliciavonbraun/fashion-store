@@ -10,7 +10,7 @@ import { UserContext } from '../contexts/UserContext';
 function Navbar() {
     const cartContext = useContext(CartContext);
     const { getBadgeQuantity } = cartContext;
-    const { user } = useContext(UserContext);
+    const { user, setLoginError } = useContext(UserContext);
 
     const ifLoggedIn = () => {
         if(user) return true;
@@ -19,7 +19,7 @@ function Navbar() {
     return (
         <Header style={layoutStyle}>
             <Link to='/' style={logoLink}>
-                <img src={logo} alt='logo' style={li} />
+                <img src={logo} alt='logo' style={li} onClick={() => setLoginError('none')} />
             </Link>
             <Menu mode='horizontal' style={menuStyle}>
                 <Menu.Item key='1' style={li}>

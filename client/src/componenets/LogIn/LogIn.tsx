@@ -6,7 +6,7 @@ import RegisterForm from './RegisterForm';
 function LogIn() {
   const [toggleForm, setToggleForm] = useState(false);
 
-  const { loginResponse } = useContext(UserContext)
+  const { loginError } = useContext(UserContext)
 
   return (
     <main style={backgroundImage}>
@@ -19,7 +19,7 @@ function LogIn() {
           }
         </h2>
         <p style ={errorMessage}>
-          {loginResponse !== 'LoggedIn' && loginResponse}
+          {loginError !== 'none' && loginError}
         </p>
         {toggleForm
           ? <RegisterForm toggleForm={(value) => setToggleForm(value)} />

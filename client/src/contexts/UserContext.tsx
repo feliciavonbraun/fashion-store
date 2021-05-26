@@ -29,11 +29,12 @@ const emptyAddress: Address = {
 
 interface UserValue {
     userOrders: Order[];
-    loginResponse: string;
+    loginError: string;
     adminRequests: User[];
     user?: User;
     address: Address;
     validEmail: boolean;
+    setLoginError: (error: string) => void;
     setValidEmail: (value: boolean) => void;
     setAddress: React.Dispatch<React.SetStateAction<Address>>;
     loginUser: (email: string, password: string) => Promise<void>;
@@ -48,7 +49,7 @@ interface Props {
 
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
-    const [loginResponse, setLoginResponse] = useState('LoggedIn');
+    const [loginError, setLoginError] = useState('none');
     const [user, setUser] = useState<User>();
     const [userOrders, setUserOrders] = useState<Order[]>([]);
     const [address, setAddress] = useState<Address>(emptyAddress);
@@ -102,9 +103,9 @@ function UserProvider({ children }: Props) {
         const res = await makeRequest('/api/user/login', 'POST', user);
         if (res.email) {
             setUser(res);
-            setLoginResponse('LoggedIn');
+            setLoginError('none');
         } else {
-            setLoginResponse(res);
+            setLoginError(res);
         }
     }
 
@@ -134,12 +135,13 @@ function UserProvider({ children }: Props) {
     return (
         <UserContext.Provider
             value={{
-                loginResponse,
+                loginError,
                 adminRequests,
                 validEmail,
                 user,
                 userOrders,
                 address,
+                setLoginError,
                 setValidEmail,
                 setAddress,
                 loginUser,
