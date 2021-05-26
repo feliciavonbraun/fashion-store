@@ -1,5 +1,5 @@
-import { Address } from './OrderContext';
-import { createContext, useEffect, useState } from 'react';
+import { Address, Order } from './OrderContext';
+import { createContext, useEffect, useState, useCallback } from 'react';
 import { makeRequest } from '../makeRequest';
 
 export interface User {
@@ -31,6 +31,7 @@ const emptyUser: User = {
 
 interface UserValue {
     loggedin: boolean;
+    userOrders: Order[];
     loginResponse: string;
     adminRequests: User[];
     user: User;
@@ -59,14 +60,26 @@ export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
     const [loginResponse, setLoginResponse] = useState('Login');
     const [user, setUser] = useState<User>(emptyUser);
+    const [userOrders, setUserOrders] = useState<Order[]>([]);
     const [address, setAddress] = useState<Address>(emptyAddress);
     const [loggedin, setLoggedin] = useState(false);
     const [validEmail, setValidEmail] = useState(false);
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
+    const getUserOrders = useCallback(async () => {
+        console.log('hello');
+        const userOrders = await makeRequest(
+            `/api/order/user/${user._id}`,
+            'GET'
+        );
+        console.log(userOrders);
+        setUserOrders(userOrders);
+    }, [user._id]);
+
     useEffect(() => {
+        getUserOrders();
         getAllAdminRequests();
-    }, []);
+    }, [getUserOrders]);
 
     // REGISTER NEW USER
     async function registerUser(
@@ -150,6 +163,7 @@ function UserProvider({ children }: Props) {
                 adminRequests,
                 validEmail,
                 user,
+                userOrders,
                 address,
                 setValidEmail,
                 setAddress,

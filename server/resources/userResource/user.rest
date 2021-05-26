@@ -31,12 +31,12 @@ GET http://localhost:4000/api/user/admin
 
 ###
 
-PATCH http://localhost:4000/api/user/admin
+PUT http://localhost:4000/api/user/admin
 Content-Type: application/json
 
 {
         "_id": "60a7b98cdfb5ef553c2ef58b",
-        "accept": true
-
+        "role": "admin",
+        "firstname": "Oskar"
 }
 

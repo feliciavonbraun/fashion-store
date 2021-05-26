@@ -6,13 +6,24 @@ exports.getAllOrders = async (req, res) => {
     res.status(200).json(docs);
 };
 
-exports.getOneOrder = async (req, res) => {
-    const { _id } = req.body;
+exports.getOrder = async (req, res) => {
+    const _id = req.params.id;
     const doc = await OrderModel.find({ _id: _id }).populate([
         'delivery',
         'user',
     ]);
     res.status(200).json(doc);
+};
+
+exports.getUserOrders = async (req, res) => {
+    const _id = req.params.id;
+    console.log(_id);
+    const docs = await OrderModel.find({ user: _id }).populate([
+        'delivery',
+        'user',
+    ]);
+    console.log(docs);
+    res.status(200).json(docs);
 };
 
 exports.newOrder = async (req, res) => {
@@ -46,7 +57,7 @@ exports.newOrder = async (req, res) => {
 };
 
 exports.updateOrder = async (req, res) => {
-    const { _id } = req.body;
-    const doc = await OrderModel.replaceOne({ _id: _id }, { ...req.body });
+    const { _id, isSent } = req.body;
+    const doc = await OrderModel.updateOne({ _id: _id }, { isSent: isSent });
     res.status(201).json(doc);
 };

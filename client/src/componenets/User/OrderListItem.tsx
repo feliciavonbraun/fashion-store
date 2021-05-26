@@ -9,6 +9,7 @@ interface Props {
 }
 
 export default function OrderListItem(props: Props) {
+    const { order } = props;
     // function handleChange = (value: string) => {
     //     console.log(value);
     // };
@@ -26,58 +27,67 @@ export default function OrderListItem(props: Props) {
     } */
 
     return (
-        <List.Item style={listItem}>
-            <List.Item.Meta title={`Order: ${props.order._id}`} />
-            <p style={orderInfo}>{props.order.user.firstname}</p>
-            <p style={orderInfo}>{props.order.user.email}</p>
-            <p style={orderInfo}>{props.order.address.phone}</p>
-            <p style={orderInfo}>{props.order.address.street}</p>
-            <p style={orderInfo}>{props.order.address.city}</p>
-            <p style={orderInfo}>{props.order.address.zipcode}</p>
-            <List
-                style={itemsList}
-                itemLayout='vertical'
-                dataSource={props.order.orderItems}
-                renderItem={(orderItem) => (
-                    <List.Item>
-                        <List.Item.Meta
-                            title={orderItem.product.title}
-                            avatar={<Avatar src={orderItem.product.imageUrl} />}
-                            description={orderItem.product.description}
-                        />
-                        <div style={itemInfo}>
-                            <p>
-                                Price:{' '}
-                                <b>
-                                    {orderItem.product.price * orderItem.qty} kr
-                                </b>
-                            </p>
-                            <p style={marginLeft}>
-                                Quantity: <b>{orderItem.qty}</b>
-                            </p>
-                        </div>
-                    </List.Item>
-                )}
-            ></List>
-            <p style={orderInfo}>
-                {`Delivery method: ${props.order.delivery.company}`}
-            </p>
-            {/* {isKlarna(props.order.deliveryMethod) ? (
+        <>
+            <h1 style={{ fontWeight: 'bold', marginBottom: '2rem' }}>
+                YOUR ORDERS
+            </h1>
+            <List.Item style={listItem}>
+                <List.Item.Meta title={`Order: ${order._id}`} />
+                <p style={orderInfo}>{order.user.firstname}</p>
+                <p style={orderInfo}>{order.user.email}</p>
+                <p style={orderInfo}>{order.address.phone}</p>
+                <p style={orderInfo}>{order.address.street}</p>
+                <p style={orderInfo}>{order.address.city}</p>
+                <p style={orderInfo}>{order.address.zipcode}</p>
+                <List
+                    style={itemsList}
+                    itemLayout='vertical'
+                    dataSource={order.orderItems}
+                    renderItem={(orderItem) => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={orderItem.product.title}
+                                avatar={
+                                    <Avatar src={orderItem.product.imageUrl} />
+                                }
+                                description={orderItem.product.description}
+                            />
+                            <div style={itemInfo}>
+                                <p>
+                                    Price:{' '}
+                                    <b>
+                                        {orderItem.product.price *
+                                            orderItem.qty}{' '}
+                                        kr
+                                    </b>
+                                </p>
+                                <p style={marginLeft}>
+                                    Quantity: <b>{orderItem.qty}</b>
+                                </p>
+                            </div>
+                        </List.Item>
+                    )}
+                ></List>
+                <p style={orderInfo}>
+                    {`Delivery method: ${order.delivery.company}`}
+                </p>
+                {/* {isKlarna(props.order.deliveryMethod) ? (
                 <p style={orderInfo}>Payment method: Klarna</p>
             ) : isCard(props.order.deliveryMethod) ? (
                 <p style={orderInfo}>Payment method: Card</p>
             ) : (
                 <p style={orderInfo}>Payment method: Swish</p>
             )} */}
-            <p style={orderInfo}>
-                {`Total order price: ${
-                    props.order.totalprice
-                } kr, incl delivery (VAT: ${props.order.totalprice * 0.25} kr)`}
-            </p>
-            <p style={status}>
-                Status: <b>{props.order.isSent ? 'Sent' : 'Proccessing'}</b>
-            </p>
-        </List.Item>
+                <p style={orderInfo}>
+                    {`Total order price: ${
+                        order.totalprice
+                    } kr, incl delivery (VAT: ${order.totalprice * 0.25} kr)`}
+                </p>
+                <p style={status}>
+                    Status: <b>{order.isSent ? 'Sent' : 'Proccessing'}</b>
+                </p>
+            </List.Item>
+        </>
     );
 }
 
