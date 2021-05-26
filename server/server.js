@@ -3,6 +3,7 @@ const deliveryRouter = require("./resources/deliveryResource/deliveryRouter");
 const productRouter = require('./resources/productResource/productRouter');
 const orderRouter = require('./resources/orderResource/orderRouter');
 const userRouter = require('./resources/userResource/userRouter');
+const cookieRouter = require('./resources/cookieResource/cookieRouter');
 const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 require('express-async-errors');
@@ -24,12 +25,12 @@ app.use(productRouter);
 app.use(orderRouter);
 app.use(userRouter);
 app.use(deliveryRouter);
-
+app.use(cookieRouter);
 
 
 /* ERROR HANDLING */
 app.use((req, res) => {
-    res.status(404).json('Wrong')
+    res.status(404).json('Error: Could not find')
 })
 app.use((err, req, res) => {
     console.error(err);
