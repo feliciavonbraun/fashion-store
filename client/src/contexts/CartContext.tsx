@@ -173,7 +173,7 @@ class CartProvider extends Component<{}, State> {
     createReceipt = (): IReceipt => {
         return {
             cart: this.state.cart,
-            user: this.context.user,
+            user: this.context.user!,
             deliveryMethod: this.state.deliveryMethod.company,
             totalPrice: this.getTotalPrice(),
             paymentMethod: { ...this.state.paymentInfo },

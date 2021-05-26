@@ -59,9 +59,9 @@ function PayKlarna(props: Props) {
                     onFinish={onFinish}
                     initialValues={{
                         klarna: {
-                            firstname: user.firstname,
-                            lastname: user.lastname,
-                            email: user.email,
+                            firstname: user?.firstname,
+                            lastname: user?.lastname,
+                            email: user?.email,
                             phone: address.phone,
                             street: address.street,
                             zipcode: address.zipcode,
@@ -87,21 +87,21 @@ function PayKlarna(props: Props) {
                         label='Firstname'
                         rules={[{ required: true }]}
                     >
-                        <Input value={user.firstname} disabled />
+                        <Input value={user?.firstname} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'lastname']}
                         label='Lastname'
                         rules={[{ required: true }]}
                     >
-                        <Input defaultValue={user.lastname} disabled />
+                        <Input defaultValue={user?.lastname} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'email']}
                         label='Email'
                         rules={[{ type: 'email', required: true }]}
                     >
-                        <Input defaultValue={user.email} disabled />
+                        <Input defaultValue={user?.email} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'phone']}

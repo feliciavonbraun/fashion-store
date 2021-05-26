@@ -56,8 +56,8 @@ export default function InformationForm(props: Props) {
           validateMessages={validateMessages}
           initialValues={{
             user: {
-              name: user.firstname, 
-              email: user.email
+              name: user?.firstname, 
+              email: user?.email
             }
           }}
           onFinish={onFinish}

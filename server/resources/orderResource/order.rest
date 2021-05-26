@@ -3,11 +3,10 @@ GET http://localhost:4000/api/order
 ###
 
 GET http://localhost:4000/api/order/:id
-Content-Type: application/json
 
-{
-    "_id": "60a767ce3b59f07246dc95d4"
-}
+###
+
+GET http://localhost:4000/api/order/user/:id
 
 ###
 

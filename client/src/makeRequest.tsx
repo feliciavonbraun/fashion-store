@@ -1,7 +1,7 @@
-export async function makeRequest(url: string, method: string, body?: {}) {
+export async function makeRequest(url: string, method?: string, body?: {}) {
     try {
         const response = await fetch(url, {
-        method: method,
+        method: method || 'GET',
         body: JSON.stringify(body),
         headers: {
             'Content-type': 'application/json'
