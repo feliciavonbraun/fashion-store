@@ -40,6 +40,6 @@ Content-Type: application/json
 
 {
         "_id": "60a7b98cdfb5ef553c2ef58b",
-        "accept": true
-
+        "role": "admin",
+        "firstname": "Oskar"
 }
