@@ -24,7 +24,7 @@ function LogInForm(props: Props) {
                 setPassword('');
             }
         }
-    });
+    }, [history, loggedin, remember]);
 
     function onFinish() {
         loginUser(email, password);

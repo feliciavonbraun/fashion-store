@@ -82,7 +82,10 @@ const cardContainer: CSSProperties = {
     justifyContent: 'space-around',
     alignItems: 'space-around',
     width: '80%',
-    margin: 'auto',
+    marginBottom: 'auto',
+    marginTop: 'auto',
+    marginRight: 'auto',
+    marginLeft: 'auto',
     paddingBottom: '8rem',
 };
 
