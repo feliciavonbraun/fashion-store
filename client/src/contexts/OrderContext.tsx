@@ -58,7 +58,7 @@ function OrderProvider({ children }: Props) {
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
     const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
-    const { address, user } = useContext(UserContext);
+    const { address } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
     useEffect(() => {
