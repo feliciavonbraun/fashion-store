@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import LogIn from './componenets/LogIn/LogIn';
-import Sidebar from './componenets/Admin/sidebar';
+import Profile from './componenets/Admin/Profile';
 import CartView from './componenets/Cart/CartView';
 import Footer2 from './componenets/Footer';
 import Navbar from './componenets/Navbar';
@@ -35,7 +35,7 @@ function App() {
                                     <Route exact path='/' component={StartPageView} />
                                     <Route path='/cart' component={CartView} />
                                     <Route path='/login' component={LogIn} />
-                                    <Route path='/user' component={Sidebar} />
+                                    <Route path='/user' component={Profile} />
                                 </Switch>
                                 <Footer2 />
                             </Router>

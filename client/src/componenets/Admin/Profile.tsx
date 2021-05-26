@@ -21,7 +21,7 @@ const { Content, Sider } = Layout;
 
 interface Props extends RouteComponentProps {}
 
-function Sidebar(props: Props) {
+function Profile(props: Props) {
     let history = useHistory();
     const { user, logoutUser } = useContext(UserContext);
 
@@ -112,7 +112,7 @@ function Sidebar(props: Props) {
     );
 }
 
-export default withRouter(Sidebar);
+export default withRouter(Profile);
 
 const layout: CSSProperties = {
     paddingTop: window.innerWidth > 768 ? '6rem' : '5rem',
