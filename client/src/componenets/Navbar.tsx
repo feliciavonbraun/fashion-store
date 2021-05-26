@@ -5,10 +5,16 @@ import logo from '../assets/logga-fs.png';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../contexts/CartContext';
+import { UserContext } from '../contexts/UserContext';
 
 function Navbar() {
     const cartContext = useContext(CartContext);
     const { getBadgeQuantity } = cartContext;
+    const { user } = useContext(UserContext);
+
+    const ifLoggedIn = () => {
+        if(user) return true;
+    };
 
     return (
         <Header style={layoutStyle}>
@@ -31,7 +37,7 @@ function Navbar() {
                                 color: 'white',
                             }}
                         >
-                            Log in
+                            {ifLoggedIn() ? 'Profile' : 'Log in'}
                         </h3>
                     </Link>
                 </Menu.Item>
