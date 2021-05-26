@@ -45,7 +45,7 @@ exports.loginUser = async (req, res) => {
     req.session.email = user.email;
     req.session.role = user.role;
 
-    delete user.password
+    delete user.password;
 
     res.status(200).json(user);
 };
