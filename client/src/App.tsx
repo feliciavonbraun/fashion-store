@@ -20,29 +20,29 @@ function App() {
     return (
         <CartProvider>
             <ProductProvider>
-                  <DeliveryProvider>
+                <DeliveryProvider>
                     <UserProvider>
-                       <OrderProvider>
-                        <Router>
-                            <ScrollToTop />
-                            <Navbar />
-                            <Switch>
-                                <Route path='/product/:id' component={ProductDetails} />
-                                <Route
-                                    path='/ordersuccess'
-                                    component={OrderSuccessMessage}
-                                />
-                                <Route exact path='/' component={StartPageView} />
-                                <Route path='/cart' component={CartView} />
-                                <Route path='/login' component={LogIn} />
-                                <Route path='/user' component={Sidebar} />
-                            </Switch>
-                            <Footer2 />
-                        </Router>
-                      </OrderProvider>
+                        <OrderProvider>
+                            <Router>
+                                <ScrollToTop />
+                                <Navbar />
+                                <Switch>
+                                    <Route path='/product/:id' component={ProductDetails} />
+                                    <Route
+                                        path='/ordersuccess'
+                                        component={OrderSuccessMessage}
+                                    />
+                                    <Route exact path='/' component={StartPageView} />
+                                    <Route path='/cart' component={CartView} />
+                                    <Route path='/login' component={LogIn} />
+                                    <Route path='/user' component={Sidebar} />
+                                </Switch>
+                                <Footer2 />
+                            </Router>
+                        </OrderProvider>
                     </UserProvider>
-            </DeliveryProvider>
-           </ProductProvider>
+                </DeliveryProvider>
+            </ProductProvider>
         </CartProvider>
     );
 }

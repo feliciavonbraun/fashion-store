@@ -1,43 +1,21 @@
-import { List, Col, Row } from "antd";
-import { CSSProperties, useContext } from "react";
-// import { Order } from "../../interfaces";
-import { OrderContext } from "../../contexts/OrderContext";
-import OrderListItem from "./OrderListItem";
-
-// interface State {
-//     orders: Order[];
-// }
+import { List } from 'antd';
+import { useContext } from 'react';
+import { UserContext } from '../../contexts/UserContext';
+import OrderListItem from './OrderListItem';
 
 export default function OrderList() {
-
-    // const orderContext = useContext(OrderContext);
-    // const { allOrders } = orderContext;
-
-    const { allOrders } = useContext(OrderContext);
+    const { userOrders } = useContext(UserContext);
 
     return (
-        <Row style={containerStyle}>
-            <Col style={columnStyle}>
-                <List
-                    itemLayout="vertical"
-                    dataSource={allOrders}
-                    renderItem={(order) => <OrderListItem order={order} />}
-                >
-                </List>
-            </Col>
-        </Row>
+        <>
+            <h1 style={{ fontWeight: 'bold', marginBottom: '2rem' }}>
+                YOUR ORDERS
+            </h1>
+            <List
+                itemLayout='vertical'
+                dataSource={userOrders}
+                renderItem={(order) => <OrderListItem order={order} />}
+            ></List>
+        </>
     );
 }
-
-const containerStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: '8rem',
-    textAlign: 'left',
-};
-
-const columnStyle: CSSProperties = {
-    marginTop: '8rem',
-    width: '80%',
-};

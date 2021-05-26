@@ -1,6 +1,6 @@
 import { Form, Input, Button, Row, Col } from 'antd';
-import { Component, ContextType, CSSProperties } from 'react';
-import { CartContext } from '../../contexts/CartContext';
+import { CSSProperties, useContext } from 'react';
+import { UserContext } from '../../contexts/UserContext';
 
 const layout = {
   labelCol: { span: 5 },
@@ -19,9 +19,10 @@ const validateMessages = {
   },
 };
 
+// sätt dessa i adressInterfacet i OrderContext
 export interface UserInfo {
-  name: string;
-  email: string;
+  // name: string;
+  // email: string;
   phone: string;
   street: string;
   zipcode: string;
@@ -31,77 +32,85 @@ interface Props {
   next(): void;
 }
 
-class InformationForm extends Component<Props> {
-  context!: ContextType<typeof CartContext>
-  static contextType = CartContext;
+export default function InformationForm(props: Props) {
+  const { setAddress, user } = useContext(UserContext);
 
-  onValuesChange = (values: any, allValues: any) => {
-    const { updateUserInfo } = this.context;
-    updateUserInfo(allValues.user);
+  const onValuesChange = (values: any, allValues: any) => {
+    // const { updateUserInfo } = this.context;
+    setAddress(allValues.user);
   };
 
-  onFinish = (values: any) => {
+  const onFinish = (values: any) => {
     console.log('Success:', values);
-    this.props.next();
+    props.next();
   };
 
-  render() {
-      return (
-          <Row style={formContainerStyle}>
-            <Col span={24} style={columnStyle}>
-              <h2>Your information</h2>
-              <Form {...layout} 
-                name="nest-messages" 
-                onValuesChange={this.onValuesChange} 
-                validateMessages={validateMessages}
-                onFinish={this.onFinish}>
-                <Form.Item name={['user', 'name']} label="Name" 
-                    rules={[{ min: 2, required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name={['user', 'email']} label="Email" 
-                    rules={[{ min: 5, type: 'email', required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name={['user', 'phone']} label="Phone" 
-                    rules={[{ min: 10, max: 10, required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name={['user', 'street']} label="Street" 
-                    rules={[{ min: 5, required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name={['user', 'zipcode']} label="Zipcode" 
-                    rules={[{ min: 5, max: 5, required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name={['user', 'city']} label="City" 
-                    rules={[{ min: 3, required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 5 }}>
-                  <Button type="primary" htmlType="submit">
-                    Next
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Col>
-        </Row>
-      );
-    };
-  }
-
-  export default InformationForm;
-
-  const formContainerStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'space-around',
-    width: '100%',
-    margin: 'auto'
+  return (
+    <Row style={formContainerStyle}>
+      <Col span={24} style={columnStyle}>
+        <h2>Your information</h2>
+        <Form
+          {...layout}
+          name='nest-messages'
+          onValuesChange={onValuesChange}
+          validateMessages={validateMessages}
+          onFinish={onFinish}
+        >
+          <Form.Item name={['user', 'name']} label="Name"
+            rules={[{ min: 2}]}>
+            <Input defaultValue={user?.firstname} disabled />
+          </Form.Item>
+          <Form.Item name={['user', 'email']} label="Email"
+            rules={[{ min: 5, type: 'email' }]}>
+            <Input defaultValue={user?.email} disabled/>
+          </Form.Item>
+          <Form.Item
+            name={['user', 'phone']}
+            label='Phone'
+            rules={[{ min: 10, max: 10, required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name={['user', 'street']}
+            label='Street'
+            rules={[{ min: 5, required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name={['user', 'zipcode']}
+            label='Zipcode'
+            rules={[{ min: 5, max: 5, required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name={['user', 'city']}
+            label='City'
+            rules={[{ min: 3, required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 5 }}>
+            <Button type='primary' htmlType='submit'>
+              Next
+                        </Button>
+          </Form.Item>
+        </Form>
+      </Col>
+    </Row>
+  );
 }
+
+const formContainerStyle: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-around',
+  alignItems: 'space-around',
+  width: '100%',
+  margin: 'auto',
+};
 
 const columnStyle: CSSProperties = {
-    marginTop: '3rem',
-    marginBottom: '3rem',
-}
+  marginBottom: '3rem',
+};

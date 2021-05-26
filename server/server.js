@@ -3,6 +3,7 @@ const deliveryRouter = require("./resources/deliveryResource/deliveryRouter");
 const productRouter = require('./resources/productResource/productRouter');
 const orderRouter = require('./resources/orderResource/orderRouter');
 const userRouter = require('./resources/userResource/userRouter');
+const cookieRouter = require('./resources/cookieResource/cookieRouter');
 const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 require('express-async-errors');
@@ -19,6 +20,7 @@ app.use(
 		httpOnly: true,
 	})
 );
+
 /* ALL ROUTES */
 app.use(productRouter);
 app.use(orderRouter);
@@ -26,14 +28,14 @@ app.use(userRouter);
 app.use(deliveryRouter);
 
 
-
 /* ERROR HANDLING */
 app.use((req, res) => {
-    res.status(404).json('Wrong')
+    res.status(404).json('Error: Could not find')
 })
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).json(err.message);
+	// Lägg till felmeddelande för tex. mongoose.
 });
 
 /* CONNECT TO DATABASE */

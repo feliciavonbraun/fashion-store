@@ -9,10 +9,11 @@ import {
 } from 'react-router-dom';
 
 import ProductList from './ProductList';
-import UserList from './UserList';
+import AdminReqList from './AdminReqList';
 import OrderList from '../User/OrderList';
 import AddNewProduct from './AddNewProduct';
 import AdminEditDetails from './AdminEditDetails';
+import AdminOrderList from './AdminOrderList';
 
 const { Content, Sider } = Layout;
 
@@ -37,8 +38,12 @@ function Sidebar(props: Props) {
                             <Link to={`${props.match.url}/order-list`} />
                         </Menu.Item>
                         <Menu.Item key='3'>
-                            <span>Users</span>
-                            <Link to={`${props.match.url}/user-list`} />
+                            <span>Admin Requests</span>
+                            <Link to={`${props.match.url}/admin-list`} />
+                        </Menu.Item>
+                        <Menu.Item key='4'>
+                            <span>Orders (Admin)</span>
+                            <Link to={`${props.match.url}/admin-order-list`} />
                         </Menu.Item>
                     </Menu>
                 </Sider>
@@ -63,8 +68,12 @@ function Sidebar(props: Props) {
                             component={OrderList}
                         />
                         <Route
-                            path={`${props.match.url}/user-list`}
-                            component={UserList}
+                            path={`${props.match.url}/admin-list`}
+                            component={AdminReqList}
+                        />
+                        <Route
+                            path={`${props.match.url}/admin-order-list`}
+                            component={AdminOrderList}
                         />
                     </Content>
                 </Layout>
@@ -88,7 +97,8 @@ const mainContent: CSSProperties = {
 };
 
 const contentStyle: CSSProperties = {
-    boxSizing: 'border-box',
+    flex: 1,
+    minHeight: 'auto',
     minWidth: '18rem',
-    padding: '2rem',
+    padding: '3rem 2rem',
 };

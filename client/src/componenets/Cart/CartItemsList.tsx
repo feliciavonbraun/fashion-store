@@ -4,10 +4,6 @@ import { Product } from '../../contexts/ProductContext';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../../contexts/CartContext';
 
-export interface CartItem {
-    product: Product;
-    quantity: number;
-}
 class CartItemsList extends Component {
     context!: ContextType<typeof CartContext>;
     static contextType = CartContext;
@@ -78,10 +74,14 @@ class CartItemsList extends Component {
                                                     </span>,
                                                     <InputNumber
                                                         min={1}
-                                                        max={10}
-                                                        defaultValue={
-                                                            item.quantity
+                                                        max={
+                                                            item.product.qty >
+                                                            10
+                                                                ? 10
+                                                                : item.product
+                                                                      .qty
                                                         }
+                                                        defaultValue={item.qty}
                                                         onChange={(value) =>
                                                             this.onChangeQuantity(
                                                                 value,
@@ -91,7 +91,7 @@ class CartItemsList extends Component {
                                                         style={numberInputStyle}
                                                     />,
                                                     item.product.price *
-                                                        item.quantity +
+                                                        item.qty +
                                                         ' kr',
                                                 ]}
                                             />

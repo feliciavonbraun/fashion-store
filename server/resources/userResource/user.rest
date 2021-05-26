@@ -1,4 +1,4 @@
-
+// Register user
 POST http://localhost:4000/api/user/register
 Content-Type: application/json
 
@@ -13,30 +13,33 @@ Content-Type: application/json
 
 ###
 
+// Log in user
 POST http://localhost:4000/api/user/login
 Content-Type: application/json
 
 {
-        "email": "Janne",
-        "password": "3"
+        "email": "nej@nej.nej",
+        "password": "nej"
 }
 
 ###
 
+// Log out user
 DELETE http://localhost:4000/api/user/logout
 
 ###
 
+// Get all admin requests
 GET http://localhost:4000/api/user/admin
 
 ###
 
+// Handle admin request
 PATCH http://localhost:4000/api/user/admin
 Content-Type: application/json
 
 {
         "_id": "60a7b98cdfb5ef553c2ef58b",
-        "accept": true
-
+        "role": "admin",
+        "firstname": "Oskar"
 }
-
