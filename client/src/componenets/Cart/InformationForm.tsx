@@ -9,13 +9,17 @@ const layout = {
 
 /* eslint-disable no-template-curly-in-string */
 const validateMessages = {
-    required: '${label} is required!',
+    required: '${label} is required',
     types: {
-        email: '${label} is not a valid email!',
-        number: '${label} is not a valid number!',
+        email: '${label} is not a valid email',
+        number: '${label} must only contain numbers',
+    },
+    string: {
+        len: '${label} must be ${len} characters',
     },
     number: {
-        range: '${label} must be between ${min} and ${max}',
+        range: '${label} must be between ${min} and ${max} characters',
+        len: '${label} must be ${len} characters',
     },
 };
 
@@ -56,7 +60,7 @@ export default function InformationForm(props: Props) {
                     validateMessages={validateMessages}
                     initialValues={{
                         user: {
-                            name: user?.firstname,
+                            name: user?.firstname + ' ' + user?.lastname,
                             email: user?.email,
                         },
                     }}
@@ -79,7 +83,26 @@ export default function InformationForm(props: Props) {
                     <Form.Item
                         name={['user', 'phone']}
                         label='Phone'
-                        rules={[{ min: 10, max: 10, required: true }]}
+                        rules={[
+                            {
+                                type: 'string',
+                                len: 10,
+                                required: true,
+                            },
+                            () => ({
+                                validator(_, value) {
+                                    const regex = /^[0-9]*$/;
+                                    if (regex.test(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            'Phone can only contain digits'
+                                        )
+                                    );
+                                },
+                            }),
+                        ]}
                     >
                         <Input />
                     </Form.Item>
@@ -93,14 +116,33 @@ export default function InformationForm(props: Props) {
                     <Form.Item
                         name={['user', 'zipcode']}
                         label='Zipcode'
-                        rules={[{ min: 5, max: 5, required: true }]}
+                        rules={[
+                            {
+                                type: 'string',
+                                len: 5,
+                                required: true,
+                            },
+                            () => ({
+                                validator(_, value) {
+                                    const regex = /^[0-9]*$/;
+                                    if (regex.test(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            'Card number can only contain digits'
+                                        )
+                                    );
+                                },
+                            }),
+                        ]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         name={['user', 'city']}
                         label='City'
-                        rules={[{ min: 3, required: true }]}
+                        rules={[{ type: 'string', required: true }]}
                     >
                         <Input />
                     </Form.Item>
