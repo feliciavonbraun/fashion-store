@@ -6,7 +6,8 @@ import RegisterForm from './RegisterForm';
 function LogIn() {
   const [toggleForm, setToggleForm] = useState(false);
 
-  const { loginError } = useContext(UserContext)
+  const { loginError, emailResponse } = useContext(UserContext)
+
 
   return (
     <main style={backgroundImage}>
@@ -18,12 +19,21 @@ function LogIn() {
             : 'LOG IN'
           }
         </h2>
-        <p style ={errorMessage}>
-          {loginError !== 'none' && loginError}
-        </p>
+
         {toggleForm
-          ? <RegisterForm toggleForm={(value) => setToggleForm(value)} />
-          : <LogInForm toggleForm={(value) => setToggleForm(value)} />
+          ? <>
+              <p style ={errorMessage}>
+                  {emailResponse === 'notApproved' && "Email is already taken"}
+              </p>
+             
+           <RegisterForm toggleForm={(value) => setToggleForm(value)} />
+           </>
+          : <> 
+              <p style ={errorMessage}>
+                {loginError !== 'LoggedIn' && loginError}
+              </p>
+           <LogInForm toggleForm={(value) => setToggleForm(value)} />
+          </>
         }
       </div>
     </main>

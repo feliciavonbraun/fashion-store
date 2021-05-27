@@ -33,10 +33,9 @@ interface UserValue {
     adminRequests: User[];
     user?: User | null;
     address: Address;
-    validEmail: boolean;
+    emailResponse: string;
+    setEmailResponse: (value: string) => void;
     getUserOrders: () => void;
-    setLoginError: (error: string) => void;
-    setValidEmail: (value: boolean) => void;
     setAddress: React.Dispatch<React.SetStateAction<Address>>;
     loginUser: (email: string, password: string) => Promise<void>;
     logoutUser: () => Promise<void>;
@@ -54,7 +53,7 @@ function UserProvider({ children }: Props) {
     const [user, setUser] = useState<User | null>();
     const [userOrders, setUserOrders] = useState<Order[]>([]);
     const [address, setAddress] = useState<Address>(emptyAddress);
-    const [validEmail, setValidEmail] = useState(false);
+    const [emailResponse, setEmailResponse] = useState('noData');
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
     const getUserOrders = async () => {
@@ -86,19 +85,19 @@ function UserProvider({ children }: Props) {
 
     // REGISTER NEW USER
     async function registerUser(user: NewUser) {
-        const uniqueEmail = await makeRequest(
+        const emailResponse = await makeRequest(
             '/api/user/register',
             'POST',
             user
         );
 
-        if (uniqueEmail) {
-            setValidEmail(true);
+        if (emailResponse === 'approved') {
+            setEmailResponse('approved');
             if (user.adminRequest) {
                 getAllAdminRequests();
             }
         } else {
-            setValidEmail(false);
+            setEmailResponse('notApproved');
         }
     }
 
@@ -146,13 +145,13 @@ function UserProvider({ children }: Props) {
             value={{
                 loginError,
                 adminRequests,
-                validEmail,
+                emailResponse,
                 user,
                 userOrders,
                 address,
+                setEmailResponse,
                 getUserOrders,
                 setLoginError,
-                setValidEmail,
                 setAddress,
                 loginUser,
                 logoutUser,
