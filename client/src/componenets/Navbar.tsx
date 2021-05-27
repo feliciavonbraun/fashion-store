@@ -19,7 +19,7 @@ function Navbar() {
     return (
         <Header style={layoutStyle}>
             <Link to='/' style={logoLink}>
-                <img src={logo} alt='logo' style={li} onClick={() => setLoginError('none')} />
+                <img src={logo} alt='logo' style={li} />
             </Link>
             <Menu mode='horizontal' style={menuStyle}>
                 <Menu.Item key='1' style={li}>
@@ -30,7 +30,7 @@ function Navbar() {
                     </Link>
                 </Menu.Item>
                 <Menu.Item key='2' style={li}>
-                    <Link to='/login'>
+                    <Link to='/login' onClick={() => setLoginError('none')}>
                         <h3
                             style={{
                                 margin: 0,
