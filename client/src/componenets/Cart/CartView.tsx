@@ -51,11 +51,13 @@ function CartView() {
     return (
         <Row style={cartViewContainerStyle}>
             <CartItemsList />
-            <h3 style={priceTextStyle}>
-                Price products: {getTotalPriceProducts() + ' kr '}
-            </h3>
-            {!cart.length ? null : ifLoggedIn() ? (
+            {!cart.length ? (
+                <h3 style={priceTextStyle}>Your cart is empty</h3>
+            ) : ifLoggedIn() ? (
                 <>
+                    <h3 style={priceTextStyle}>
+                        Price products: {getTotalPriceProducts() + ' kr '}
+                    </h3>
                     <Steps
                         current={current}
                         style={{ marginTop: '7rem', marginBottom: '1rem' }}
@@ -75,6 +77,9 @@ function CartView() {
                         flexDirection: 'column',
                     }}
                 >
+                    <h3 style={priceTextStyle}>
+                        Price products: {getTotalPriceProducts() + ' kr '}
+                    </h3>
                     <h2 style={{ color: '#1890ff', marginBottom: '1.5rem' }}>
                         Log in to place your order
                     </h2>
