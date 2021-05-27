@@ -16,7 +16,7 @@ class CartItemsList extends Component {
     onChangeQuantity(quantity: number, product: Product) {
         const { addProductToCart } = this.context;
         addProductToCart(product, quantity);
-    }
+    };
 
     render() {
         return (
@@ -48,8 +48,7 @@ class CartItemsList extends Component {
                                                 avatar={
                                                     <Avatar
                                                         src={
-                                                            item.product
-                                                                .imageUrl
+                                                            item.product.imageUrl
                                                         }
                                                     />
                                                 }
@@ -75,11 +74,9 @@ class CartItemsList extends Component {
                                                     <InputNumber
                                                         min={1}
                                                         max={
-                                                            item.product.qty >
-                                                            10
+                                                            item.product.qty > 10
                                                                 ? 10
-                                                                : item.product
-                                                                      .qty
+                                                                : item.product.qty
                                                         }
                                                         defaultValue={item.qty}
                                                         onChange={(value) =>
@@ -90,9 +87,7 @@ class CartItemsList extends Component {
                                                         }
                                                         style={numberInputStyle}
                                                     />,
-                                                    item.product.price *
-                                                        item.qty +
-                                                        ' kr',
+                                                    item.product.price * item.qty + ' kr',
                                                 ]}
                                             />
                                         </List.Item>
@@ -105,7 +100,7 @@ class CartItemsList extends Component {
             </CartContext.Consumer>
         );
     }
-}
+};
 
 const listContainerStyle: CSSProperties = {
     display: 'flex',

@@ -13,10 +13,18 @@ const { Meta } = Card;
 const success = () => {
     message.success('The product was added to the cart', 5);
 };
+
 export default function ProductCardGrid(props: Props) {
-    const cartContext = useContext(CartContext);
-    const { addProductToCart } = cartContext;
     const { products } = props;
+    const { cart, addProductToCart } = useContext(CartContext);
+
+    const checkQty = (item: Product) => {
+        const inCart = cart.find((cartItem) => cartItem.product._id === item._id);
+        if (!inCart) {
+            return 0
+        }
+        return inCart.qty
+    };
 
     return (
         <Row style={cardContainer}>
@@ -44,7 +52,7 @@ export default function ProductCardGrid(props: Props) {
                                         />
                                     }
                                     actions={[
-                                        item.qty ? (
+                                        item.qty > checkQty(item) ? (
                                             <ShoppingCartOutlined
                                                 style={{ fontSize: '2rem' }}
                                                 onClick={(e) => {
@@ -75,7 +83,7 @@ export default function ProductCardGrid(props: Props) {
             </Col>
         </Row>
     );
-}
+};
 
 const cardContainer: CSSProperties = {
     display: 'flex',
