@@ -4,6 +4,7 @@ import { Image } from 'antd';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Product, ProductContext } from '../../contexts/ProductContext';
 import { CartContext } from '../../contexts/CartContext';
+import ErrorPage from '../ErrorPage';
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
@@ -78,7 +79,7 @@ function ProductDetails(props: Props) {
                         )}
                     </Col>
                 </>
-            ) : null}
+            ) : <ErrorPage />}
         </Row>
     );
 }
