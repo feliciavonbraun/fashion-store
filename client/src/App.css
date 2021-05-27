@@ -46,3 +46,24 @@ ul .ant-menu-horizontal {
     background: #1890ff !important;
     color: #ffff !important;
 }
+
+@media (max-width: 768px) {
+    .ant-steps {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ant-steps-horizontal:not(.ant-steps-label-vertical) .ant-steps-item {
+        padding-left: 0;
+    }
+
+
+    .ant-steps-item-container {
+        margin-top: .4rem;
+    }
+
+    .ant-steps-item-title::after {
+        display: none;
+    }
+
+}
