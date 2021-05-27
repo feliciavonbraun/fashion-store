@@ -87,13 +87,6 @@ function Profile(props: Props) {
                                 Log out
                             </Button>
                         </Menu.Item>
-                        {/* <Button
-                            type='primary'
-                            style={logOutButton}
-                            onClick={() => handleLogOut()}
-                        >
-                            Log out
-                        </Button> */}
                     </Menu>
                 </Sider>
 
