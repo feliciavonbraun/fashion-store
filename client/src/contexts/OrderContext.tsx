@@ -6,16 +6,16 @@ import { Product, ProductContext } from './ProductContext';
 import { DeliveryMethod } from './DeliveryContext';
 
 export interface OrderItem {
-    product: Product; // in cart from CartContext
+    product: Product;
     qty: number; // in cart from CartContext
-}
+};
 
 export interface Address {
     phone: number; // in userInfo from CartContext
     street: string; // in userInfo from CartContext
     zipcode: number; // in userInfo from CartContext
     city: string; // in userInfo from CartContext
-}
+};
 
 export interface Order {
     orderItems: OrderItem[];
@@ -28,7 +28,7 @@ export interface Order {
 
     delivery: DeliveryMethod;
     user: User;
-}
+};
 
 interface NewOrder {
     orderItems: OrderItem[];
@@ -36,18 +36,18 @@ interface NewOrder {
     totalprice: number;
     isSent: boolean;
     delivery: string;
-}
+};
 
 interface OrderValue {
     allOrders: Order[];
     getOneOrder: (_id: string) => void;
     newOrder: () => void;
     updateOrder: (order: Order) => Promise<Order>;
-}
+};
 
 interface Props {
     children: Object;
-}
+};
 
 export const OrderContext = createContext<OrderValue>({} as OrderValue);
 
@@ -68,12 +68,12 @@ function OrderProvider({ children }: Props) {
     async function getOrders() {
         const orders = await makeRequest('/api/order', 'GET');
         setAllOrders(orders);
-    }
+    };
 
     async function getOneOrder(_id: string) {
         const order = await makeRequest(`/api/order/${_id}`, 'GET');
         return order;
-    }
+    };
 
     async function newOrder() {
         const order: NewOrder = {
@@ -92,7 +92,7 @@ function OrderProvider({ children }: Props) {
         setAllProducts(products);
 
         return newOrder;
-    }
+    };
 
     async function updateOrder(order: Order) {
         const updatedOrder = await makeRequest(
@@ -102,7 +102,7 @@ function OrderProvider({ children }: Props) {
         );
         getOrders();
         return updatedOrder;
-    }
+    };
 
     return (
         <OrderContext.Provider
@@ -116,5 +116,5 @@ function OrderProvider({ children }: Props) {
             {children}
         </OrderContext.Provider>
     );
-}
+};
 export default OrderProvider;
