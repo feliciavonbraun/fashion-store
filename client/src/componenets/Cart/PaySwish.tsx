@@ -75,11 +75,7 @@ function PaySwish(props: Props) {
 export default PaySwish;
 
 const formContainerStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'space-around',
     width: '100%',
-    margin: 'auto',
 };
 
 const columnStyle: CSSProperties = {

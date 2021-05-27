@@ -28,10 +28,10 @@ export interface PaymentKlarna {
     street: string;
     zipcode: string;
     city: string;
-};
+}
 interface Props {
     next(): void;
-};
+}
 
 function PayKlarna(props: Props) {
     const { user, address } = useContext(UserContext);
@@ -65,7 +65,7 @@ function PayKlarna(props: Props) {
                             phone: address.phone,
                             street: address.street,
                             zipcode: address.zipcode,
-                            city: address.city
+                            city: address.city,
                         },
                     }}
                 >
@@ -94,14 +94,14 @@ function PayKlarna(props: Props) {
                         label='Lastname'
                         rules={[{ required: true }]}
                     >
-                        <Input defaultValue={user?.lastname} disabled />
+                        <Input value={user?.lastname} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'email']}
                         label='Email'
                         rules={[{ type: 'email', required: true }]}
                     >
-                        <Input defaultValue={user?.email} disabled />
+                        <Input value={user?.email} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'phone']}
@@ -110,7 +110,7 @@ function PayKlarna(props: Props) {
                             {
                                 min: 10,
                                 max: 10,
-                                required: true
+                                required: true,
                             },
                         ]}
                     >
@@ -152,13 +152,11 @@ function PayKlarna(props: Props) {
             </Col>
         </Row>
     );
-};
+}
 export default PayKlarna;
 
 const formContainerStyle: CSSProperties = {
-    display: 'flex',
     width: '100%',
-    margin: 'auto',
 };
 
 const columnStyle: CSSProperties = {

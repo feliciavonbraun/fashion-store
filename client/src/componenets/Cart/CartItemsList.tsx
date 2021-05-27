@@ -30,6 +30,7 @@ class CartItemsList extends Component {
                                     dataSource={cart}
                                     renderItem={(item) => (
                                         <List.Item
+                                            key={'item' + item.product._id}
                                             actions={[
                                                 <button
                                                     key='delete-item'
@@ -45,6 +46,7 @@ class CartItemsList extends Component {
                                             ]}
                                         >
                                             <List.Item.Meta
+                                                key={'meta' + item.product._id}
                                                 avatar={
                                                     <Avatar
                                                         src={
@@ -66,6 +68,10 @@ class CartItemsList extends Component {
                                                 description={[
                                                     <span
                                                         style={descriptionStyle}
+                                                        key={
+                                                            'span' +
+                                                            item.product._id
+                                                        }
                                                     >
                                                         {item.product.description.substring(
                                                             0,
@@ -73,6 +79,10 @@ class CartItemsList extends Component {
                                                         ) + '...'}
                                                     </span>,
                                                     <InputNumber
+                                                        key={
+                                                            'input' +
+                                                            item.product._id
+                                                        }
                                                         min={1}
                                                         max={
                                                             item.product.qty >
@@ -112,7 +122,10 @@ const listContainerStyle: CSSProperties = {
     justifyContent: 'space-around',
     alignItems: 'space-around',
     width: '80%',
-    margin: 'auto',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
 };
 
 const columnStyle: CSSProperties = {

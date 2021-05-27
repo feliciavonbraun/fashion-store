@@ -27,8 +27,6 @@ function ProductDetails(props: Props) {
         fetch();
     }, [_id, getProduct]);
 
-    console.log(_id);
-
     const handleAddClick = () => {
         success();
         addProductToCart(product!, undefined);
@@ -84,7 +82,10 @@ const detailContainer: CSSProperties = {
     display: 'flex',
     justifyContent: 'space-around',
     width: '80%',
-    margin: 'auto',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
 };
 
 const columnStyle: CSSProperties = {
