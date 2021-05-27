@@ -10,13 +10,17 @@ const layout = {
 
 /* eslint-disable no-template-curly-in-string */
 const validateMessages = {
-    required: '${label} is required!',
+    required: '${label} is required',
     types: {
-        email: '${label} is not a valid email!',
-        number: '${label} is not a valid number!',
+        email: '${label} is not a valid email',
+        number: '${label} is not a valid number',
+    },
+    string: {
+        len: '${label} must be ${len} characters',
+        range: '${label} must be between ${min} and ${max} characters',
     },
     number: {
-        range: '${label} must be between ${min} and ${max}',
+        range: '${label} must be between ${min} and ${max} digits',
     },
 };
 export interface PaymentCard {
@@ -61,28 +65,83 @@ function PayCard(props: Props) {
                     <Form.Item
                         name={['card', 'cardno']}
                         label='Card number'
-                        rules={[{ min: 13, max: 19, required: true }]}
+                        rules={[
+                            {
+                                type: 'string',
+                                min: 13,
+                                max: 19,
+                                required: true,
+                            },
+                            () => ({
+                                validator(_, value) {
+                                    const regex = /^[0-9]*$/;
+                                    if (regex.test(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            'Card number can only contain digits'
+                                        )
+                                    );
+                                },
+                            }),
+                        ]}
                     >
                         <Input placeholder='XXXX XXXX XXXX XXXX' />
                     </Form.Item>
                     <Form.Item
                         name={['card', 'expdate']}
                         label='Expiry date'
-                        rules={[{ min: 5, max: 5, required: true }]}
+                        rules={[
+                            { type: 'string', len: 5, required: true },
+                            () => ({
+                                validator(_, value) {
+                                    const regex = /(0[1-9]|1[0-2])\/[0-9]{2}/;
+                                    if (regex.test(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            'Make sure expiry date is written in format MM/YY'
+                                        )
+                                    );
+                                },
+                            }),
+                        ]}
                     >
                         <Input placeholder='MM/YY' />
                     </Form.Item>
                     <Form.Item
                         name={['card', 'name']}
                         label='Name on card'
-                        rules={[{ min: 2, required: true }]}
+                        rules={[{ type: 'string', required: true }]}
                     >
                         <Input value={`${user?.firstname} ${user?.lastname}`} />
                     </Form.Item>
                     <Form.Item
                         name={['card', 'cvc']}
                         label='CVC/CCV'
-                        rules={[{ min: 3, max: 3, required: true }]}
+                        rules={[
+                            {
+                                type: 'string',
+                                min: 3,
+                                max: 4,
+                                required: true,
+                            },
+                            () => ({
+                                validator(_, value) {
+                                    const regex = /^[0-9]*$/;
+                                    if (regex.test(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            'CVC/CCV can only contain digits'
+                                        )
+                                    );
+                                },
+                            }),
+                        ]}
                     >
                         <Input placeholder='e.g. 123' />
                     </Form.Item>
