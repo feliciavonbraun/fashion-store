@@ -1,7 +1,7 @@
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Input, InputNumber, Button, message } from 'antd';
 import { NewProduct, ProductContext } from '../../contexts/ProductContext';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Select } from 'antd';
 
 const { Option } = Select;
@@ -36,6 +36,7 @@ export default function AddNewProduct() {
     const productContext = useContext(ProductContext);
     const { newProduct, allCategories } = productContext;
     const [buttonSaveLoading, setButtonSaveLoading] = useState(false);
+    // const [isCancelled, setIsCancelled] = useState(false);
 
     const onFinish = async (product: NewProduct) => {
         setButtonSaveLoading(true);
@@ -125,6 +126,11 @@ export default function AddNewProduct() {
                             justifyContent: 'space-between',
                         }}
                     >
+                        <Link to={'/user/product-list'} >
+                            <Button type='ghost'>
+                                Cancel
+                            </Button>
+                        </Link>
                         <Button
                             type='primary'
                             htmlType='submit'

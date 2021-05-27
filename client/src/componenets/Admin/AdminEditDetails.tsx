@@ -1,6 +1,6 @@
 import { Form, Input, Button, message, InputNumber } from 'antd';
-import { useContext, useEffect, useState } from 'react';
-import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
 import {
     NewProduct,
     Product,
@@ -177,6 +177,21 @@ function AdminEditDetails(props: Props) {
                                 justifyContent: 'space-between',
                             }}
                         >
+                            <Link to={'/user/product-list'} >
+                                <Button type='ghost'>
+                                    Cancel
+                                </Button>
+                            </Link>
+                            <div>
+                            <Button
+                                type='primary'
+                                danger
+                                style={{marginRight:'.3rem'}}
+                                onClick={handleDelete}
+                                loading={buttonDeleteLoading}
+                            >
+                                Delete
+                            </Button>
                             <Button
                                 type='primary'
                                 htmlType='submit'
@@ -184,15 +199,7 @@ function AdminEditDetails(props: Props) {
                             >
                                 Save
                             </Button>
-
-                            <Button
-                                type='primary'
-                                danger
-                                onClick={handleDelete}
-                                loading={buttonDeleteLoading}
-                            >
-                                Delete
-                            </Button>
+                            </div>
                         </div>
                     </Form.Item>
                 </Form>
