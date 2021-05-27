@@ -29,10 +29,11 @@ const emptyAddress: Address = {
 
 interface UserValue {
     userOrders: Order[];
-    loginError: string;
     adminRequests: User[];
     user?: User | null;
     address: Address;
+    loginError: string;
+    setLoginError: (value: string) => void
     emailResponse: string;
     setEmailResponse: (value: string) => void;
     getUserOrders: () => void;
@@ -49,7 +50,7 @@ interface Props {
 
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
-    const [loginError, setLoginError] = useState('none');
+    const [loginError, setLoginError] = useState('');
     const [user, setUser] = useState<User | null>();
     const [userOrders, setUserOrders] = useState<Order[]>([]);
     const [address, setAddress] = useState<Address>(emptyAddress);
@@ -111,7 +112,7 @@ function UserProvider({ children }: Props) {
         const res = await makeRequest('/api/user/login', 'POST', user);
         if (res.email) {
             setUser(res);
-            setLoginError('none');
+            setLoginError('');
         } else {
             setLoginError(res);
         }
