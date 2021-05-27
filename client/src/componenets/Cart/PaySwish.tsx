@@ -11,6 +11,10 @@ const layout = {
 /* eslint-disable no-template-curly-in-string */
 const validateMessages = {
     required: '${label} is required!',
+    string: {
+        len: '${label} must be ${len} characters',
+        range: '${label} must be between ${min} and ${max} characters',
+    },
     number: {
         range: '${label} must be between ${min} and ${max}',
     },
@@ -48,10 +52,23 @@ function PaySwish(props: Props) {
                         label='Phone'
                         rules={[
                             {
-                                min: 10,
-                                max: 10,
+                                type: 'string',
+                                len: 10,
                                 required: true,
                             },
+                            () => ({
+                                validator(_, value) {
+                                    const regex = /^[0-9]*$/;
+                                    if (regex.test(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            'Phone can only contain digits'
+                                        )
+                                    );
+                                },
+                            }),
                         ]}
                     >
                         <Input />
@@ -75,11 +92,7 @@ function PaySwish(props: Props) {
 export default PaySwish;
 
 const formContainerStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'space-around',
     width: '100%',
-    margin: 'auto',
 };
 
 const columnStyle: CSSProperties = {

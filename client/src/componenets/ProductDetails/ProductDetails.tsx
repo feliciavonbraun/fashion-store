@@ -14,8 +14,7 @@ const success = () => {
 function ProductDetails(props: Props) {
     const productContext = useContext(ProductContext);
     const { getProduct } = productContext;
-    const cartContext = useContext(CartContext);
-    const { addProductToCart } = cartContext;
+    const { cart, addProductToCart } = useContext(CartContext);
     const _id = props.match.params.id;
     const [product, setProduct] = useState<Product>();
 
@@ -27,11 +26,17 @@ function ProductDetails(props: Props) {
         fetch();
     }, [_id, getProduct]);
 
-    console.log(_id);
-
     const handleAddClick = () => {
         success();
         addProductToCart(product!, undefined);
+    };
+
+    const checkQty = () => {
+        const inCart = cart.find((cartItem) => cartItem.product._id === product?._id);
+        if (!inCart) {
+            return 0
+        }
+        return inCart.qty
     };
 
     return (
@@ -46,7 +51,7 @@ function ProductDetails(props: Props) {
                         <h2 style={titleStyle}>{product.title}</h2>
                         <h4>{product.description} </h4>
                         <h2 style={price}>{product.price + ' kr'} </h2>
-                        {product.qty ? (
+                        {product.qty > checkQty() ? (
                             <Button
                                 type='primary'
                                 style={{
@@ -84,7 +89,10 @@ const detailContainer: CSSProperties = {
     display: 'flex',
     justifyContent: 'space-around',
     width: '80%',
-    margin: 'auto',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
 };
 
 const columnStyle: CSSProperties = {

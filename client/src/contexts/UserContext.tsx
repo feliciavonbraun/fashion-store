@@ -1,5 +1,5 @@
 import { Address, Order } from './OrderContext';
-import { createContext, useEffect, useState, useCallback } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { makeRequest } from '../makeRequest';
 
 export interface User {
@@ -31,9 +31,10 @@ interface UserValue {
     userOrders: Order[];
     loginError: string;
     adminRequests: User[];
-    user?: User;
+    user?: User | null;
     address: Address;
     validEmail: boolean;
+    getUserOrders: () => void;
     setLoginError: (error: string) => void;
     setValidEmail: (value: boolean) => void;
     setAddress: React.Dispatch<React.SetStateAction<Address>>;
@@ -50,30 +51,36 @@ interface Props {
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
     const [loginError, setLoginError] = useState('none');
-    const [user, setUser] = useState<User>();
+    const [user, setUser] = useState<User | null>();
     const [userOrders, setUserOrders] = useState<Order[]>([]);
     const [address, setAddress] = useState<Address>(emptyAddress);
     const [validEmail, setValidEmail] = useState(false);
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
-    const getUserOrders = useCallback(async () => {
+    const getUserOrders = async () => {
         if (!user) return;
 
         const userOrders = await makeRequest(`/api/order/user/${user._id}`);
         setUserOrders(userOrders);
+    };
+
+    useEffect(() => {
+        (async function () {
+            if (!user) return;
+
+            const userOrders = await makeRequest(`/api/order/user/${user._id}`);
+            setUserOrders(userOrders);
+        })();
     }, [user]);
 
     useEffect(() => {
-        getUserOrders();
         getAllAdminRequests();
-    }, [getUserOrders]);
+    }, []);
 
     useEffect(() => {
         (async function () {
             const user = await makeRequest('/api/user/auth');
-            if (user.email) {
-                setUser(user);
-            }
+            setUser(user);
         })();
     }, [setUser]);
 
@@ -114,7 +121,7 @@ function UserProvider({ children }: Props) {
     // LOG OUT USER
     async function logoutUser() {
         await makeRequest('/api/user/logout', 'DELETE');
-        setUser(undefined);
+        setUser(null);
     }
 
     // GET ALL ADMIN REQUESTS
@@ -143,6 +150,7 @@ function UserProvider({ children }: Props) {
                 user,
                 userOrders,
                 address,
+                getUserOrders,
                 setLoginError,
                 setValidEmail,
                 setAddress,

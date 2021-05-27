@@ -15,6 +15,10 @@ const validateMessages = {
         email: '${label} is not a valid email!',
         number: '${label} is not a valid number!',
     },
+    string: {
+        len: '${label} must be ${len} characters',
+        range: '${label} must be between ${min} and ${max} characters',
+    },
     number: {
         range: '${label} must be between ${min} and ${max}',
     },
@@ -28,10 +32,10 @@ export interface PaymentKlarna {
     street: string;
     zipcode: string;
     city: string;
-};
+}
 interface Props {
     next(): void;
-};
+}
 
 function PayKlarna(props: Props) {
     const { user, address } = useContext(UserContext);
@@ -65,7 +69,7 @@ function PayKlarna(props: Props) {
                             phone: address.phone,
                             street: address.street,
                             zipcode: address.zipcode,
-                            city: address.city
+                            city: address.city,
                         },
                     }}
                 >
@@ -74,10 +78,21 @@ function PayKlarna(props: Props) {
                         label='SSN'
                         rules={[
                             {
-                                min: 10,
-                                max: 10,
+                                type: 'string',
+                                len: 10,
                                 required: true,
                             },
+                            () => ({
+                                validator(_, value) {
+                                    const regex = /^[0-9]*$/;
+                                    if (regex.test(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error('SSN can only contain digits')
+                                    );
+                                },
+                            }),
                         ]}
                     >
                         <Input type='number' placeholder='YYMMDDXXXX' />
@@ -94,24 +109,37 @@ function PayKlarna(props: Props) {
                         label='Lastname'
                         rules={[{ required: true }]}
                     >
-                        <Input defaultValue={user?.lastname} disabled />
+                        <Input value={user?.lastname} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'email']}
                         label='Email'
                         rules={[{ type: 'email', required: true }]}
                     >
-                        <Input defaultValue={user?.email} disabled />
+                        <Input value={user?.email} disabled />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'phone']}
                         label='Phone'
                         rules={[
                             {
-                                min: 10,
-                                max: 10,
-                                required: true
+                                type: 'string',
+                                len: 10,
+                                required: true,
                             },
+                            () => ({
+                                validator(_, value) {
+                                    const regex = /^[0-9]*$/;
+                                    if (regex.test(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            'Phone can only contain digits'
+                                        )
+                                    );
+                                },
+                            }),
                         ]}
                     >
                         <Input />
@@ -119,21 +147,36 @@ function PayKlarna(props: Props) {
                     <Form.Item
                         name={['klarna', 'street']}
                         label='Street'
-                        rules={[{ required: true }]}
+                        rules={[{ type: 'string', required: true }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'zipcode']}
                         label='Zip-code'
-                        rules={[{ required: true }]}
+                        rules={[
+                            { type: 'string', len: 5, required: true },
+                            () => ({
+                                validator(_, value) {
+                                    const regex = /^[0-9]*$/;
+                                    if (regex.test(value)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            'Zipcode can only contain digits'
+                                        )
+                                    );
+                                },
+                            }),
+                        ]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         name={['klarna', 'city']}
                         label='City'
-                        rules={[{ required: true }]}
+                        rules={[{ type: 'string', required: true }]}
                     >
                         <Input />
                     </Form.Item>
@@ -152,13 +195,11 @@ function PayKlarna(props: Props) {
             </Col>
         </Row>
     );
-};
+}
 export default PayKlarna;
 
 const formContainerStyle: CSSProperties = {
-    display: 'flex',
     width: '100%',
-    margin: 'auto',
 };
 
 const columnStyle: CSSProperties = {
