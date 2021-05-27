@@ -8,14 +8,14 @@ import { DeliveryMethod } from './DeliveryContext';
 export interface OrderItem {
     product: Product;
     qty: number; // in cart from CartContext
-};
+}
 
 export interface Address {
     phone: number; // in userInfo from CartContext
     street: string; // in userInfo from CartContext
     zipcode: number; // in userInfo from CartContext
     city: string; // in userInfo from CartContext
-};
+}
 
 export interface Order {
     orderItems: OrderItem[];
@@ -28,7 +28,7 @@ export interface Order {
 
     delivery: DeliveryMethod;
     user: User;
-};
+}
 
 interface NewOrder {
     orderItems: OrderItem[];
@@ -36,18 +36,18 @@ interface NewOrder {
     totalprice: number;
     isSent: boolean;
     delivery: string;
-};
+}
 
 interface OrderValue {
     allOrders: Order[];
     getOneOrder: (_id: string) => void;
     newOrder: () => void;
     updateOrder: (order: Order) => Promise<Order>;
-};
+}
 
 interface Props {
     children: Object;
-};
+}
 
 export const OrderContext = createContext<OrderValue>({} as OrderValue);
 
@@ -55,7 +55,7 @@ function OrderProvider({ children }: Props) {
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
     const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
-    const { address, user } = useContext(UserContext);
+    const { address, user, getUserOrders } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
     useEffect(() => {
@@ -68,12 +68,12 @@ function OrderProvider({ children }: Props) {
     async function getOrders() {
         const orders = await makeRequest('/api/order', 'GET');
         setAllOrders(orders);
-    };
+    }
 
     async function getOneOrder(_id: string) {
         const order = await makeRequest(`/api/order/${_id}`, 'GET');
         return order;
-    };
+    }
 
     async function newOrder() {
         const order: NewOrder = {
@@ -87,12 +87,13 @@ function OrderProvider({ children }: Props) {
 
         /* Updates orders */
         getOrders();
+        getUserOrders();
         /* Updates products in product context, since qty has changed */
         const products = await getProducts();
         setAllProducts(products);
 
         return newOrder;
-    };
+    }
 
     async function updateOrder(order: Order) {
         const updatedOrder = await makeRequest(
@@ -100,9 +101,13 @@ function OrderProvider({ children }: Props) {
             'PUT',
             order
         );
+
+        /* Updates orders */
         getOrders();
+        getUserOrders();
+
         return updatedOrder;
-    };
+    }
 
     return (
         <OrderContext.Provider
@@ -116,5 +121,5 @@ function OrderProvider({ children }: Props) {
             {children}
         </OrderContext.Provider>
     );
-};
+}
 export default OrderProvider;

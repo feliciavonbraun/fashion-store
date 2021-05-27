@@ -1,5 +1,5 @@
 import { Address, Order } from './OrderContext';
-import { createContext, useEffect, useState, useCallback } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { makeRequest } from '../makeRequest';
 
 export interface User {
@@ -34,6 +34,7 @@ interface UserValue {
     user?: User | null;
     address: Address;
     validEmail: boolean;
+    getUserOrders: () => void;
     setLoginError: (error: string) => void;
     setValidEmail: (value: boolean) => void;
     setAddress: React.Dispatch<React.SetStateAction<Address>>;
@@ -56,17 +57,25 @@ function UserProvider({ children }: Props) {
     const [validEmail, setValidEmail] = useState(false);
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
-    const getUserOrders = useCallback(async () => {
+    const getUserOrders = async () => {
         if (!user) return;
 
         const userOrders = await makeRequest(`/api/order/user/${user._id}`);
         setUserOrders(userOrders);
+    };
+
+    useEffect(() => {
+        (async function () {
+            if (!user) return;
+
+            const userOrders = await makeRequest(`/api/order/user/${user._id}`);
+            setUserOrders(userOrders);
+        })();
     }, [user]);
 
     useEffect(() => {
-        getUserOrders();
         getAllAdminRequests();
-    }, [getUserOrders]);
+    }, []);
 
     useEffect(() => {
         (async function () {
@@ -141,6 +150,7 @@ function UserProvider({ children }: Props) {
                 user,
                 userOrders,
                 address,
+                getUserOrders,
                 setLoginError,
                 setValidEmail,
                 setAddress,
