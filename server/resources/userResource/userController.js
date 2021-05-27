@@ -1,34 +1,42 @@
 const UserModel = require('./userModel');
 const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator');
 
 /* REGISTER USER */
 exports.registerUser = async (req, res) => {
-    try {
-        const emailExist = await UserModel.findOne({ email: req.body.email });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('error message')
+        return res.status(400).json({errors: errors.array()});
+    }
 
-        if (emailExist) {
-            res.status(400).json(false);
-        } else {
-            const password = await bcrypt.hash(req.body.password, 5);
-            const user = new UserModel({
-                firstname: req.body.firstname,
-                lastname: req.body.lastname,
-                email: req.body.email,
-                password: password,
-                role: 'user',
-                adminRequest: req.body.adminRequest,
-            });
+    const emailExist = await UserModel.findOne({ email: req.body.email });
+    if (emailExist) {
+        res.status(400).json(false);
+    } else {
+        const password = await bcrypt.hash(req.body.password, 5);
+        const user = new UserModel({
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
+            password: password,
+            role: 'user',
+            adminRequest: req.body.adminRequest,
+        });
 
-            await user.save();
-            res.status(201).json(true);
-        }
-    } catch (error) {
-        console.log(error);
+        await user.save();
+        res.status(201).json(true);
     }
 };
 
 /* LOG IN USER AND SET COOKIE */
 exports.loginUser = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('error message')
+        return res.status(400).json({errors: errors.array()});
+    }
+    
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email: email }).select('+password');
 

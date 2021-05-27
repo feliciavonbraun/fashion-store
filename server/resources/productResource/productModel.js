@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 
 const ProductSchema = new mongoose.Schema({
-    title: { type: String, required: [true, 'Please enter a product name'] },
+    title: { 
+        type: String, 
+        required: [true, 'Please enter a product name'] },
     description: {
         type: String,
         required: [true, 'Please enter a product description'],
@@ -18,7 +20,9 @@ const ProductSchema = new mongoose.Schema({
         type: [String],
         required: [true, 'Please enter a product category'],
     },
-    qty: { type: Number, required: [true, 'Please enter a product quantity'] },
+    qty: { 
+        type: Number, 
+        required: [true, 'Please enter a product quantity'] },
 });
 
 const ProductModel = mongoose.model('product', ProductSchema);
