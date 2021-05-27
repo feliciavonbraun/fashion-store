@@ -61,13 +61,17 @@ function OrderProvider({ children }: Props) {
     useEffect(() => {
         (async function () {
             const orders = await makeRequest('/api/order', 'GET');
-            setAllOrders(orders);
+            if (typeof orders !== 'string') {
+                setAllOrders(orders);
+            }
         })();
     }, [user]);
 
     async function getOrders() {
         const orders = await makeRequest('/api/order', 'GET');
-        setAllOrders(orders);
+        if (typeof orders !== 'string') {
+            setAllOrders(orders);
+        }
     }
 
     async function getOneOrder(_id: string) {

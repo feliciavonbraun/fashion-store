@@ -33,7 +33,7 @@ interface UserValue {
     user?: User | null;
     address: Address;
     loginError: string;
-    setLoginError: (value: string) => void
+    setLoginError: (value: string) => void;
     emailResponse: string;
     setEmailResponse: (value: string) => void;
     getUserOrders: () => void;
@@ -69,7 +69,9 @@ function UserProvider({ children }: Props) {
             if (!user) return;
 
             const userOrders = await makeRequest(`/api/order/user/${user._id}`);
-            setUserOrders(userOrders);
+            if (typeof userOrders !== 'string') {
+                setUserOrders(userOrders);
+            }
         })();
     }, [user]);
 
@@ -82,7 +84,7 @@ function UserProvider({ children }: Props) {
             const user = await makeRequest('/api/user/auth');
             setUser(user);
         })();
-    }, [setUser]);
+    });
 
     // REGISTER NEW USER
     async function registerUser(user: NewUser) {
@@ -126,8 +128,10 @@ function UserProvider({ children }: Props) {
 
     // GET ALL ADMIN REQUESTS
     async function getAllAdminRequests() {
-        const allRequsts = await makeRequest('/api/user/admin', 'GET');
-        setAdminrequests(allRequsts);
+        const allRequests = await makeRequest('/api/user/admin', 'GET');
+        if (typeof allRequests !== 'string') {
+            setAdminrequests(allRequests);
+        }
     }
 
     // RESPONSE TO ADMIN REQUEST
