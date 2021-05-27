@@ -1,22 +1,28 @@
-import { CSSProperties, useContext, useEffect } from 'react';
+import { CSSProperties, useContext, useEffect, useState } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { NewUser, UserContext } from '../../contexts/UserContext';
 
 interface Props {
     toggleForm: (value: boolean) => void;
+
+
 }
 
 // TODO: Visa felmeddelande om användaren skriver in en mail som redan finns.
 
 function RegisterForm(props: Props) {
-    const { registerUser, validEmail, setValidEmail } = useContext(UserContext);
+    const { registerUser, emailResponse, setEmailResponse } = useContext(UserContext);
+
+
 
     useEffect(() => {
-        if (validEmail) {
+        if (emailResponse === 'approved') {
             props.toggleForm(false);
-            setValidEmail(false);
-        }
-    });
+            setEmailResponse('noData');
+        } 
+            
+    },[props, emailResponse, setEmailResponse]);
+    
 
     const onFinish = (form: any) => {
         const user: NewUser = {
@@ -28,10 +34,7 @@ function RegisterForm(props: Props) {
             role: 'user',
         };
         registerUser(user);
-    };
-
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
+        
     };
 
     return (
@@ -41,7 +44,7 @@ function RegisterForm(props: Props) {
                 remember: true,
             }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+           
         >
             <Form.Item
                 name='firstname'
@@ -75,18 +78,22 @@ function RegisterForm(props: Props) {
                 <Input placeholder='Lastname' style={{ padding: '.8rem' }} />
             </Form.Item>
 
-            <Form.Item
-                shouldUpdate
+                <Form.Item
                 name='email'
                 rules={[
                     {
-                        type: 'email',
-                        required: true,
-                        message: 'Please input your e-mail',
-                    },
-                ]}
+                    type: 'email',
+                    required: true,
+                    message: 'Please input your e-mail',
+                },      
+            ]}  
+            validateStatus= {emailResponse === 'notApproved' ? 'error' : 'success'}   
             >
-                <Input placeholder='E-mail' style={{ padding: '.8rem' }} />
+                <Input
+                    placeholder='E-mail'
+                    style={{ padding: '.8rem' }}
+                    onChange={() => setEmailResponse('noData')}
+                />
             </Form.Item>
 
             <Form.Item name='password-control' style={{ marginBottom: '0' }}>
@@ -96,7 +103,7 @@ function RegisterForm(props: Props) {
                         {
                             required: true,
                             message: 'Please input your password',
-                        },
+                        }, 
                     ]}
                     style={{
                         display: 'inline-block',
@@ -154,7 +161,7 @@ function RegisterForm(props: Props) {
                     Register
                 </Button>
             </Form.Item>
-            <h3 style={cancelButton} onClick={() => props.toggleForm(false)}>
+            <h3 style={cancelButton} onClick={() =>{props.toggleForm(false); setEmailResponse('noData')}}>
                 Cancel
             </h3>
         </Form>
