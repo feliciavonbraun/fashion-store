@@ -8,6 +8,7 @@ import { CartContext } from '../../contexts/CartContext';
 import CompleteOrder from './CompleteOrder';
 import { UserContext } from '../../contexts/UserContext';
 import LogInForm from '../LogIn/LogInForm';
+import '../../App.css';
 
 const { Step } = Steps;
 
@@ -60,10 +61,11 @@ function CartView() {
                     </h3>
                     <Steps
                         current={current}
-                        style={{ marginTop: '7rem', marginBottom: '1rem' }}
+                        className='stepNumber'
+                        style={{ marginTop: '7rem', marginBottom: '1rem'}}
                     >
                         {steps.map((item) => (
-                            <Step key={item.title} title={item.title} />
+                            <Step key={item.title} title={item.title}  />
                         ))}
                     </Steps>
                     <StepsComponent next={next} />
