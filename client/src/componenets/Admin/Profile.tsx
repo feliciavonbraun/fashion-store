@@ -78,13 +78,15 @@ function Profile(props: Props) {
                                 <Link to={`${props.match.url}/order-list`} />
                             </Menu.Item>
                         )}
-                        <Button
-                            type='primary'
-                            style={logOutButton}
+                        <Menu.Item
+                            style={buttonContainer}
+                            key='5'
                             onClick={handleLogOut}
                         >
-                            Log out
-                        </Button>
+                            <Button type='primary' style={logOutButton}>
+                                Log out
+                            </Button>
+                        </Menu.Item>
                     </Menu>
                 </Sider>
 
@@ -151,8 +153,13 @@ const contentStyle: CSSProperties = {
     padding: '3rem 2rem',
 };
 
+const buttonContainer: CSSProperties = {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'flex-end',
+};
+
 const logOutButton: CSSProperties = {
-    position: 'absolute',
-    bottom: '3rem',
-    margin: '0 auto',
+    width: '100%',
+    marginBottom: '1rem',
 };

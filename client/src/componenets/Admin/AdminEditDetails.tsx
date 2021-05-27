@@ -108,7 +108,7 @@ function AdminEditDetails(props: Props) {
                         label='Title'
                         rules={[{ required: true }]}
                     >
-                        <Input.TextArea defaultValue={product.title} />
+                        <Input.TextArea />
                     </Form.Item>
 
                     <Form.Item
@@ -117,7 +117,7 @@ function AdminEditDetails(props: Props) {
                         label='Description'
                         rules={[{ required: true }]}
                     >
-                        <Input.TextArea defaultValue={product.description} />
+                        <Input.TextArea />
                     </Form.Item>
 
                     <Form.Item
@@ -126,7 +126,7 @@ function AdminEditDetails(props: Props) {
                         label='Price'
                         rules={[{ required: true }]}
                     >
-                        <InputNumber min={1} defaultValue={product.price} />
+                        <InputNumber min={1} />
                     </Form.Item>
 
                     <Form.Item
@@ -135,7 +135,7 @@ function AdminEditDetails(props: Props) {
                         label='ImageUrl'
                         rules={[{ required: true }]}
                     >
-                        <Input.TextArea defaultValue={product.imageUrl} />
+                        <Input.TextArea />
                     </Form.Item>
 
                     <Form.Item
@@ -145,7 +145,6 @@ function AdminEditDetails(props: Props) {
                         rules={[{ required: true }]}
                     >
                         <Select
-                            defaultValue={product.category}
                             mode='tags'
                             style={{ width: '100%' }}
                             tokenSeparators={[',']}
@@ -168,7 +167,7 @@ function AdminEditDetails(props: Props) {
                         label='Storage qty'
                         rules={[{ required: true }]}
                     >
-                        <InputNumber defaultValue={product.qty} />
+                        <InputNumber />
                     </Form.Item>
 
                     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>

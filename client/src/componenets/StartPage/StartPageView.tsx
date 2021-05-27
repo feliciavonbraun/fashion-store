@@ -21,6 +21,7 @@ export default function StartPageView() {
             }
         };
         fetchProducts();
+        return function cleanup() {};
     }, [category, getProducts, getCategoryProducts]);
 
     return (
