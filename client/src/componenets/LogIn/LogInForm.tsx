@@ -59,7 +59,7 @@ function LogInForm(props: Props) {
                     prefix={<UserOutlined style={inputIconStyle} />}
                     placeholder='E-mail'
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {setEmail(e.target.value); setLoginError('none')}}
                     style={{ padding: '.8rem' }}
                 />
             </Form.Item>

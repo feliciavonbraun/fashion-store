@@ -50,7 +50,7 @@ interface Props {
 
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
-    const [loginError, setLoginError] = useState('');
+    const [loginError, setLoginError] = useState('none');
     const [user, setUser] = useState<User | null>();
     const [userOrders, setUserOrders] = useState<Order[]>([]);
     const [address, setAddress] = useState<Address>(emptyAddress);
@@ -112,7 +112,7 @@ function UserProvider({ children }: Props) {
         const res = await makeRequest('/api/user/login', 'POST', user);
         if (res.email) {
             setUser(res);
-            setLoginError('');
+            setLoginError('none');
         } else {
             setLoginError(res);
         }

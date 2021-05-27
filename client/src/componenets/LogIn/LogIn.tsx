@@ -30,7 +30,7 @@ function LogIn() {
            </>
           : <> 
               <p style ={errorMessage}>
-                {loginError !== 'LoggedIn' && loginError}
+                {loginError !== 'none' && loginError}
               </p>
            <LogInForm toggleForm={(value) => setToggleForm(value)} />
           </>
