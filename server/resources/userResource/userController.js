@@ -1,36 +1,48 @@
-const UserModel = require("./userModel");
-const bcrypt = require("bcrypt");
+
+const UserModel = require('./userModel');
+const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator');
 
 /* REGISTER USER */
 exports.registerUser = async (req, res) => {
-	try {
-		const emailExist = await UserModel.findOne({ email: req.body.email });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('error message')
+        return res.status(400).json({errors: errors.array()});
+    }
 
-		if (emailExist) {
-			res.status(400).json("notApproved");
-		} else {
-			const password = await bcrypt.hash(req.body.password, 5);
-			const user = new UserModel({
-				firstname: req.body.firstname,
-				lastname: req.body.lastname,
-				email: req.body.email,
-				password: password,
-				role: "user",
-				adminRequest: req.body.adminRequest,
-			});
+    const emailExist = await UserModel.findOne({ email: req.body.email });
+    if (emailExist) {
+       res.status(400).json("notApproved");
+    } else {
+        const password = await bcrypt.hash(req.body.password, 5);
+        const user = new UserModel({
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
+            password: password,
+            role: 'user',
+            adminRequest: req.body.adminRequest,
+        });
 
-			await user.save();
-			res.status(201).json("approved");
-		}
-	} catch (error) {
-		console.log(error);
-	}
+        await user.save();
+       	res.status(201).json("approved");
+    }
+
 };
 
 /* LOG IN USER AND SET COOKIE */
 exports.loginUser = async (req, res) => {
-	const { email, password } = req.body;
-	const user = await UserModel.findOne({ email: email }).select("+password");
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('error message')
+        return res.status(400).json({errors: errors.array()});
+    }
+    
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email: email }).select('+password');
+
 
 	if (!user || !(await bcrypt.compare(password, user.password))) {
 		res.status(400).json("Incorrect e-mail or password");
@@ -45,7 +57,9 @@ exports.loginUser = async (req, res) => {
 	req.session.email = user.email;
 	req.session.role = user.role;
 
-	delete user.password;
+
+    delete user.password;
+
 
 	res.status(200).json(user);
 };

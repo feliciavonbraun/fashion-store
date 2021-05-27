@@ -6,7 +6,7 @@ import { Product, ProductContext } from './ProductContext';
 import { DeliveryMethod } from './DeliveryContext';
 
 export interface OrderItem {
-    product: Product; // in cart from CartContext
+    product: Product;
     qty: number; // in cart from CartContext
 }
 
@@ -55,12 +55,15 @@ function OrderProvider({ children }: Props) {
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
     const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
-    const { address } = useContext(UserContext);
+    const { address, user, getUserOrders } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
     useEffect(() => {
-        getOrders();
-    }, [setAllOrders]);
+        (async function () {
+            const orders = await makeRequest('/api/order', 'GET');
+            setAllOrders(orders);
+        })();
+    }, [user]);
 
     async function getOrders() {
         const orders = await makeRequest('/api/order', 'GET');
@@ -84,6 +87,7 @@ function OrderProvider({ children }: Props) {
 
         /* Updates orders */
         getOrders();
+        getUserOrders();
         /* Updates products in product context, since qty has changed */
         const products = await getProducts();
         setAllProducts(products);
@@ -97,7 +101,11 @@ function OrderProvider({ children }: Props) {
             'PUT',
             order
         );
+
+        /* Updates orders */
         getOrders();
+        getUserOrders();
+
         return updatedOrder;
     }
 

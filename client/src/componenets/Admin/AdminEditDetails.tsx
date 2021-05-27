@@ -1,6 +1,6 @@
 import { Form, Input, Button, message, InputNumber } from 'antd';
-import { useContext, useEffect, useState } from 'react';
-import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
 import {
     NewProduct,
     Product,
@@ -108,7 +108,7 @@ function AdminEditDetails(props: Props) {
                         label='Title'
                         rules={[{ required: true }]}
                     >
-                        <Input.TextArea defaultValue={product.title} />
+                        <Input.TextArea />
                     </Form.Item>
 
                     <Form.Item
@@ -117,7 +117,7 @@ function AdminEditDetails(props: Props) {
                         label='Description'
                         rules={[{ required: true }]}
                     >
-                        <Input.TextArea defaultValue={product.description} />
+                        <Input.TextArea />
                     </Form.Item>
 
                     <Form.Item
@@ -126,7 +126,7 @@ function AdminEditDetails(props: Props) {
                         label='Price'
                         rules={[{ required: true }]}
                     >
-                        <InputNumber min={1} defaultValue={product.price} />
+                        <InputNumber min={1} />
                     </Form.Item>
 
                     <Form.Item
@@ -135,7 +135,7 @@ function AdminEditDetails(props: Props) {
                         label='ImageUrl'
                         rules={[{ required: true }]}
                     >
-                        <Input.TextArea defaultValue={product.imageUrl} />
+                        <Input.TextArea />
                     </Form.Item>
 
                     <Form.Item
@@ -145,7 +145,6 @@ function AdminEditDetails(props: Props) {
                         rules={[{ required: true }]}
                     >
                         <Select
-                            defaultValue={product.category}
                             mode='tags'
                             style={{ width: '100%' }}
                             tokenSeparators={[',']}
@@ -168,7 +167,7 @@ function AdminEditDetails(props: Props) {
                         label='Storage qty'
                         rules={[{ required: true }]}
                     >
-                        <InputNumber defaultValue={product.qty} />
+                        <InputNumber />
                     </Form.Item>
 
                     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
@@ -178,6 +177,21 @@ function AdminEditDetails(props: Props) {
                                 justifyContent: 'space-between',
                             }}
                         >
+                            <Link to={'/user/product-list'} >
+                                <Button type='ghost'>
+                                    Cancel
+                                </Button>
+                            </Link>
+                            <div>
+                            <Button
+                                type='primary'
+                                danger
+                                style={{marginRight:'.3rem'}}
+                                onClick={handleDelete}
+                                loading={buttonDeleteLoading}
+                            >
+                                Delete
+                            </Button>
                             <Button
                                 type='primary'
                                 htmlType='submit'
@@ -185,15 +199,7 @@ function AdminEditDetails(props: Props) {
                             >
                                 Save
                             </Button>
-
-                            <Button
-                                type='primary'
-                                danger
-                                onClick={handleDelete}
-                                loading={buttonDeleteLoading}
-                            >
-                                Delete
-                            </Button>
+                            </div>
                         </div>
                     </Form.Item>
                 </Form>

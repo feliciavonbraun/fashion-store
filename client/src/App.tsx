@@ -14,6 +14,7 @@ import ProductProvider from './contexts/ProductContext';
 import OrderProvider from "./contexts/OrderContext";
 import UserProvider from "./contexts/UserContext"
 import DeliveryProvider from './contexts/DeliveryContext';
+import ErrorPage from './componenets/ErrorPage';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
                                     <Route path='/cart' component={CartView} />
                                     <Route path='/login' component={LogIn} />
                                     <Route path='/user' component={Profile} />
+                                    <ErrorPage />
                                 </Switch>
                                 <Footer2 />
                             </Router>
@@ -45,6 +47,6 @@ function App() {
             </ProductProvider>
         </CartProvider>
     );
-}
+};
 
 export default App;

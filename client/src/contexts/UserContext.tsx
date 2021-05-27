@@ -1,5 +1,5 @@
 import { Address, Order } from './OrderContext';
-import { createContext, useEffect, useState, useCallback } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { makeRequest } from '../makeRequest';
 
 export interface User {
@@ -29,15 +29,16 @@ const emptyAddress: Address = {
 
 interface UserValue {
     userOrders: Order[];
-    loginResponse: string;
+    loginError: string;
     adminRequests: User[];
-    user?: User;
+    user?: User | null;
     address: Address;
     emailResponse: string;
     setEmailResponse: (value: string) => void;
+    getUserOrders: () => void;
     setAddress: React.Dispatch<React.SetStateAction<Address>>;
     loginUser: (email: string, password: string) => Promise<void>;
-    logoutUser: (id: string) => Promise<void>;
+    logoutUser: () => Promise<void>;
     responseAdminRequest: (user: User, response: boolean) => Promise<void>;
     registerUser: (user: NewUser) => Promise<void>;
 }
@@ -48,24 +49,32 @@ interface Props {
 
 export const UserContext = createContext<UserValue>({} as UserValue);
 function UserProvider({ children }: Props) {
-    const [loginResponse, setLoginResponse] = useState('LoggedIn');
-    const [user, setUser] = useState<User>();
+    const [loginError, setLoginError] = useState('none');
+    const [user, setUser] = useState<User | null>();
     const [userOrders, setUserOrders] = useState<Order[]>([]);
     const [address, setAddress] = useState<Address>(emptyAddress);
     const [emailResponse, setEmailResponse] = useState('noData');
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
-    const getUserOrders = useCallback(async () => {
+    const getUserOrders = async () => {
         if (!user) return;
 
         const userOrders = await makeRequest(`/api/order/user/${user._id}`);
         setUserOrders(userOrders);
+    };
+
+    useEffect(() => {
+        (async function () {
+            if (!user) return;
+
+            const userOrders = await makeRequest(`/api/order/user/${user._id}`);
+            setUserOrders(userOrders);
+        })();
     }, [user]);
 
     useEffect(() => {
-        getUserOrders();
         getAllAdminRequests();
-    }, [getUserOrders]);
+    }, []);
 
     useEffect(() => {
         (async function () {
@@ -102,16 +111,16 @@ function UserProvider({ children }: Props) {
         const res = await makeRequest('/api/user/login', 'POST', user);
         if (res.email) {
             setUser(res);
-            setLoginResponse('LoggedIn');
+            setLoginError('none');
         } else {
-            setLoginResponse(res);
+            setLoginError(res);
         }
     }
 
     // LOG OUT USER
-    async function logoutUser(id: string) {
-        setUser(undefined);
-        await makeRequest(`/api/user/logout/${id}`, 'DELETE');
+    async function logoutUser() {
+        await makeRequest('/api/user/logout', 'DELETE');
+        setUser(null);
     }
 
     // GET ALL ADMIN REQUESTS
@@ -134,13 +143,15 @@ function UserProvider({ children }: Props) {
     return (
         <UserContext.Provider
             value={{
-                loginResponse,
+                loginError,
                 adminRequests,
                 emailResponse,
                 user,
                 userOrders,
                 address,
                 setEmailResponse,
+                getUserOrders,
+                setLoginError,
                 setAddress,
                 loginUser,
                 logoutUser,

@@ -1,4 +1,5 @@
 const { ProductModel } = require('./productModel');
+const { validationResult } = require('express-validator');
 
 exports.getAllProducts = async (req, res) => {
     const docs = await ProductModel.find({});
@@ -23,11 +24,21 @@ exports.getProduct = async (req, res) => {
 };
 
 exports.newProduct = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('error message')
+        return res.status(400).json({errors: errors.array()});
+    }
     const doc = await ProductModel.create(req.body);
     res.status(201).json(doc);
 };
 
 exports.updateProduct = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('error message')
+        return res.status(400).json({errors: errors.array()});
+    }
     const { _id } = req.body;
     const doc = await ProductModel.replaceOne({ _id: _id }, req.body);
     res.status(200).json(doc);

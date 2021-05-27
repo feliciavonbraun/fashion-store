@@ -16,7 +16,7 @@ class CartItemsList extends Component {
     onChangeQuantity(quantity: number, product: Product) {
         const { addProductToCart } = this.context;
         addProductToCart(product, quantity);
-    }
+    };
 
     render() {
         return (
@@ -30,6 +30,7 @@ class CartItemsList extends Component {
                                     dataSource={cart}
                                     renderItem={(item) => (
                                         <List.Item
+                                            key={'item' + item.product._id}
                                             actions={[
                                                 <button
                                                     key='delete-item'
@@ -45,11 +46,11 @@ class CartItemsList extends Component {
                                             ]}
                                         >
                                             <List.Item.Meta
+                                                key={'meta' + item.product._id}
                                                 avatar={
                                                     <Avatar
                                                         src={
-                                                            item.product
-                                                                .imageUrl
+                                                            item.product.imageUrl
                                                         }
                                                     />
                                                 }
@@ -66,6 +67,10 @@ class CartItemsList extends Component {
                                                 description={[
                                                     <span
                                                         style={descriptionStyle}
+                                                        key={
+                                                            'span' +
+                                                            item.product._id
+                                                        }
                                                     >
                                                         {item.product.description.substring(
                                                             0,
@@ -73,13 +78,15 @@ class CartItemsList extends Component {
                                                         ) + '...'}
                                                     </span>,
                                                     <InputNumber
+                                                        key={
+                                                            'input' +
+                                                            item.product._id
+                                                        }
                                                         min={1}
                                                         max={
-                                                            item.product.qty >
-                                                            10
+                                                            item.product.qty > 10
                                                                 ? 10
-                                                                : item.product
-                                                                      .qty
+                                                                : item.product.qty
                                                         }
                                                         defaultValue={item.qty}
                                                         onChange={(value) =>
@@ -90,9 +97,7 @@ class CartItemsList extends Component {
                                                         }
                                                         style={numberInputStyle}
                                                     />,
-                                                    item.product.price *
-                                                        item.qty +
-                                                        ' kr',
+                                                    item.product.price * item.qty + ' kr',
                                                 ]}
                                             />
                                         </List.Item>
@@ -105,14 +110,17 @@ class CartItemsList extends Component {
             </CartContext.Consumer>
         );
     }
-}
+};
 
 const listContainerStyle: CSSProperties = {
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'space-around',
     width: '80%',
-    margin: 'auto',
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
 };
 
 const columnStyle: CSSProperties = {
