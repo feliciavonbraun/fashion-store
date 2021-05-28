@@ -166,7 +166,3 @@ class CartProvider extends Component<{}, State> {
 }
 
 export default CartProvider;
-
-/* async function createOrderMockApi() {
-    return new Promise((res) => setTimeout(() => res('success'), 2000));
-} */
