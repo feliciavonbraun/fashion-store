@@ -39,14 +39,6 @@ interface State {
 }
 
 interface ContextValue extends State {
-    // cart: [],
-    // deliveryMethod: emptyDelivery,
-    // paymentInfo: defaultPayment,
-    // receipt: emptyReceipt,
-    // disablePlaceOrderButton: false,
-
-    // ovan är tillagt från nedaför tror inte vi behöver det? 
-
     addProductToCart: (product: Product, quantity: number | undefined) => void;
     setDeliveryMethod: (method: DeliveryMethod) => void;
     deleteProductFromCart: (id: string) => void;
@@ -55,25 +47,9 @@ interface ContextValue extends State {
     getBadgeQuantity: () => number;
     updatePaymentInfo: (paymentInfo: PaymentMethod) => void;
     handlePlaceOrder: (history: any) => void;
-};
+}
 
-//Skrev en rad istället för deras 10. 
 export const CartContext = createContext<ContextValue>({} as ContextValue);
-// export const CartContext = createContext<ContextValue>({
-//     cart: [],
-//     deliveryMethod: emptyDelivery,
-//     paymentInfo: defaultPayment,
-//     receipt: emptyReceipt,
-//     disablePlaceOrderButton: false,
-//     addProductToCart: () => {},
-//     setDeliveryMethod: () => {},
-//     deleteProductFromCart: () => {},
-//     getTotalPrice: () => 0,
-//     getTotalPriceProducts: () => {},
-//     getBadgeQuantity: () => 0,
-//     updatePaymentInfo: () => {},
-//     handlePlaceOrder: () => {},
-// });
 
 class CartProvider extends Component<{}, State> {
     context!: ContextType<typeof UserContext>;
@@ -90,8 +66,9 @@ class CartProvider extends Component<{}, State> {
         this.setState({
             cart: JSON.parse(localStorage.getItem('cartItems') as string) || [],
         });
-    };
+    }
 
+    // ADD PRODUCT TO CART
     addProductToCart = (product: Product, qty: number | undefined) => {
         let cartItems = this.state.cart;
         const existingCartItem = cartItems.filter(
@@ -119,10 +96,12 @@ class CartProvider extends Component<{}, State> {
         return cartItems;
     };
 
+    // SET DELIVERY METHOD
     setDeliveryMethod = (method: DeliveryMethod) => {
         this.setState({ deliveryMethod: method });
     };
 
+    // DELETE PRODUCT FROM CART
     deleteProductFromCart = (id: string) => {
         let cartItems = this.state.cart;
         const newCartItemsList = cartItems.filter(
@@ -132,6 +111,7 @@ class CartProvider extends Component<{}, State> {
         this.setState({ cart: newCartItemsList });
     };
 
+    // GET TOTAL PRICE OF PRODUCTS IN CART
     getTotalPriceProducts = () => {
         let cartItems = this.state.cart;
         let totalPriceProducts = 0;
@@ -141,11 +121,13 @@ class CartProvider extends Component<{}, State> {
         return totalPriceProducts;
     };
 
+    // GET TOTAL CART PRICE
     getTotalPrice = () => {
         let deliveryPrice = this.state.deliveryMethod?.price;
         return this.getTotalPriceProducts() + (deliveryPrice as number);
     };
 
+    // GET BADGE QUANTITY FOR CART ICON
     getBadgeQuantity = () => {
         let cartItems = this.state.cart;
         let quantity = 0;
@@ -155,10 +137,12 @@ class CartProvider extends Component<{}, State> {
         return quantity;
     };
 
+    // SET PAYMENT INFO
     updatePaymentInfo = (paymentInfo: PaymentMethod) => {
         this.setState({ paymentInfo: paymentInfo });
     };
 
+    // CREATE RECEIPT
     createReceipt = (): IReceipt => {
         return {
             cart: this.state.cart,
@@ -168,6 +152,7 @@ class CartProvider extends Component<{}, State> {
         };
     };
 
+    // CLEAR CART
     clearCart = () => {
         this.setState({
             deliveryMethod: emptyDelivery,
@@ -176,6 +161,7 @@ class CartProvider extends Component<{}, State> {
         localStorage.setItem('cartItems', JSON.stringify([]));
     };
 
+    // PLACE ORDER
     handlePlaceOrder = async (history: any) => {
         this.setState({ disablePlaceOrderButton: true });
         try {
@@ -217,10 +203,10 @@ class CartProvider extends Component<{}, State> {
             </CartContext.Provider>
         );
     }
-};
+}
 
 export default CartProvider;
 
 async function createOrderMockApi() {
     return new Promise((res) => setTimeout(() => res('success'), 2000));
-};
+}

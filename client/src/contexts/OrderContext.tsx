@@ -55,30 +55,35 @@ function OrderProvider({ children }: Props) {
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
     const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
-    const { address, user, getUserOrders } = useContext(UserContext);
+    const { address, getUserOrders, user } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
+    // GETS ALL ORDERS ON MOUNT
     useEffect(() => {
+        if (!user) return;
         (async function () {
             const orders = await makeRequest('/api/order', 'GET');
-            if (typeof orders !== 'string') {
+            if (typeof orders === 'object') {
                 setAllOrders(orders);
             }
         })();
     }, [user]);
 
+    // GET ALL ORDERS
     async function getOrders() {
         const orders = await makeRequest('/api/order', 'GET');
-        if (typeof orders !== 'string') {
+        if (typeof orders === 'object') {
             setAllOrders(orders);
         }
     }
 
+    // GET ONE ORDER
     async function getOneOrder(_id: string) {
         const order = await makeRequest(`/api/order/${_id}`, 'GET');
         return order;
     }
 
+    // NEW ORDER
     async function newOrder() {
         const order: NewOrder = {
             orderItems: cart,
@@ -99,6 +104,7 @@ function OrderProvider({ children }: Props) {
         return newOrder;
     }
 
+    // UPDATE ORDER
     async function updateOrder(order: Order) {
         const updatedOrder = await makeRequest(
             `/api/order/${order._id}`,

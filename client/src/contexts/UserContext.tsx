@@ -33,8 +33,8 @@ interface UserValue {
     user?: User | null;
     address: Address;
     loginError: string;
-    setLoginError: (value: string) => void;
     emailResponse: string;
+    setLoginError: (value: string) => void;
     setEmailResponse: (value: string) => void;
     getUserOrders: () => void;
     setAddress: React.Dispatch<React.SetStateAction<Address>>;
@@ -57,35 +57,38 @@ function UserProvider({ children }: Props) {
     const [emailResponse, setEmailResponse] = useState('noData');
     const [adminRequests, setAdminrequests] = useState<User[]>([]);
 
-    const getUserOrders = async () => {
-        if (!user) return;
-
-        const userOrders = await makeRequest(`/api/order/user/${user._id}`);
-        setUserOrders(userOrders);
-    };
-
-    useEffect(() => {
-        (async function () {
-            if (!user) return;
-
-            const userOrders = await makeRequest(`/api/order/user/${user._id}`);
-            if (typeof userOrders !== 'string') {
-                setUserOrders(userOrders);
-            }
-        })();
-    }, [user]);
-
-    useEffect(() => {
-        getAllAdminRequests();
-    }, []);
-
     /* HANDLEDNING MÅNDAG, KOLLA KONTINUELIGT ATT ANVÄNDAREN ÄR INLOGGAD */
+    // GETS USER ON MOUNT
     useEffect(() => {
         (async function () {
             const user = await makeRequest('/api/user/auth');
             setUser(user);
         })();
     }, [setUser]);
+
+    // GETS USER ORDERS ON MOUNT
+    useEffect(() => {
+        (async function () {
+            if (!user) return;
+
+            const userOrders = await makeRequest(`/api/order/user/${user._id}`);
+            if (typeof userOrders === 'object') {
+                setUserOrders(userOrders);
+            }
+        })();
+    }, [user]);
+
+    // GETS ADMIN REQUESTS ON MOUNT
+    useEffect(() => {
+        if (!user) return;
+
+        (async function () {
+            const allRequests = await makeRequest('/api/user/admin', 'GET');
+            if (typeof allRequests === 'object') {
+                setAdminrequests(allRequests);
+            }
+        })();
+    }, [user]);
 
     // REGISTER NEW USER
     async function registerUser(user: NewUser) {
@@ -130,10 +133,20 @@ function UserProvider({ children }: Props) {
     // GET ALL ADMIN REQUESTS
     async function getAllAdminRequests() {
         const allRequests = await makeRequest('/api/user/admin', 'GET');
-        if (typeof allRequests !== 'string') {
+        if (typeof allRequests === 'object') {
             setAdminrequests(allRequests);
         }
     }
+
+    // GET ALL USER ORDERS
+    const getUserOrders = async () => {
+        if (!user) return;
+
+        const userOrders = await makeRequest(`/api/order/user/${user._id}`);
+        if (typeof userOrders === 'object') {
+            setUserOrders(userOrders);
+        }
+    };
 
     // RESPONSE TO ADMIN REQUEST
     async function responseAdminRequest(user: User, response: boolean) {

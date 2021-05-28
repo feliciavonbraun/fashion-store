@@ -6,16 +6,16 @@ export interface DeliveryMethod {
     company: string;
     time: number;
     price: number;
-};
+}
 
 export interface DeliveryValue {
     allDeliveryMethods: DeliveryMethod[];
     calculateDeliveryDay: (timeInHours: number) => string;
-};
+}
 
 interface Props {
     children: object;
-};
+}
 
 export const DeliveryContext = createContext<DeliveryValue>(
     {} as DeliveryValue
@@ -26,14 +26,16 @@ function DeliveryProvider({ children }: Props) {
         []
     );
 
+    // GETS ALL DELIVERY METHODS ON MOUNT
     useEffect(() => {
         async function getDeliveryMethods() {
             const delivery = await makeRequest('/api/delivery', 'GET');
             setDeliveryMethod(delivery);
         }
         getDeliveryMethods();
-    }, [setDeliveryMethod]);
+    }, []);
 
+    // CALCULATE DELIVERY DATE
     const calculateDeliveryDay = (timeInHours: number) => {
         const today = new Date();
         const deliveryDay = new Date(today);
@@ -51,5 +53,5 @@ function DeliveryProvider({ children }: Props) {
             {children}
         </DeliveryContext.Provider>
     );
-};
+}
 export default DeliveryProvider;
