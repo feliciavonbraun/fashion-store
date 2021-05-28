@@ -41,6 +41,7 @@ function ProductProvider({ children }: Props) {
     const [allProducts, setAllProducts] = useState<Product[]>([]);
     const [allCategories, setAllCategories] = useState<string[]>([]);
 
+    // GETS PRODUCTS AND CATEGORIES ON MOUNT
     useEffect(() => {
         const fetchData = async () => {
             const products = await getProducts();
@@ -51,16 +52,19 @@ function ProductProvider({ children }: Props) {
         fetchData();
     }, []);
 
+    // GET ALL PRODUCTS
     const getProducts = async () => {
         const products = await makeRequest('/api/product', 'GET');
         return products;
     };
 
+    // GET ALL CATEGORIES
     const getCategories = async () => {
         const categories = await makeRequest('/api/product/category', 'GET');
         return categories;
     };
 
+    // UPDATES PRODUCTS AND CATEGORIES
     const updateProductsAndCategories = async () => {
         const products = await getProducts();
         setAllProducts(products);
@@ -68,6 +72,7 @@ function ProductProvider({ children }: Props) {
         setAllCategories(categories);
     };
 
+    // GET PRODUCTS OF A SPECIFIC CATEGORY
     const getCategoryProducts = async (category: string) => {
         const categories = await makeRequest(
             `/api/product/category/${category}`,
@@ -76,6 +81,7 @@ function ProductProvider({ children }: Props) {
         return categories;
     };
 
+    // GET PRODUCT
     const getProduct = async (_id: string) => {
         const product: Product = await makeRequest(
             `/api/product/${_id}`,
@@ -84,6 +90,7 @@ function ProductProvider({ children }: Props) {
         return product;
     };
 
+    // NEW PRODUCT
     const newProduct = async (product: NewProduct) => {
         const body = { ...product };
         const newProduct = await makeRequest('/api/product', 'POST', body);
@@ -91,6 +98,7 @@ function ProductProvider({ children }: Props) {
         return newProduct;
     };
 
+    // UPDATE PRODUCT
     const updateProduct = async (product: Product) => {
         const body = { ...product };
         const editedProduct = await makeRequest(
@@ -102,6 +110,7 @@ function ProductProvider({ children }: Props) {
         return editedProduct;
     };
 
+    // DELETE PRODUCT
     const deleteProduct = async (product: Product) => {
         const body = { ...product };
         const deletedProduct = await makeRequest(
