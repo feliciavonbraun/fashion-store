@@ -17,7 +17,8 @@ app.use(
         secret: 'aV3ryS3cr3tK3y',
         secure: false,
         httpOnly: true,
-        maxAge: 1000 * 60 * 5
+        /* HANDLEDNING MÅNDAG */
+        // maxAge: 1000 * 60 * 5
     })
 );
 
@@ -27,13 +28,12 @@ app.use(orderRouter);
 app.use(userRouter);
 app.use(deliveryRouter);
 
-
 /* ERROR HANDLING */
 app.use((req, res) => {
     res.status(404).json('Error: Could not find');
 });
 app.use((err, req, res, next) => {
-    res.status(500).json(err.message)
+    res.status(500).json(err.message);
 });
 
 /* CONNECT TO DATABASE */

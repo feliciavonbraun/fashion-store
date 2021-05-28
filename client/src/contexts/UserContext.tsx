@@ -79,12 +79,13 @@ function UserProvider({ children }: Props) {
         getAllAdminRequests();
     }, []);
 
+    /* HANDLEDNING MÅNDAG, KOLLA KONTINUELIGT ATT ANVÄNDAREN ÄR INLOGGAD */
     useEffect(() => {
         (async function () {
             const user = await makeRequest('/api/user/auth');
             setUser(user);
         })();
-    });
+    }, [setUser]);
 
     // REGISTER NEW USER
     async function registerUser(user: NewUser) {
