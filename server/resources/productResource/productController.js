@@ -26,7 +26,6 @@ exports.getProduct = async (req, res) => {
 exports.newProduct = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log('error message')
         return res.status(400).json({errors: errors.array()});
     }
     const doc = await ProductModel.create(req.body);
@@ -36,7 +35,6 @@ exports.newProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log('error message')
         return res.status(400).json({errors: errors.array()});
     }
     const { _id } = req.body;

@@ -7,10 +7,14 @@ const { adminSecure, secure, userSecure } = require('../../middleware/auth');
 
 userRouter
     .post('/api/user/register',
+        body('firstname').not().isEmpty(),
+        body('lastname').not().isEmpty(),
         body('email').isEmail(),
         body('password').not().isEmpty(),
+        body('adminRequest').not().isEmpty(),
         controller.registerUser
     );
+
 userRouter
     .post('/api/user/login',
         body('email').isEmail(),
