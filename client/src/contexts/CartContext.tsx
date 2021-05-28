@@ -5,7 +5,6 @@ import { PaymentCard } from '../componenets/Cart/PayCard';
 import { PaymentKlarna } from '../componenets/Cart/PayKlarna';
 import { PaymentSwish } from '../componenets/Cart/PaySwish';
 import { DeliveryMethod } from '../contexts/DeliveryContext';
-import { IReceipt } from '../componenets/OrderSuccess/Reciept';
 import { Product } from '../contexts/ProductContext';
 
 const emptyDelivery: DeliveryMethod = {
@@ -23,18 +22,10 @@ const defaultPayment: PaymentMethod = {
     cardName: '',
     cvc: '',
 };
-
-const emptyReceipt: IReceipt = {
-    cart: [],
-    deliveryMethod: '',
-    totalPrice: 0,
-    paymentMethod: defaultPayment,
-};
 interface State {
     cart: OrderItem[];
     deliveryMethod: DeliveryMethod;
     paymentInfo: PaymentMethod;
-    receipt: IReceipt;
     disablePlaceOrderButton: boolean;
 }
 
@@ -45,8 +36,8 @@ interface ContextValue extends State {
     getTotalPrice: () => number;
     getTotalPriceProducts: () => void;
     getBadgeQuantity: () => number;
+    clearCart: () => void;
     updatePaymentInfo: (paymentInfo: PaymentMethod) => void;
-    handlePlaceOrder: (history: any) => void;
 }
 
 export const CartContext = createContext<ContextValue>({} as ContextValue);
@@ -58,7 +49,6 @@ class CartProvider extends Component<{}, State> {
         cart: [],
         deliveryMethod: emptyDelivery,
         paymentInfo: defaultPayment,
-        receipt: emptyReceipt,
         disablePlaceOrderButton: false,
     };
 
@@ -142,16 +132,6 @@ class CartProvider extends Component<{}, State> {
         this.setState({ paymentInfo: paymentInfo });
     };
 
-    // CREATE RECEIPT
-    createReceipt = (): IReceipt => {
-        return {
-            cart: this.state.cart,
-            deliveryMethod: this.state.deliveryMethod.company,
-            totalPrice: this.getTotalPrice(),
-            paymentMethod: { ...this.state.paymentInfo },
-        };
-    };
-
     // CLEAR CART
     clearCart = () => {
         this.setState({
@@ -161,25 +141,6 @@ class CartProvider extends Component<{}, State> {
         localStorage.setItem('cartItems', JSON.stringify([]));
     };
 
-    // PLACE ORDER
-    handlePlaceOrder = async (history: any) => {
-        this.setState({ disablePlaceOrderButton: true });
-        try {
-            await createOrderMockApi();
-        } catch (error) {
-            console.log(error);
-            return;
-        }
-        this.setState({
-            receipt: this.createReceipt(),
-        });
-        console.log('receipt', this.state.receipt);
-        this.clearCart();
-
-        history.push('/ordersuccess');
-        this.setState({ disablePlaceOrderButton: false });
-    };
-
     render() {
         return (
             <CartContext.Provider
@@ -187,7 +148,6 @@ class CartProvider extends Component<{}, State> {
                     cart: this.state.cart,
                     deliveryMethod: this.state.deliveryMethod,
                     paymentInfo: this.state.paymentInfo,
-                    receipt: this.state.receipt,
                     disablePlaceOrderButton: this.state.disablePlaceOrderButton,
                     addProductToCart: this.addProductToCart,
                     setDeliveryMethod: this.setDeliveryMethod,
@@ -196,7 +156,7 @@ class CartProvider extends Component<{}, State> {
                     getTotalPriceProducts: this.getTotalPriceProducts,
                     getBadgeQuantity: this.getBadgeQuantity,
                     updatePaymentInfo: this.updatePaymentInfo,
-                    handlePlaceOrder: this.handlePlaceOrder,
+                    clearCart: this.clearCart,
                 }}
             >
                 {this.props.children}
@@ -206,7 +166,3 @@ class CartProvider extends Component<{}, State> {
 }
 
 export default CartProvider;
-
-async function createOrderMockApi() {
-    return new Promise((res) => setTimeout(() => res('success'), 2000));
-}

@@ -21,9 +21,9 @@ export interface NewUser {
 }
 
 const emptyAddress: Address = {
-    phone: 0,
+    phone: '',
     street: '',
-    zipcode: 0,
+    zipcode: '',
     city: '',
 };
 
@@ -80,7 +80,7 @@ function UserProvider({ children }: Props) {
 
     // GETS ADMIN REQUESTS ON MOUNT
     useEffect(() => {
-        if (!user) return;
+        if (!user || user.role !== 'admin') return;
 
         (async function () {
             const allRequests = await makeRequest('/api/user/admin', 'GET');

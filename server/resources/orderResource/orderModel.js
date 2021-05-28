@@ -7,9 +7,9 @@ const OrderItemSchema = new mongoose.Schema({
 });
 
 const AddressSchema = new mongoose.Schema({
-    phone: { type: Number, required: [true, 'Please enter phone-number'] },
+    phone: { type: String, required: [true, 'Please enter phone-number'] },
     street: { type: String, required: [true, 'Please enter street'] },
-    zipcode: { type: Number, required: [true, 'Please enter zipcode'] },
+    zipcode: { type: String, required: [true, 'Please enter zipcode'] },
     city: { type: String, required: [true, 'Please enter city'] },
 });
 
