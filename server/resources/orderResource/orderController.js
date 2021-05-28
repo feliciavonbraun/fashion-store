@@ -8,7 +8,7 @@ exports.getAllOrders = async (req, res) => {
 
 exports.getOrder = async (req, res) => {
     const _id = req.params.id;
-    const doc = await OrderModel.find({ _id: _id }).populate([
+    const doc = await OrderModel.findOne({ _id: _id }).populate([
         'delivery',
         'user',
     ]);
@@ -25,7 +25,7 @@ exports.getUserOrders = async (req, res) => {
 };
 
 exports.newOrder = async (req, res) => {
-    const { orderItems } = req.body;
+    const { orderItems, delivery } = req.body;
     const user = req.session.id;
 
     /* REMOVES PRODUCTS IN ORDER THAT ARE NOT IN STOCK */
@@ -42,8 +42,10 @@ exports.newOrder = async (req, res) => {
     const order = {
         ...req.body,
         user: user,
+        delivery: delivery._id,
         orderItems: [...updatedOrderItems],
     };
+
     const doc = await OrderModel.create(order);
 
     /* UPDATES PRODUCT STOCK QUANTITY FOR EVERY ITEM IN ORDER */

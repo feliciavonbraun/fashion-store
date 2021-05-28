@@ -7,14 +7,14 @@ import { DeliveryMethod } from './DeliveryContext';
 
 export interface OrderItem {
     product: Product;
-    qty: number; // in cart from CartContext
+    qty: number;
 }
 
 export interface Address {
-    phone: number; // in userInfo from CartContext
-    street: string; // in userInfo from CartContext
-    zipcode: number; // in userInfo from CartContext
-    city: string; // in userInfo from CartContext
+    phone: string;
+    street: string;
+    zipcode: string;
+    city: string;
 }
 
 export interface Order {
@@ -35,13 +35,15 @@ interface NewOrder {
     address: Address;
     totalprice: number;
     isSent: boolean;
-    delivery: string;
+    delivery: DeliveryMethod;
 }
 
 interface OrderValue {
+    order: NewOrder;
+    orderButton: boolean;
     allOrders: Order[];
-    getOneOrder: (_id: string) => void;
-    newOrder: () => void;
+    getOneOrder: (_id: string) => Promise<Order>;
+    newOrder: () => Promise<Order>;
     updateOrder: (order: Order) => Promise<Order>;
 }
 
@@ -52,15 +54,24 @@ interface Props {
 export const OrderContext = createContext<OrderValue>({} as OrderValue);
 
 function OrderProvider({ children }: Props) {
-    const [allOrders, setAllOrders] = useState<Order[]>([]);
-
-    const { cart, getTotalPrice, deliveryMethod } = useContext(CartContext);
+    const { cart, getTotalPrice, deliveryMethod, clearCart } =
+        useContext(CartContext);
     const { address, getUserOrders, user } = useContext(UserContext);
     const { setAllProducts, getProducts } = useContext(ProductContext);
 
+    const [allOrders, setAllOrders] = useState<Order[]>([]);
+    const [orderButton, setOrderButton] = useState(false);
+    const order: NewOrder = {
+        orderItems: cart,
+        address: address,
+        totalprice: getTotalPrice(),
+        isSent: false,
+        delivery: deliveryMethod,
+    };
+
     // GETS ALL ORDERS ON MOUNT
     useEffect(() => {
-        if (!user) return;
+        if (!user || user.role !== 'admin') return;
         (async function () {
             const orders = await makeRequest('/api/order', 'GET');
             if (typeof orders === 'object') {
@@ -85,21 +96,17 @@ function OrderProvider({ children }: Props) {
 
     // NEW ORDER
     async function newOrder() {
-        const order: NewOrder = {
-            orderItems: cart,
-            address: address,
-            totalprice: getTotalPrice(),
-            isSent: false,
-            delivery: deliveryMethod._id,
-        };
+        setOrderButton(true);
         const newOrder = await makeRequest('/api/order', 'POST', order);
 
+        clearCart();
         /* Updates orders */
         getOrders();
         getUserOrders();
         /* Updates products in product context, since qty has changed */
         const products = await getProducts();
         setAllProducts(products);
+        setOrderButton(false);
 
         return newOrder;
     }
@@ -122,6 +129,8 @@ function OrderProvider({ children }: Props) {
     return (
         <OrderContext.Provider
             value={{
+                order,
+                orderButton,
                 allOrders,
                 getOneOrder,
                 newOrder,
