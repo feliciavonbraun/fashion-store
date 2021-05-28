@@ -2,14 +2,6 @@ const secure = (req, res, next) => {
     if (req.session.email) {
         next();
     } else {
-        res.status(401).json('You are not logged in');
-    }
-};
-
-const userSecure = (req, res, next) => {
-    if (req.session.email) {
-        next();
-    } else {
         res.status(401).json(null);
     }
 };
@@ -27,6 +19,5 @@ const adminSecure = [
 
 module.exports = {
     secure,
-    userSecure,
     adminSecure,
 };

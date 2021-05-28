@@ -2,7 +2,7 @@ const express = require('express');
 const { body } = require('express-validator')
 const userRouter = express.Router();
 const controller = require('./userController');
-const { adminSecure, secure, userSecure } = require('../../middleware/auth');
+const { adminSecure, secure } = require('../../middleware/auth');
 
 
 userRouter
@@ -24,7 +24,7 @@ userRouter
     );
 userRouter
     .get('/api/user/auth',
-        userSecure,
+        secure,
         controller.getLoggedinUser
     );
 
