@@ -22,9 +22,7 @@ export const DeliveryContext = createContext<DeliveryValue>(
 );
 
 function DeliveryProvider({ children }: Props) {
-    const [allDeliveryMethods, setDeliveryMethod] = useState<DeliveryMethod[]>(
-        []
-    );
+    const [allDeliveryMethods, setDeliveryMethod] = useState<DeliveryMethod[]>([]);
 
     // GETS ALL DELIVERY METHODS ON MOUNT
     useEffect(() => {

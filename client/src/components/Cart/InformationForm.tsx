@@ -23,10 +23,7 @@ const validateMessages = {
     },
 };
 
-// sätt dessa i adressInterfacet i OrderContext
 export interface UserInfo {
-    // name: string;
-    // email: string;
     phone: string;
     street: string;
     zipcode: string;

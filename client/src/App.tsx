@@ -1,20 +1,20 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
-import LogIn from './componenets/LogIn/LogIn';
-import Profile from './componenets/Admin/Profile';
-import CartView from './componenets/Cart/CartView';
-import Footer2 from './componenets/Footer';
-import Navbar from './componenets/Navbar';
-import OrderSuccessMessage from './componenets/OrderSuccess/OrderSuccessMessage';
-import ProductDetails from './componenets/ProductDetails/ProductDetails';
-import StartPageView from './componenets/StartPage/StartPageView';
-import ScrollToTop from './componenets/ScrollToTop';
+import LogIn from './components/LogIn/LogIn';
+import Profile from './components/Admin/Profile';
+import CartView from './components/Cart/CartView';
+import Footer2 from './components/Footer';
+import Navbar from './components/Navbar';
+import OrderSuccessMessage from './components/OrderSuccess/OrderSuccessMessage';
+import ProductDetails from './components/ProductDetails/ProductDetails';
+import StartPageView from './components/StartPage/StartPageView';
+import ScrollToTop from './components/ScrollToTop';
 import CartProvider from './contexts/CartContext';
 import ProductProvider from './contexts/ProductContext';
 import OrderProvider from "./contexts/OrderContext";
 import UserProvider from "./contexts/UserContext"
 import DeliveryProvider from './contexts/DeliveryContext';
-import ErrorPage from './componenets/ErrorPage';
+import ErrorPage from './components/ErrorPage';
 
 
 function App() {

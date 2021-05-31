@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Form, Input, InputNumber, Button, message } from 'antd';
 import { NewProduct, ProductContext } from '../../contexts/ProductContext';
 import { Link, useHistory } from 'react-router-dom';
@@ -36,7 +36,6 @@ export default function AddNewProduct() {
     const productContext = useContext(ProductContext);
     const { newProduct, allCategories } = productContext;
     const [buttonSaveLoading, setButtonSaveLoading] = useState(false);
-    // const [isCancelled, setIsCancelled] = useState(false);
 
     const onFinish = async (product: NewProduct) => {
         setButtonSaveLoading(true);

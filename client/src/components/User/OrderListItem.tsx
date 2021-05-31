@@ -1,38 +1,13 @@
 import { Avatar, List } from 'antd';
-import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox/Checkbox';
-import React, { CSSProperties, useContext } from 'react';
-import { Order, OrderContext } from '../../contexts/OrderContext';
-// import { PaymentCard } from '../Cart/PayCard';
-// import { PaymentKlarna } from '../Cart/PayKlarna';
+import { CSSProperties } from 'react';
+import { Order } from '../../contexts/OrderContext';
 
 interface Props {
     order: Order;
 }
 
-export default function AdminOrderListItem(props: Props) {
-    const { updateOrder } = useContext(OrderContext);
+export default function OrderListItem(props: Props) {
     const { order } = props;
-    // function handleChange = (value: string) => {
-    //     console.log(value);
-    // };
-
-    /* function isKlarna(payment: any): payment is PaymentKlarna {
-        return payment && payment.ssn && typeof payment.ssn == 'string';
-    }
-
-    function isCard(payment: any): payment is PaymentCard {
-        return (
-            payment &&
-            payment.cardNumber &&
-            typeof payment.cardNumber == 'string'
-        );
-    } */
-
-    const changeOrderStatus = async (e: CheckboxChangeEvent) => {
-        const isSent = e.target.checked;
-        const updatedOrder = { ...order, isSent: isSent };
-        await updateOrder(updatedOrder);
-    };
 
     return (
         <List.Item style={listItem}>
@@ -71,25 +46,14 @@ export default function AdminOrderListItem(props: Props) {
             <p style={orderInfo}>
                 {`Delivery method: ${order.delivery.company}`}
             </p>
-            {/* {isKlarna(props.order.deliveryMethod) ? (
-                <p style={orderInfo}>Payment method: Klarna</p>
-            ) : isCard(props.order.deliveryMethod) ? (
-                <p style={orderInfo}>Payment method: Card</p>
-            ) : (
-                <p style={orderInfo}>Payment method: Swish</p>
-            )} */}
             <p style={orderInfo}>
                 {`Total order price: ${
                     order.totalprice
                 } kr, incl delivery (VAT: ${order.totalprice * 0.25} kr)`}
             </p>
-            <p>Status: {order.isSent ? 'Sent' : 'Proccessing'}</p>
-            <Checkbox
-                defaultChecked={order.isSent}
-                onChange={changeOrderStatus}
-            >
-                Order has been sent
-            </Checkbox>
+            <p style={status}>
+                Status: <b>{order.isSent ? 'Sent' : 'Proccessing'}</b>
+            </p>
         </List.Item>
     );
 }
@@ -116,4 +80,8 @@ const marginLeft: CSSProperties = {
 
 const orderInfo: CSSProperties = {
     margin: '0 0 0.25rem 0',
+};
+
+const status: CSSProperties = {
+    marginTop: '1rem',
 };
