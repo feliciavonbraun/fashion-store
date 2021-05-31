@@ -1,6 +1,6 @@
 # FashionStore
 
-This project is created with Create React App, Ant Design and MongoDB. All data such as products, orders, users and deliveryoptions is saved in a cloud based Atlas MongoDB. 
+This project is created with Create React App, Ant Design and MongoDB. All data such as products, orders, users and deliveryoptions is saved in a cloud based Atlas MongoDB.
 
 ## For developers:
 
