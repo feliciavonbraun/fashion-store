@@ -1,5 +1,5 @@
 import { Row, Select } from 'antd';
-import React, {
+import {
     CSSProperties,
     Dispatch,
     SetStateAction,

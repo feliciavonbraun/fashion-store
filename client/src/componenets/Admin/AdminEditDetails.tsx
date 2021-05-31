@@ -1,5 +1,5 @@
 import { Form, Input, Button, message, InputNumber } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
 import {
     NewProduct,

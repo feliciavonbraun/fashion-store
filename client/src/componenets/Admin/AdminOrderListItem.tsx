@@ -1,9 +1,7 @@
 import { Avatar, List } from 'antd';
 import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox/Checkbox';
-import React, { CSSProperties, useContext } from 'react';
+import { CSSProperties, useContext } from 'react';
 import { Order, OrderContext } from '../../contexts/OrderContext';
-// import { PaymentCard } from '../Cart/PayCard';
-// import { PaymentKlarna } from '../Cart/PayKlarna';
 
 interface Props {
     order: Order;
@@ -12,21 +10,6 @@ interface Props {
 export default function AdminOrderListItem(props: Props) {
     const { updateOrder } = useContext(OrderContext);
     const { order } = props;
-    // function handleChange = (value: string) => {
-    //     console.log(value);
-    // };
-
-    /* function isKlarna(payment: any): payment is PaymentKlarna {
-        return payment && payment.ssn && typeof payment.ssn == 'string';
-    }
-
-    function isCard(payment: any): payment is PaymentCard {
-        return (
-            payment &&
-            payment.cardNumber &&
-            typeof payment.cardNumber == 'string'
-        );
-    } */
 
     const changeOrderStatus = async (e: CheckboxChangeEvent) => {
         const isSent = e.target.checked;

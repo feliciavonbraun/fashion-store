@@ -1,8 +1,6 @@
 import { Avatar, List } from 'antd';
-import React, { CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 import { Order } from '../../contexts/OrderContext';
-// import { PaymentCard } from '../Cart/PayCard';
-// import { PaymentKlarna } from '../Cart/PayKlarna';
 
 interface Props {
     order: Order;
@@ -10,21 +8,6 @@ interface Props {
 
 export default function OrderListItem(props: Props) {
     const { order } = props;
-    // function handleChange = (value: string) => {
-    //     console.log(value);
-    // };
-
-    /* function isKlarna(payment: any): payment is PaymentKlarna {
-        return payment && payment.ssn && typeof payment.ssn == 'string';
-    }
-
-    function isCard(payment: any): payment is PaymentCard {
-        return (
-            payment &&
-            payment.cardNumber &&
-            typeof payment.cardNumber == 'string'
-        );
-    } */
 
     return (
         <List.Item style={listItem}>
@@ -63,13 +46,6 @@ export default function OrderListItem(props: Props) {
             <p style={orderInfo}>
                 {`Delivery method: ${order.delivery.company}`}
             </p>
-            {/* {isKlarna(props.order.deliveryMethod) ? (
-                <p style={orderInfo}>Payment method: Klarna</p>
-            ) : isCard(props.order.deliveryMethod) ? (
-                <p style={orderInfo}>Payment method: Card</p>
-            ) : (
-                <p style={orderInfo}>Payment method: Swish</p>
-            )} */}
             <p style={orderInfo}>
                 {`Total order price: ${
                     order.totalprice

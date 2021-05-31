@@ -1,4 +1,4 @@
-import React, { CSSProperties, useContext } from 'react';
+import { CSSProperties, useContext } from 'react';
 import { Card, Col, List, Row, message } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Product } from '../../contexts/ProductContext';

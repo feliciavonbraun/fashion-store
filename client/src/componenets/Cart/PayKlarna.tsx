@@ -26,8 +26,6 @@ const validateMessages = {
 
 export interface PaymentKlarna {
     ssn: string;
-    // name: string;
-    // email: string;
     phone: string;
     street: string;
     zipcode: string;
@@ -40,11 +38,6 @@ interface Props {
 function PayKlarna(props: Props) {
     const { user, address } = useContext(UserContext);
     const { updatePaymentInfo } = useContext(CartContext);
-
-    /* const onValuesChange = (values: any, allValues: any) => {
-        console.log('klarna', allValues);
-        updatePaymentInfo(allValues.klarna);
-    }; */
 
     const onFinish = (values: any) => {
         console.log('Success:', values);

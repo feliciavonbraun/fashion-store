@@ -6,8 +6,6 @@ interface Props {
     toggleForm: (value: boolean) => void;
 }
 
-// TODO: Visa felmeddelande om användaren skriver in en mail som redan finns.
-
 function RegisterForm(props: Props) {
     const { registerUser, emailResponse, setEmailResponse } =
         useContext(UserContext);
