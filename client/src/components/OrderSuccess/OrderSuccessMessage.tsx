@@ -2,7 +2,7 @@ import { Result, Button, Row, Col } from 'antd';
 import { CSSProperties } from 'react';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Order } from '../../contexts/OrderContext';
-import Reciept from '../OrderSuccess/Reciept';
+import Reciept from './Reciept';
 
 interface Props extends RouteComponentProps<{}, {}, { order: Order }> {}
 

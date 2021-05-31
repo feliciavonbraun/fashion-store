@@ -1,9 +1,9 @@
 import { Component, ContextType, createContext } from 'react';
 import { OrderItem } from '../contexts/OrderContext';
 import { UserContext } from '../contexts/UserContext';
-import { PaymentCard } from '../componenets/Cart/PayCard';
-import { PaymentKlarna } from '../componenets/Cart/PayKlarna';
-import { PaymentSwish } from '../componenets/Cart/PaySwish';
+import { PaymentCard } from '../components/Cart/PayCard';
+import { PaymentKlarna } from '../components/Cart/PayKlarna';
+import { PaymentSwish } from '../components/Cart/PaySwish';
 import { DeliveryMethod } from '../contexts/DeliveryContext';
 import { Product } from '../contexts/ProductContext';
 
