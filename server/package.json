@@ -6,6 +6,7 @@
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.11.1",
     "mongoose": "^5.12.10",
+    "multer": "^1.4.2",
     "nodemon": "^2.0.7"
   },
   "scripts": {
@@ -14,7 +15,6 @@
   "name": "server",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC",

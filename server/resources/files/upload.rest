@@ -1,0 +1,10 @@
+POST http://localhost:4000/api/upload
+Content-Type: multipart/form-data; boundary=Row
+
+
+# detta sker från frontend
+--Row
+Content-Disposition: form-data; name="image"; filename="cow.jpg"
+Content-Type: image/jpeg
+
+--Row--

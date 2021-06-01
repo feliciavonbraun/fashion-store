@@ -1,6 +1,9 @@
 const { ProductModel } = require('./productModel');
 const { validationResult } = require('express-validator');
 
+const multer  = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 exports.getAllProducts = async (req, res) => {
     const docs = await ProductModel.find({});
     res.status(200).json(docs);
@@ -28,6 +31,7 @@ exports.newProduct = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({errors: errors.array()});
     }
+    console.log(req.file)     
     const doc = await ProductModel.create(req.body);
     res.status(201).json(doc);
 };
@@ -47,3 +51,9 @@ exports.deleteProduct = async (req, res) => {
     const doc = await ProductModel.deleteOne({ _id: _id });
     res.status(200).json(doc);
 };
+
+
+exports.newImage = upload.single('productImage'), (req, res, next) => {
+    req.file()
+    console.log(req.file)
+}

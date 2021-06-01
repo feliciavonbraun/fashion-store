@@ -31,7 +31,7 @@ Content-Type: application/json
     "title": "PRINTED CHIFFON SKIRT",
     "description": "Printed midi chiffon skirt with a gently pleated finish. Concealed zipper at the side. Length of skirt: 83.5cm / 33.3",
     "price": "429",
-    "imageUrl": "https://github.com/feliciavonbraun/fashion-store/blob/master/src/assets/prod8.png?raw=true",
+    "imageUrl": "cow.jpg",
     "qty": "10",
     "category": ["Skirts"]
 }
