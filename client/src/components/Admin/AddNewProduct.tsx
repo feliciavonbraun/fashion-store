@@ -1,8 +1,9 @@
-import { useState, useContext } from 'react';
-import { Form, Input, InputNumber, Button, message } from 'antd';
+import React, { useState, useContext, useRef } from 'react';
+import { Form, Input, InputNumber, Button, message, Upload } from 'antd';
 import { NewProduct, ProductContext } from '../../contexts/ProductContext';
 import { Link, useHistory } from 'react-router-dom';
 import { Select } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -24,6 +25,7 @@ const validateMessages = {
     },
     number: {
         range: '${label} must be between ${min} and ${max}',
+        min: '${label} cannot be less than ${min}',
     },
 };
 
@@ -44,6 +46,49 @@ export default function AddNewProduct() {
         history.push('/product-list');
     };
 
+    function handleFileChange(info: any) {
+        if (info.file.status !== 'uploading') {
+            console.log('file', info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+            message.success(`${info.file.name} file uploaded successfully`);
+        } else if (info.file.status === 'error') {
+            message.error(`${info.file.name} file upload failed.`);
+        }
+    }
+
+    function handleBeforeUpload(file: any) {
+        const isJpgOrPng =
+            file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+            message.error('You can only upload JPG/PNG file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error('Image must smaller than 2MB!');
+        }
+        return isJpgOrPng && isLt2M;
+    }
+
+    const normFile = (e: any) => {
+        console.log('Upload event:', e);
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
+    };
+
+    const handleRequest = (options: any) => {
+        /* if (options.file.status !== 'uploading') {
+            console.log('file', options.file, options.fileList);
+        } */
+        /* if (options.file.status === 'done') {
+            message.success(`${options.file.name} file uploaded successfully`);
+        } else if (options.file.status === 'error') {
+            message.error(`${options.file.name} file upload failed.`);
+        } */
+    };
+
     return (
         <div>
             <Form
@@ -51,6 +96,7 @@ export default function AddNewProduct() {
                 name='nest-messages'
                 onFinish={onFinish}
                 validateMessages={validateMessages}
+                encType='multipar/form-data'
             >
                 <h1
                     style={{
@@ -89,9 +135,22 @@ export default function AddNewProduct() {
                 <Form.Item
                     name={'imageUrl'}
                     label='ImageUrl'
+                    getValueFromEvent={normFile}
+                    valuePropName='fileList'
                     rules={[{ required: true }]}
                 >
-                    <Input />
+                    <Upload
+                        name='imageUrl'
+                        action='/api/upload'
+                        listType='picture'
+                        maxCount={1}
+                        beforeUpload={handleBeforeUpload}
+                        onChange={handleFileChange}
+                    >
+                        <Button icon={<UploadOutlined />}>
+                            Upload (Max: 1)
+                        </Button>
+                    </Upload>
                 </Form.Item>
                 <Form.Item
                     name={'category'}
@@ -113,9 +172,9 @@ export default function AddNewProduct() {
                 <Form.Item
                     name={'qty'}
                     label='Storage qty'
-                    rules={[{ required: true }]}
+                    rules={[{ required: true, type: 'number' }]}
                 >
-                    <InputNumber />
+                    <InputNumber min={0} />
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
@@ -125,10 +184,8 @@ export default function AddNewProduct() {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <Link to={'/user/product-list'} >
-                            <Button type='ghost'>
-                                Cancel
-                            </Button>
+                        <Link to={'/user/product-list'}>
+                            <Button type='ghost'>Cancel</Button>
                         </Link>
                         <Button
                             type='primary'
