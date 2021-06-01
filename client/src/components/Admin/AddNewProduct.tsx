@@ -37,6 +37,10 @@ const error = () => {
     message.error('Could not save product', 3);
 };
 
+const uploadError = () => {
+    message.error('Invalid file, check if file type is jpg or png', 3);
+};
+
 export default function AddNewProduct() {
     const history = useHistory();
     const productContext = useContext(ProductContext);
@@ -45,14 +49,21 @@ export default function AddNewProduct() {
     const [buttonSaveLoading, setButtonSaveLoading] = useState(false);
 
     const onFinish = async (product: NewProduct) => {
-        const completedProduct: NewProduct = { ...product, imageUrl: fileName };
-        setButtonSaveLoading(true);
-        const p = await newProduct(completedProduct);
-        if (p._id) {
-            success();
-            history.push('/user/product-list');
+        if (fileName) {
+            const completedProduct: NewProduct = {
+                ...product,
+                imageUrl: fileName,
+            };
+            setButtonSaveLoading(true);
+            const p = await newProduct(completedProduct);
+            if (p._id) {
+                success();
+                history.push('/user/product-list');
+            } else {
+                error();
+            }
         } else {
-            error();
+            uploadError();
         }
     };
 
@@ -75,11 +86,7 @@ export default function AddNewProduct() {
         if (!isJpgOrPng) {
             message.error('You can only upload JPG/PNG file');
         }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB');
-        }
-        return isJpgOrPng && isLt2M;
+        return isJpgOrPng;
     }
 
     const normFile = (e: any) => {
