@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Input, InputNumber, Button, message, Upload } from 'antd';
 import { NewProduct, ProductContext } from '../../contexts/ProductContext';
 import { Link, useHistory } from 'react-router-dom';
@@ -78,7 +78,7 @@ export default function AddNewProduct() {
         return e && e.fileList;
     };
 
-    const handleRequest = (options: any) => {
+    // const handleRequest = (options: any) => {
         /* if (options.file.status !== 'uploading') {
             console.log('file', options.file, options.fileList);
         } */
@@ -87,7 +87,7 @@ export default function AddNewProduct() {
         } else if (options.file.status === 'error') {
             message.error(`${options.file.name} file upload failed.`);
         } */
-    };
+    // };
 
     return (
         <div>
@@ -134,14 +134,14 @@ export default function AddNewProduct() {
 
                 <Form.Item
                     name={'imageUrl'}
-                    label='ImageUrl'
+                    label='Image'
                     getValueFromEvent={normFile}
                     valuePropName='fileList'
                     rules={[{ required: true }]}
                 >
                     <Upload
                         name='imageUrl'
-                        action='/api/upload'
+                        action='/api/product'
                         listType='picture'
                         maxCount={1}
                         beforeUpload={handleBeforeUpload}

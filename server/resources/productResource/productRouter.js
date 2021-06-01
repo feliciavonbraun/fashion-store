@@ -4,8 +4,8 @@ const controller = require('./productController');
 const { adminSecure, secure } = require('../../middleware/auth');
 const { body } = require('express-validator');
 
-const multer  = require('multer');
-const upload = multer({ dest: 'uploads/' });
+// const multer  = require('multer');
+// const upload = multer({ dest: 'uploads/' });
 
 
 productRouter.get('/api/product', controller.getAllProducts);
@@ -23,7 +23,7 @@ productRouter
         body('category').not().isEmpty(),
         body('qty').not().isEmpty(),
         adminSecure,
-        upload.single('productImage'),
+        // upload.single('productImage'),
         controller.newProduct
     );
 productRouter
@@ -36,6 +36,6 @@ productRouter
         adminSecure,
         controller.deleteProduct
     );
-productRouter.post('/api/product', controller.newImage)
+// productRouter.post('/api/product', controller.newImage)
 
 module.exports = productRouter;

@@ -26,12 +26,12 @@ exports.getProduct = async (req, res) => {
     res.status(200).json(doc);
 };
 
-exports.newProduct = async (req, res) => {
+exports.newProduct = upload.single('imageUrl'), async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({errors: errors.array()});
     }
-    console.log(req.file)     
+    req.file
     const doc = await ProductModel.create(req.body);
     res.status(201).json(doc);
 };
@@ -53,7 +53,7 @@ exports.deleteProduct = async (req, res) => {
 };
 
 
-exports.newImage = upload.single('productImage'), (req, res, next) => {
-    req.file()
-    console.log(req.file)
-}
+// exports.newImage = upload.single('productImage'), (req, res, next) => {
+//     req.file()
+//     console.log(req.file)
+// }
