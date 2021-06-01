@@ -22,6 +22,8 @@ app.use(
     })
 );
 
+app.use(express.static('uploads'));
+
 /* ALL ROUTES */
 app.use(productRouter);
 app.use(orderRouter);

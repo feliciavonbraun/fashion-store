@@ -35,6 +35,19 @@ Content-Type: application/json
     "qty": "10",
     "category": ["Skirts"]
 }
+
+###
+
+POST http://localhost:4000/api/upload
+Content-Type: multipart/form-data; boundary=Row
+
+--Row
+Content-Disposition: form-data; name="imageUrl"; filename="flower.png"
+Content-Type: image/png
+
+< ./flower.png
+--Row--
+
 ###
 
 PUT http://localhost:4000/api/product/:id

@@ -23,10 +23,23 @@ exports.getProduct = async (req, res) => {
     res.status(200).json(doc);
 };
 
+exports.postImage = async (req, res) => {
+    console.log(req.files);
+    if (req.files?.imageUrl) {
+        const fileName = Date.now() + '-' + req.files.imageUrl.name;
+        req.files.imageUrl.mv(`uploads/${fileName}`, () => {
+            res.status(200).json('File successfully uploaded');
+        });
+    } else {
+        res.status(500).json('File could not be uploaded');
+    }
+};
+
 exports.newProduct = async (req, res) => {
+    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        return res.status(400).json({ errors: errors.array() });
     }
     const doc = await ProductModel.create(req.body);
     res.status(201).json(doc);
@@ -35,7 +48,7 @@ exports.newProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        return res.status(400).json({ errors: errors.array() });
     }
     const { _id } = req.body;
     const doc = await ProductModel.replaceOne({ _id: _id }, req.body);
