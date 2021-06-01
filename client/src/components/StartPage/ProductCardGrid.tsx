@@ -19,11 +19,13 @@ export default function ProductCardGrid(props: Props) {
     const { cart, addProductToCart } = useContext(CartContext);
 
     const checkQty = (item: Product) => {
-        const inCart = cart.find((cartItem) => cartItem.product._id === item._id);
+        const inCart = cart.find(
+            (cartItem) => cartItem.product._id === item._id
+        );
         if (!inCart) {
-            return 0
+            return 0;
         }
-        return inCart.qty
+        return inCart.qty;
     };
 
     return (
@@ -47,7 +49,7 @@ export default function ProductCardGrid(props: Props) {
                                     hoverable
                                     cover={
                                         <img
-                                            src={item.imageUrl}
+                                            src={'/uploads/' + item.imageUrl}
                                             alt='product'
                                         />
                                     }
@@ -83,7 +85,7 @@ export default function ProductCardGrid(props: Props) {
             </Col>
         </Row>
     );
-};
+}
 
 const cardContainer: CSSProperties = {
     display: 'flex',

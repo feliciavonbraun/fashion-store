@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import { useState, useContext } from 'react';
 import { Form, Input, InputNumber, Button, message, Upload } from 'antd';
 import { NewProduct, ProductContext } from '../../contexts/ProductContext';
 import { Link, useHistory } from 'react-router-dom';
@@ -33,17 +33,27 @@ const success = () => {
     message.success('The product has been published', 3);
 };
 
+const error = () => {
+    message.error('Could not save product', 3);
+};
+
 export default function AddNewProduct() {
     const history = useHistory();
     const productContext = useContext(ProductContext);
+    const [fileName, setFileName] = useState('');
     const { newProduct, allCategories } = productContext;
     const [buttonSaveLoading, setButtonSaveLoading] = useState(false);
 
     const onFinish = async (product: NewProduct) => {
+        const completedProduct: NewProduct = { ...product, imageUrl: fileName };
         setButtonSaveLoading(true);
-        await newProduct(product);
-        success();
-        history.push('/product-list');
+        const p = await newProduct(completedProduct);
+        if (p._id) {
+            success();
+            history.push('/user/product-list');
+        } else {
+            error();
+        }
     };
 
     function handleFileChange(info: any) {
@@ -51,6 +61,8 @@ export default function AddNewProduct() {
             console.log('file', info.file, info.fileList);
         }
         if (info.file.status === 'done') {
+            // Correct filename is set here
+            setFileName(info.file.response);
             message.success(`${info.file.name} file uploaded successfully`);
         } else if (info.file.status === 'error') {
             message.error(`${info.file.name} file upload failed.`);
@@ -61,11 +73,11 @@ export default function AddNewProduct() {
         const isJpgOrPng =
             file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
+            message.error('You can only upload JPG/PNG file');
         }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
+            message.error('Image must smaller than 2MB');
         }
         return isJpgOrPng && isLt2M;
     }
@@ -76,17 +88,6 @@ export default function AddNewProduct() {
             return e;
         }
         return e && e.fileList;
-    };
-
-    const handleRequest = (options: any) => {
-        /* if (options.file.status !== 'uploading') {
-            console.log('file', options.file, options.fileList);
-        } */
-        /* if (options.file.status === 'done') {
-            message.success(`${options.file.name} file uploaded successfully`);
-        } else if (options.file.status === 'error') {
-            message.error(`${options.file.name} file upload failed.`);
-        } */
     };
 
     return (

@@ -17,12 +17,10 @@ app.use(
         secret: 'aV3ryS3cr3tK3y',
         secure: false,
         httpOnly: true,
-        /* HANDLEDNING MÅNDAG */
-        // maxAge: 1000 * 60 * 5
     })
 );
 
-app.use(express.static('uploads'));
+app.use('/uploads', express.static('uploads'));
 
 /* ALL ROUTES */
 app.use(productRouter);
