@@ -24,11 +24,10 @@ exports.getProduct = async (req, res) => {
 };
 
 exports.postImage = async (req, res) => {
-    console.log(req.files);
     if (req.files?.imageUrl) {
         const fileName = Date.now() + '-' + req.files.imageUrl.name;
         req.files.imageUrl.mv(`uploads/${fileName}`, () => {
-            res.status(200).json('File successfully uploaded');
+            res.status(200).json(fileName);
         });
     } else {
         res.status(500).json('File could not be uploaded');

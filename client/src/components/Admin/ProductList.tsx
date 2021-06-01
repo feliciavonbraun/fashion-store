@@ -47,7 +47,10 @@ function ProductList(props: Props) {
                         >
                             <List.Item.Meta
                                 avatar={
-                                    <Avatar size={64} src={item.imageUrl} />
+                                    <Avatar
+                                        size={64}
+                                        src={'/uploads/' + item.imageUrl}
+                                    />
                                 }
                                 title={item.title}
                                 description={[item.description.split('.')[0]]}

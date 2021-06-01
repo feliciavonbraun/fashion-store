@@ -33,11 +33,13 @@ function ProductDetails(props: Props) {
     };
 
     const checkQty = () => {
-        const inCart = cart.find((cartItem) => cartItem.product._id === product?._id);
+        const inCart = cart.find(
+            (cartItem) => cartItem.product._id === product?._id
+        );
         if (!inCart) {
-            return 0
+            return 0;
         }
-        return inCart.qty
+        return inCart.qty;
     };
 
     return (
@@ -45,7 +47,7 @@ function ProductDetails(props: Props) {
             {product ? (
                 <>
                     <Col lg={{ span: 10 }} style={columnStyle}>
-                        <Image src={product.imageUrl} />
+                        <Image src={'/uploads/' + product.imageUrl} />
                     </Col>
 
                     <Col lg={{ span: 10 }} style={columnStyle}>
@@ -79,7 +81,9 @@ function ProductDetails(props: Props) {
                         )}
                     </Col>
                 </>
-            ) : <ErrorPage />}
+            ) : (
+                <ErrorPage />
+            )}
         </Row>
     );
 }

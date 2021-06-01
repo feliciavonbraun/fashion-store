@@ -16,7 +16,7 @@ productRouter.get('/api/product/:id', controller.getProduct);
 /* ADMIN */
 productRouter.post(
     '/api/product',
-    body('titel').not().isEmpty(),
+    body('titel').isEmpty(),
     body('description').not().isEmpty(),
     body('price').not().isEmpty(),
     body('imageUrl').not().isEmpty(),
