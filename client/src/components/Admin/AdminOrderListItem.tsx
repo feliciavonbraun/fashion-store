@@ -34,7 +34,11 @@ export default function AdminOrderListItem(props: Props) {
                     <List.Item>
                         <List.Item.Meta
                             title={orderItem.product.title}
-                            avatar={<Avatar src={`/uploads/${orderItem.product.imageUrl}`} />}
+                            avatar={
+                                <Avatar
+                                    src={`/uploads/${orderItem.product.imageUrl}`}
+                                />
+                            }
                             description={orderItem.product.description}
                         />
                         <div style={itemInfo}>
