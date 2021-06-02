@@ -76,7 +76,7 @@ Download repo and run:
 - Checkoutflödet i frontendapplikationen ska ha validering på samtliga fält.
   - Samtliga fält har validering. 
 
-### Väl Godkänt
+#### Väl Godkänt
 - Man ska kunna registrera sig som administratör på sidan, nya användare ska sparas i databasen.
   - Nya användare sparas i databasen och har möjlighet att ansöka om att få bli admin. 
 
