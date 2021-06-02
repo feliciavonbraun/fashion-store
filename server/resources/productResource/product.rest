@@ -15,12 +15,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:4000/api/product/:id
-Content-Type: application/json
-
-{
-    "_id": "60a544da597058b62ff8fed1"
-}
+GET http://localhost:4000/api/product/60a772e7532290e262b50949
 
 ###
 
@@ -31,7 +26,7 @@ Content-Type: application/json
     "title": "PRINTED CHIFFON SKIRT",
     "description": "Printed midi chiffon skirt with a gently pleated finish. Concealed zipper at the side. Length of skirt: 83.5cm / 33.3",
     "price": "429",
-    "imageUrl": "https://github.com/feliciavonbraun/fashion-store/blob/master/src/assets/prod8.png?raw=true",
+    "imageUrl": "prod8.png",
     "qty": "10",
     "category": ["Skirts"]
 }
@@ -69,5 +64,5 @@ DELETE http://localhost:4000/api/product/:id
 Content-Type: application/json
 
 {
-    "_id": "60a544da597058b62ff8fed1"
+    "_id": "60b76f3cdde3157fce8f46f3"
 }
