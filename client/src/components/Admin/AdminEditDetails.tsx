@@ -1,12 +1,19 @@
-import { Form, Input, Button, message, InputNumber } from 'antd';
-import { useContext, useEffect, useState } from 'react';
-import { Link, RouteComponentProps, useHistory, withRouter } from 'react-router-dom';
+import { Form, Input, Button, message, InputNumber, Upload } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+    Link,
+    RouteComponentProps,
+    useHistory,
+    withRouter,
+} from 'react-router-dom';
 import {
     NewProduct,
     Product,
     ProductContext,
 } from '../../contexts/ProductContext';
 import { Select } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 const { Option } = Select;
 
@@ -41,6 +48,10 @@ const successDelete = () => {
     message.success('The product has been deleted', 3);
 };
 
+const uploadError = () => {
+    message.error('Invalid file, file must be of type jpg or png', 3);
+};
+
 function AdminEditDetails(props: Props) {
     const history = useHistory();
     const _id = props.match.params.id;
@@ -50,21 +61,39 @@ function AdminEditDetails(props: Props) {
     const [buttonSaveLoading, setButtonSaveLoading] = useState(false);
     const [buttonDeleteLoading, setButtonDeleteLoading] = useState(false);
     const [product, setProduct] = useState<Product>();
+    const [fileName, setFileName] = useState('');
+
+    const defaultFileList: UploadFile<any>[] = [
+        {
+            uid: '1',
+            size: 0,
+            type: 'image/png',
+            name: product?.imageUrl || '',
+            status: 'done',
+            response: `${product?.imageUrl}`,
+            url: `/uploads/${product?.imageUrl}`,
+        },
+    ];
 
     useEffect(() => {
         const fetch = async () => {
             const product = await getProduct(_id);
             setProduct(product);
+            setFileName(product.imageUrl);
         };
         fetch();
     }, [_id, getProduct]);
 
     const onFinish = async (product: NewProduct) => {
-        setButtonSaveLoading(true);
-        const updatedProduct = { ...product, _id: _id };
-        await updateProduct(updatedProduct);
-        successSave();
-        history.goBack();
+        if (fileName) {
+            setButtonSaveLoading(true);
+            const updatedProduct = { ...product, _id: _id, imageUrl: fileName };
+            await updateProduct(updatedProduct);
+            successSave();
+            history.goBack();
+        } else {
+            uploadError();
+        }
     };
 
     const handleDelete = async () => {
@@ -72,6 +101,38 @@ function AdminEditDetails(props: Props) {
         await deleteProduct(product!);
         successDelete();
         history.goBack();
+    };
+
+    function handleFileChange(info: any) {
+        if (info.file.status !== 'uploading') {
+            console.log('file', info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+            // Correct filename is set here
+            setFileName(info.file.response);
+            message.success(`${info.file.name} uploaded successfully`);
+        } else if (info.file.status === 'error') {
+            setFileName('');
+            message.error(`${info.file.name} upload failed.`);
+        }
+    }
+
+    function handleBeforeUpload(file: any) {
+        const isJpgOrPng =
+            file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+            setFileName('');
+            message.error('You can only upload JPG/PNG file');
+        }
+        return isJpgOrPng;
+    }
+
+    const normFile = (e: any) => {
+        console.log('Upload event:', e);
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
     };
 
     return (
@@ -87,7 +148,6 @@ function AdminEditDetails(props: Props) {
                             title: product.title,
                             description: product.description,
                             price: product.price,
-                            imageUrl: product.imageUrl,
                             qty: product.qty,
                         },
                     }}
@@ -130,12 +190,26 @@ function AdminEditDetails(props: Props) {
                     </Form.Item>
 
                     <Form.Item
-                        initialValue={product.imageUrl}
                         name={'imageUrl'}
-                        label='ImageUrl'
+                        label='Image'
+                        initialValue={defaultFileList}
+                        getValueFromEvent={normFile}
+                        valuePropName='fileList'
                         rules={[{ required: true }]}
                     >
-                        <Input.TextArea />
+                        <Upload
+                            defaultFileList={defaultFileList}
+                            name='imageUrl'
+                            action='/api/upload'
+                            listType='picture'
+                            maxCount={1}
+                            beforeUpload={handleBeforeUpload}
+                            onChange={handleFileChange}
+                        >
+                            <Button icon={<UploadOutlined />}>
+                                Upload (Max: 1)
+                            </Button>
+                        </Upload>
                     </Form.Item>
 
                     <Form.Item
@@ -177,28 +251,26 @@ function AdminEditDetails(props: Props) {
                                 justifyContent: 'space-between',
                             }}
                         >
-                            <Link to={'/user/product-list'} >
-                                <Button type='ghost'>
-                                    Cancel
-                                </Button>
+                            <Link to={'/user/product-list'}>
+                                <Button type='ghost'>Cancel</Button>
                             </Link>
                             <div>
-                            <Button
-                                type='primary'
-                                danger
-                                style={{marginRight:'.3rem'}}
-                                onClick={handleDelete}
-                                loading={buttonDeleteLoading}
-                            >
-                                Delete
-                            </Button>
-                            <Button
-                                type='primary'
-                                htmlType='submit'
-                                loading={buttonSaveLoading}
-                            >
-                                Save
-                            </Button>
+                                <Button
+                                    type='primary'
+                                    danger
+                                    style={{ marginRight: '.3rem' }}
+                                    onClick={handleDelete}
+                                    loading={buttonDeleteLoading}
+                                >
+                                    Delete
+                                </Button>
+                                <Button
+                                    type='primary'
+                                    htmlType='submit'
+                                    loading={buttonSaveLoading}
+                                >
+                                    Save
+                                </Button>
                             </div>
                         </div>
                     </Form.Item>

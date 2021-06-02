@@ -38,7 +38,7 @@ const error = () => {
 };
 
 const uploadError = () => {
-    message.error('Invalid file, check if file type is jpg or png', 3);
+    message.error('Invalid file, file must be of type jpg or png', 3);
 };
 
 export default function AddNewProduct() {
@@ -74,9 +74,10 @@ export default function AddNewProduct() {
         if (info.file.status === 'done') {
             // Correct filename is set here
             setFileName(info.file.response);
-            message.success(`${info.file.name} file uploaded successfully`);
+            message.success(`${info.file.name} uploaded successfully`);
         } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
+            setFileName('');
+            message.error(`${info.file.name} upload failed.`);
         }
     }
 
@@ -84,6 +85,7 @@ export default function AddNewProduct() {
         const isJpgOrPng =
             file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
+            setFileName('');
             message.error('You can only upload JPG/PNG file');
         }
         return isJpgOrPng;
@@ -142,7 +144,7 @@ export default function AddNewProduct() {
 
                 <Form.Item
                     name={'imageUrl'}
-                    label='ImageUrl'
+                    label='Image'
                     getValueFromEvent={normFile}
                     valuePropName='fileList'
                     rules={[{ required: true }]}
