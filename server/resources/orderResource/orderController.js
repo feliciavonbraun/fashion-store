@@ -37,7 +37,7 @@ exports.newOrder = async (req, res) => {
         if (item.qty > product.qty) {
             item.qty = product.qty;
         }
-    }
+    };
 
     const order = {
         ...req.body,
@@ -56,7 +56,7 @@ exports.newOrder = async (req, res) => {
             { _id: product._id },
             { qty: product.qty - item.qty }
         );
-    }
+    };
 
     res.status(201).json(doc);
 };

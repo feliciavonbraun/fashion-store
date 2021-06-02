@@ -2,7 +2,7 @@ GET http://localhost:4000/api/order
 
 ###
 
-GET http://localhost:4000/api/order/:id
+GET http://localhost:4000/api/order/60b740bde727857f4fe692fd
 
 ###
 
@@ -16,23 +16,44 @@ Content-Type: application/json
 {
     "orderItems": [
         {
-            "product": "60a77166532290e262b50946",
+            "product": {
+                "_id": "60a7744c532290e262b50950",
+                "title": "PRINTED CHIFFON SKIRT",
+                "description": "Printed midi chiffon skirt with a gently pleated finish. Concealed zipper at the side. Length of skirt: 83.5cm / 33.3",
+                "price": "429",
+                "imageUrl": "prod8.png",
+                "qty": "10",
+                "category": ["Skirts"]
+            },
             "qty": 1
         },
         {
-            "product": "60a7732b532290e262b5094a",
+            "product": {
+                "_id": "60a7732b532290e262b5094a",
+                "title": "TAILORED BLAZER",
+                "description": "Tailored blazer featuring a cinched waistline and shoulder pads for a subtle hourglass silhouette.",
+                "price": "629",
+                "imageUrl": "prod3.png",
+                "qty": "2",
+                "category": ["Blazers"]
+            },
             "qty": 3
         }
     ],
     "address": {
-        "phone": "07217897979787",
+        "phone": "0721773030",
         "street": "yoyoyoyo",
         "zipcode": "12345",
         "city": "NYYYYASTE"
     },
     "totalprice": "1999", 
-    "orderProducts": "60a544da597058b62ff8fed1", 
-    "isSent": false
+    "isSent": false,
+    "delivery": { 
+        "company": "Postnord",
+        "price": 145,
+        "time": 24,
+        "_id": "60abaa9b1f828d61f4829b88"
+    }
 }
 
 ###
@@ -41,14 +62,6 @@ PUT http://localhost:4000/api/order/:id
 Content-Type: application/json
 
 {
-    "orderItem": [],
-    "address": {
-        "phone": "072177",
-        "street": "Hej",
-        "zipcode": "12345",
-        "city": "SkenEEEE"
-    },
-    "totalprice": "1000", 
-    "orderProducts": "60a767ce3b59f07246dc95d4", 
-    "isSent": false
+    "_id": "60b740bde727857f4fe692fd",
+    "isSent": true
 }
